@@ -1,0 +1,34 @@
+The Movie Stead
+
+STACK: React JS / Node.js / PostgreSQL
+
+* Uses TMDB API
+* ROLES: Visitor / User / Admin
+
+
+Anonymous users can:
+- Search/filter movies by different category
+- Sign up / Sign in
+
+| Movies | 						| Sign in |
+							 -Register
+User can:
+- Review movies
+- Browse/sort own reviewed movies
+- Modify own reviews (only 1 review per movie)
+- Delete own reviews
+- Add movies to watchlist
+- Browse/sort own watchlist
+- Remove movies from own watchlist
+
+| Movies | Watchlist | My reviews |			| Sign out |
+ -Review
+
+Admin can:
+- Browse/sort users
+- Disable users
+- View each users reviews
+- Modify or delete unappropriate reviews
+
+| Movies | Users |					| Sign out |
+	  -Reviews

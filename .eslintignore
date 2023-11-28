@@ -1,0 +1,9 @@
+dist
+node_modules
+.env
+.babelrc
+.gitignore
+.eslintrc.cjs
+.eslintignore
+.node-version
+.nvmrc
