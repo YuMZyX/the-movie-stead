@@ -1,1 +1,1 @@
-# the-movie-stead
+# The Movie Stead
