@@ -1,8 +1,7 @@
 require('dotenv').config()
-/*
-const APIKEY = process.env.APIKEY
+
+const API_KEY = process.env.TMDB_APIKEY
 
 module.exports = {
-  APIKEY
+  API_KEY
 }
-*/

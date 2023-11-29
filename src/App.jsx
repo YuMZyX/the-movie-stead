@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react'
+import { Container } from '@mui/material'
 import axios from 'axios'
+import Movies from './components/Movies'
+import Login from './components/Login'
 
 const App = () => {
   const [imgConfig, setImgConfig] = useState([])
   const [movies, setMovies] = useState([])
-  const APIKEY = import.meta.env.VITE_TMDB_APIKEY
+  //const APIKEY = import.meta.env.VITE_TMDB_APIKEY
   const TMDB_TOKEN = import.meta.env.VITE_TMDB_TOKEN
 
   const options = {
@@ -23,20 +26,29 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    axios.get(`https://api.themoviedb.org/3/movie/13?api_key=${APIKEY}`)
+    axios.get('https://api.themoviedb.org/3/trending/movie/week?language=en-US', options)
       .then(response => {
-        setMovies(response.data)
+        setMovies(response.data.results)
+        console.log(movies)
       })
   }, [])
 
-  if (!movies || !imgConfig) return null
+  if (!movies || !imgConfig) {
+    return null
+  }
+
+  const test = true
+
+  if (test) {
+    return (
+      <Login />
+    )
+  }
 
   return (
-    <>
-      <h1>{movies.original_title}</h1>
-      <h4>{movies.release_date}</h4>
-      <img src={`${imgConfig.base_url}/${imgConfig.poster_sizes[2]}/${movies.poster_path}`}></img><br />
-    </>
+    <Container>
+      <Movies movies={movies} />
+    </Container>
   )
 }
 
