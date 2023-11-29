@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
-import { Container } from '@mui/material'
+import { Routes, Route } from 'react-router-dom'
 import axios from 'axios'
 import Movies from './components/Movies'
 import Login from './components/Login'
+import SignUp from './components/SignUp'
 
 const App = () => {
   const [imgConfig, setImgConfig] = useState([])
@@ -37,18 +38,12 @@ const App = () => {
     return null
   }
 
-  const test = true
-
-  if (test) {
-    return (
-      <Login />
-    )
-  }
-
   return (
-    <Container>
-      <Movies movies={movies} />
-    </Container>
+    <Routes>
+      <Route path='/' element={<Movies movies={movies} />} />
+      <Route path='/login' element={<Login />} />
+      <Route path='/signup' element={<SignUp />} />
+    </Routes>
   )
 }
 

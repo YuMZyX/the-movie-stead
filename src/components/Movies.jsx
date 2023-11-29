@@ -1,14 +1,19 @@
-import { Card, CardContent, CardMedia, Typography, Grid, Container } from '@mui/material'
+import { Card, CardContent, CardMedia, Typography, Grid, Container, Button } from '@mui/material'
+import { format, parseISO } from 'date-fns'
+import { useNavigate } from 'react-router-dom'
 
 const Movies = ({ movies }) => {
+
+  const navigate = useNavigate()
+
   return (
     <Container>
-      <Typography variant='h3' gutterBottom>
+      <Typography variant='h4' gutterBottom>
         Trending movies
       </Typography>
-      <Grid container spacing={5} alignItems='stretch'>
+      <Grid container spacing={4} columns={20}>
         {movies.map((movie) => (
-          <Grid item key={movie.id} xs={12} sm={6} md={4} lg={3} style={{ display: 'flex' }}>
+          <Grid item key={movie.id} xs={10} sm={6} md={5} lg={4} style={{ display: 'flex' }}>
             <Card>
               <CardMedia
                 component='img'
@@ -18,20 +23,18 @@ const Movies = ({ movies }) => {
                 style={{ objectFit: 'cover' }}
               />
               <CardContent>
-                <Typography variant='h6' component='div'>
+                <Typography variant='subtitle2' component='div' sx={{ fontSize: 16 }}>
                   {movie.title}
                 </Typography>
                 <Typography variant='body2' color='textSecondary'>
-                  Release Date: {movie.release_date}
-                </Typography>
-                <Typography variant='body2' color='textSecondary'>
-                  Popularity: {movie.popularity}
+                  {format(parseISO(movie.release_date), 'dd.MM.yyyy')}
                 </Typography>
               </CardContent>
             </Card>
           </Grid>
         ))}
       </Grid>
+      <Button variant='contained' onClick={() => navigate('/login')} sx={{ mt: 3, mb: 2 }}>Log out</Button>
     </Container>
   )
 }
