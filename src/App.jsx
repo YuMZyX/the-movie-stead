@@ -30,7 +30,6 @@ const App = () => {
     axios.get('https://api.themoviedb.org/3/trending/movie/week?language=en-US', options)
       .then(response => {
         setMovies(response.data.results)
-        console.log(movies)
       })
   }, [])
 

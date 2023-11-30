@@ -8,7 +8,7 @@ import {
   Typography,
   Container,
 } from '@mui/material'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined'
 import { Link, useNavigate } from 'react-router-dom'
 
 const Login = () => {
@@ -30,8 +30,8 @@ const Login = () => {
         justifyContent: 'center',
         minHeight: '90vh',
       }}>
-        <Avatar sx={{ m: 2, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
+        <Avatar sx={{ m: 2, bgcolor: 'success.main' }}>
+          <LoginOutlinedIcon />
         </Avatar>
         <Typography component='h1' variant='h5'>
           The Movie Stead - Login

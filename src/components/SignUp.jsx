@@ -8,7 +8,7 @@ import {
   Typography,
   Container
 } from '@mui/material'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
+import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined'
 import { Link } from 'react-router-dom'
 
 const SignUp = () => {
@@ -29,8 +29,8 @@ const SignUp = () => {
           minHeight: '95vh',
         }}
       >
-        <Avatar sx={{ m: 2, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon />
+        <Avatar sx={{ m: 2, bgcolor: 'success.main' }}>
+          <HowToRegOutlinedIcon />
         </Avatar>
         <Typography component='h1' variant='h5'>
           The Movie Stead - Sign up
@@ -52,7 +52,6 @@ const SignUp = () => {
             label='Email address'
             name='email'
             autoComplete='email'
-            autoFocus
             sx={{ mt: 3 }}/>
           <TextField
             required
