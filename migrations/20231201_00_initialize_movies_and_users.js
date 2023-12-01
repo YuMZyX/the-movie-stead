@@ -38,6 +38,10 @@ module.exports = {
           isEmail: true
         }
       },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false
+      },
       role: {
         type: DataTypes.ENUM('user', 'moderator'),
         allowNull: false
