@@ -10,6 +10,7 @@ import {
 } from '@mui/material'
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined'
 import { Link, useNavigate } from 'react-router-dom'
+import Copyright from './Copyright'
 
 const Login = () => {
 
@@ -28,7 +29,7 @@ const Login = () => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        minHeight: '90vh',
+        minHeight: '100vh',
       }}>
         <Avatar sx={{ m: 2, bgcolor: 'success.main' }}>
           <LoginOutlinedIcon />
@@ -65,14 +66,7 @@ const Login = () => {
             </Grid>
           </Grid>
         </Box>
-        <Typography
-          variant='body2'
-          color='text.secondary'
-          align='center'
-          sx={{ mt: 6, mb: 4 }}
-        >
-          © YuMZyX {new Date().getFullYear()}
-        </Typography>
+        <Copyright />
       </Box>
     </Container>
   )

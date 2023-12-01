@@ -10,6 +10,7 @@ import {
 } from '@mui/material'
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined'
 import { Link } from 'react-router-dom'
+import Copyright from './Copyright'
 
 const SignUp = () => {
   const handleSubmit = (event) => {
@@ -26,7 +27,7 @@ const SignUp = () => {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          minHeight: '95vh',
+          minHeight: '100vh',
         }}
       >
         <Avatar sx={{ m: 2, bgcolor: 'success.main' }}>
@@ -80,14 +81,7 @@ const SignUp = () => {
             </Grid>
           </Grid>
         </Box>
-        <Typography
-          variant='body2'
-          color='text.secondary'
-          align='center'
-          sx={{ mt: 6, mb: 4 }}
-        >
-          © YuMZyX {new Date().getFullYear()}
-        </Typography>
+        <Copyright />
       </Box>
     </Container>
   )
