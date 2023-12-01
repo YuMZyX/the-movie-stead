@@ -29,7 +29,6 @@ router.post('/', async (req, res) => {
       email: email
     }
   })
-  console.log(emailExists)
   if (emailExists) {
     return res.status(400).send('Email address already exists, try logging in.')
   }
