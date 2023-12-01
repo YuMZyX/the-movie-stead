@@ -24,11 +24,12 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   const { name, email, password, role } = req.body
 
-  const emailExists = User.findOne({
+  const emailExists = await User.findOne({
     where: {
       email: email
     }
   })
+  console.log(emailExists)
   if (emailExists) {
     return res.status(400).send('Email address already exists, try logging in.')
   }
