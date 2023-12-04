@@ -1,7 +1,6 @@
 import {
   Avatar,
   Button,
-  CssBaseline,
   TextField,
   Grid,
   Box,
@@ -12,6 +11,7 @@ import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined'
 import { Link } from 'react-router-dom'
 import Copyright from './Copyright'
 import userService from '../services/users'
+import sessionService from '../services/sessions'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { useNavigate } from 'react-router-dom'
@@ -38,7 +38,7 @@ const validationSchema = yup.object({
     .oneOf([yup.ref('password'), null], 'Your passwords do not match')
 })
 
-const SignUp = () => {
+const SignUp = ({ setUser }) => {
 
   const [error, setError] = useState('')
   const navigate = useNavigate()
@@ -55,7 +55,11 @@ const SignUp = () => {
       const { name, email, password } = values
       try {
         const newUser = await userService.signUp({ name, email, password, role: 'user' })
-        console.log(newUser)
+        if (newUser.id) {
+          const user = await sessionService.login({ email, password })
+          window.localStorage.setItem('loggedTMSUser', JSON.stringify(user))
+          setUser(user)
+        }
         navigate('/')
       } catch (error) {
         setError(error.response.data)
@@ -68,17 +72,16 @@ const SignUp = () => {
 
   return (
     <Container component='main' maxWidth='xs'>
-      <CssBaseline />
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          minHeight: '100vh',
+          minHeight: '90vh',
         }}
       >
-        <Avatar sx={{ m: 2, bgcolor: 'success.main' }}>
+        <Avatar sx={{ m: 2, bgcolor: 'primary.main', color: 'secondary.main' }}>
           <HowToRegOutlinedIcon />
         </Avatar>
         <Typography component='h1' variant='h5'>
@@ -139,13 +142,13 @@ const SignUp = () => {
             helperText={formik.touched.passwordCheck && formik.errors.passwordCheck}
             sx={{ mt: 3 }}/>
           {error && <Typography variant='caption' color='error' sx={{ ml: 2 }}>{error}</Typography>}
-          <Button type='submit' fullWidth variant='contained' sx={{ mt: 4, mb: 2 }}>
+          <Button type='submit' fullWidth variant='contained' sx={{ mt: 4, mb: 2, color: 'secondary.main' }}>
             Sign Up
           </Button>
           <Grid container justifyContent='flex-start'>
             <Grid item>
               <Link to='/login' variant='body2'>
-                Already have an account? Sign in
+                <Typography>Already have an account? Sign in</Typography>
               </Link>
             </Grid>
           </Grid>

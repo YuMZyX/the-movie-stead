@@ -1,14 +1,11 @@
-import { Card, CardContent, CardMedia, Typography, Grid, Container, Button } from '@mui/material'
+import { Card, CardContent, CardMedia, Typography, Grid, Container } from '@mui/material'
 import { format, parseISO } from 'date-fns'
-import { useNavigate } from 'react-router-dom'
 
 const Movies = ({ movies }) => {
 
-  const navigate = useNavigate()
-
   return (
     <Container>
-      <Typography variant='h4' gutterBottom>
+      <Typography variant='h4' gutterBottom sx={{ mt: 3, mb: 2 }}>
         Trending movies
       </Typography>
       <Grid container spacing={4} columns={20}>
@@ -34,7 +31,6 @@ const Movies = ({ movies }) => {
           </Grid>
         ))}
       </Grid>
-      <Button variant='contained' onClick={() => navigate('/login')} sx={{ mt: 3, mb: 2 }}>Log out</Button>
     </Container>
   )
 }

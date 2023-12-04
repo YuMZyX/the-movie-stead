@@ -1,15 +1,34 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import axios from 'axios'
+import { Box, CircularProgress } from '@mui/material'
 import Movies from './components/Movies'
 import Login from './components/Login'
 import SignUp from './components/SignUp'
+import Navbar from './components/Navbar'
+import sessionService from './services/sessions'
+import { useNavigate } from 'react-router-dom'
 
 const App = () => {
-  const [imgConfig, setImgConfig] = useState([])
   const [movies, setMovies] = useState([])
+  const [user, setUser] = useState(null)
   //const APIKEY = import.meta.env.VITE_TMDB_APIKEY
   const TMDB_TOKEN = import.meta.env.VITE_TMDB_TOKEN
+  const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    try {
+      await sessionService.logout()
+    } catch (error) {
+      console.log(error)
+      window.localStorage.removeItem('loggedTMSUser')
+      setUser(null)
+      navigate('/login')
+    }
+    window.localStorage.removeItem('loggedTMSUser')
+    setUser(null)
+    navigate('/login')
+  }
 
   const options = {
     method: 'GET',
@@ -20,10 +39,8 @@ const App = () => {
   }
 
   useEffect(() => {
-    axios.get('https://api.themoviedb.org/3/configuration', options)
-      .then(response => {
-        setImgConfig(response.data.images)
-      })
+    const user = JSON.parse(window.localStorage.getItem('loggedTMSUser'))
+    setUser(user)
   }, [])
 
   useEffect(() => {
@@ -33,16 +50,23 @@ const App = () => {
       })
   }, [])
 
-  if (!movies || !imgConfig) {
-    return null
+  if (!movies) {
+    return (
+      <Box sx={{ display: 'flex' }}>
+        <CircularProgress />
+      </Box>
+    )
   }
 
   return (
-    <Routes>
-      <Route path='/' element={<Movies movies={movies} />} />
-      <Route path='/login' element={<Login />} />
-      <Route path='/signup' element={<SignUp />} />
-    </Routes>
+    <>
+      <Navbar handleLogout={handleLogout} user={user} />
+      <Routes>
+        <Route path='/' element={<Movies movies={movies} />} />
+        <Route path='/login' element={<Login setUser={setUser} />} />
+        <Route path='/signup' element={<SignUp setUser={setUser} />} />
+      </Routes>
+    </>
   )
 }
 
