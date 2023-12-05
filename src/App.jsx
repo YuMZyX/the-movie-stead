@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import axios from 'axios'
-import { Box, CircularProgress } from '@mui/material'
 import Movies from './components/Movies'
 import Login from './components/Login'
 import SignUp from './components/SignUp'
 import Navbar from './components/Navbar'
 import sessionService from './services/sessions'
 import { useNavigate } from 'react-router-dom'
+import Users from './components/Users'
+import User from './components/User'
+import Progress from './components/Progress'
 
 const App = () => {
   const [movies, setMovies] = useState([])
@@ -52,9 +54,7 @@ const App = () => {
 
   if (!movies) {
     return (
-      <Box sx={{ display: 'flex' }}>
-        <CircularProgress />
-      </Box>
+      <Progress />
     )
   }
 
@@ -65,6 +65,8 @@ const App = () => {
         <Route path='/' element={<Movies movies={movies} />} />
         <Route path='/login' element={<Login setUser={setUser} />} />
         <Route path='/signup' element={<SignUp setUser={setUser} />} />
+        <Route path='/users' element={<Users />} />
+        <Route path='/users/:id' element={<User user={user} />} />
       </Routes>
     </>
   )

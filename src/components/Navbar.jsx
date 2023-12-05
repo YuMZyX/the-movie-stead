@@ -1,4 +1,5 @@
-import { AppBar, Toolbar, IconButton, Button, Menu, MenuItem, Container, Tooltip, Box, ListItemIcon, Divider, Avatar } from '@mui/material'
+import { AppBar, Toolbar, IconButton, Button, Menu, MenuItem, Container,
+  Tooltip, Box, ListItemIcon, Divider, Avatar } from '@mui/material'
 import AccountCircle from '@mui/icons-material/AccountCircle'
 import { useState } from 'react'
 import { Login, Logout, HowToReg } from '@mui/icons-material'
@@ -16,6 +17,27 @@ const Navbar = ({ handleLogout, user }) => {
 
   const handleClose = () => {
     setAnchorEl(null)
+  }
+
+  const navbarLinks = (user) => {
+    if (!user) {
+      return (
+        <Box>
+          <Button color='inherit' onClick={() => navigate('/')}>Movies</Button>
+        </Box>
+      )
+    } else {
+      return (
+        <Box>
+          <Button color='inherit' onClick={() => navigate('/')}>Movies</Button>
+          <Button color='inherit'>My Reviews</Button>
+          <Button color='inherit'>Watchlist</Button>
+          {user.role === 'moderator' &&
+            <Button color='inherit' onClick={() => navigate('/users')}>Users</Button>
+          }
+        </Box>
+      )
+    }
   }
 
   return (
@@ -40,16 +62,8 @@ const Navbar = ({ handleLogout, user }) => {
             flexGrow: 1,
             justifyContent: 'flex-end'
           }}>
-            <Box>
-              <Button color='inherit' onClick={() => navigate('/')}>Movies</Button>
-            </Box>
 
-            {user &&
-            <Box>
-              <Button color='inherit'>My Reviews</Button>
-              <Button color='inherit'>Watchlist</Button>
-            </Box>
-            }
+            {navbarLinks(user)}
 
             <Box>
               <Tooltip title='Account settings'>
@@ -97,7 +111,10 @@ const Navbar = ({ handleLogout, user }) => {
                       {user.name}
                     </MenuItem>
                     <Divider />
-                    <MenuItem>
+                    <MenuItem onClick={() => {
+                      handleClose()
+                      navigate(`/users/${user.id}`)
+                    }}>
                       <ListItemIcon>
                         <AccountCircle />
                       </ListItemIcon>

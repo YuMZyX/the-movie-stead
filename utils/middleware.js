@@ -73,9 +73,43 @@ const userExtractor = async (req, res, next) => {
   next()
 }
 
+const moderatorExtractor = async (req, res, next) => {
+  const authorization = req.get('authorization')
+  if (!authorization || !authorization.toLowerCase().startsWith('bearer ')) {
+    return res.status(401).json({ error: 'Token missing' })
+  }
+
+  try {
+    jwt.verify(authorization.substring(7), config.JWT_SECRET)
+  } catch (error) {
+    console.log(error)
+    return res.status(401).json({ error: 'Token invalid or expired' })
+  }
+
+  const session = await sessionCheck(authorization.substring(7))
+
+  if (!session) {
+    return res.status(401).json({ error: 'Session not found, please login again' })
+  } else if (session.user.disabled) {
+    await Session.destroy({
+      where: {
+        userId: session.user.id
+      }
+    })
+    return res.status(401).json({ error: 'Account disabled, contact admin/moderator' })
+  } else if (session.user.role !== 'moderator') {
+    return res.status(401).json({ error: 'Not allowed to access this content' })
+  }
+
+  req.user = session.user
+
+  next()
+}
+
 module.exports = {
   errorHandler,
   userExtractor,
   requestLogger,
-  unknownEndpoint
+  unknownEndpoint,
+  moderatorExtractor
 }

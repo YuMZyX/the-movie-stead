@@ -36,7 +36,7 @@ router.post('/login', async (req, res) => {
   })
   await Session.create({ token, userId: user.id })
 
-  res.status(200).send({ token, name: user.name, email: user.email })
+  res.status(200).send({ token, name: user.name, email: user.email, role: user.role, id: user.id })
 })
 
 router.delete('/logout', userExtractor, async (req, res) => {
