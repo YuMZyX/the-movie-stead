@@ -2,18 +2,20 @@ import { useEffect, useState } from 'react'
 import userService from '../services/users'
 import { Container, Typography } from '@mui/material'
 import { format, parseISO } from 'date-fns'
-import { DataGrid, GridActionsCellItem, GridRowModes,
-  GridToolbar, GridRowEditStopReasons } from '@mui/x-data-grid'
+import { DataGrid, GridActionsCellItem,
+  GridRowModes, GridRowEditStopReasons } from '@mui/x-data-grid'
 import { Link } from 'react-router-dom'
 import Progress from './Progress'
-import { CancelOutlined, DeleteOutlined, EditOutlined,
-  SaveOutlined } from '@mui/icons-material'
+import { CancelOutlined, DeleteOutlined,
+  EditOutlined, SaveOutlined } from '@mui/icons-material'
 import Redirect from './Redirect'
 import { useConfirm } from 'material-ui-confirm'
+import CustomToolbar from './CustomToolbar'
 
 const Users = () => {
   const [users, setUsers] = useState([])
   const [rowModesModel, setRowModesModel] = useState({})
+  const [rowSelectionModel, setRowSelectionModel] = useState([])
   const [error, setError] = useState(null)
   const confirm = useConfirm()
 
@@ -73,6 +75,13 @@ const Users = () => {
     }
   }
   const processRowUpdate = (newRow) => {
+    userService.edit(newRow.id, newRow)
+      .then(response => {
+        console.log('EDIT: ', response.id)
+      })
+      .catch(error => {
+        console.log(error)
+      })
     const updatedRow = { ...newRow, isNew: false }
     setUsers(users.map((row) => (row.id === newRow.id ? updatedRow : row)))
     return updatedRow
@@ -172,10 +181,14 @@ const Users = () => {
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
-        slots={{ toolbar: GridToolbar }}
+        onRowSelectionModelChange={(newRowSelectionModel) => {
+          setRowSelectionModel(newRowSelectionModel)
+        }}
+        rowSelectionModel={rowSelectionModel}
+        slots={{ toolbar: CustomToolbar }}
         slotProps={{
           toolbar: {
-            showQuickFilter: true
+            showQuickFilter: true,
           }
         }}
         initialState={{
