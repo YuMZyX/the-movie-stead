@@ -44,7 +44,6 @@ const Navbar = ({ handleLogout, user }) => {
     <AppBar position='sticky' sx={{ backgroundColor: '#435585', borderRadius: 4 }}>
       <Container>
         <Toolbar disableGutters sx={{ color: '#F5E8C7' }}>
-
           <Box
             component='img'
             alt='The Movie Stead - Logo'
@@ -54,7 +53,6 @@ const Navbar = ({ handleLogout, user }) => {
               width: 300
             }}
           />
-
           <Box sx={{
             display: 'flex',
             flexDirection: 'row',
@@ -62,9 +60,7 @@ const Navbar = ({ handleLogout, user }) => {
             flexGrow: 1,
             justifyContent: 'flex-end'
           }}>
-
             {navbarLinks(user)}
-
             <Box>
               <Tooltip title='Account settings'>
                 <IconButton

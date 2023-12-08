@@ -1,4 +1,5 @@
 import { Box, CircularProgress, Typography } from '@mui/material'
+
 const Progress = () => {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center',
