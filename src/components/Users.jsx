@@ -163,15 +163,16 @@ const Users = () => {
   return (
     <Container>
       <Typography
-        variant='subtitle2'
+        variant='h6'
+        fontWeight='bold'
         gutterBottom
         sx={{
-          mt: 1,
+          mt: 2,
           mb: 1,
-          fontSize: 16
+          ml: 1
         }}
       >
-      The Movie Stead - Users
+      User management
       </Typography>
       <DataGrid
         rows={users}
@@ -195,6 +196,9 @@ const Users = () => {
           pagination: {
             ...users.initialState?.pagination,
             paginationModel: { pageSize: 10 },
+          },
+          sorting: {
+            sortModel: [{ field: 'disabled', sort: 'desc' }]
           }
         }}
         pageSizeOptions={[10,25]}

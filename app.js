@@ -7,6 +7,7 @@ const middleware = require('./utils/middleware')
 const usersRouter = require('./controllers/users')
 const sessionsRouter = require('./controllers/sessions')
 const watchlistRouter = require('./controllers/watchlist')
+const moviesRouter = require('./controllers/movies')
 
 app.use(cors())
 app.use(express.json())
@@ -21,6 +22,7 @@ app.get('/test', (req, res) => {
 app.use('/api/users', usersRouter)
 app.use('/api', sessionsRouter)
 app.use('/api/watchlists', watchlistRouter)
+app.use('/api/movies', moviesRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
