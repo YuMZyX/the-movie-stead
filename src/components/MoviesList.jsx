@@ -2,14 +2,13 @@ import { FavoriteOutlined, MoreVertOutlined,
   StarOutlined } from '@mui/icons-material'
 import { Card, CardContent, CardMedia, Typography, Grid, Container,
   IconButton, Menu, MenuItem, Box, ListItemIcon } from '@mui/material'
-import { format, parseISO } from 'date-fns'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import moviesService from '../services/movies'
 import Progress from './Progress'
 
-const Movies = ({ user }) => {
+const MoviesList = ({ user }) => {
 
   const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = useState(null)
@@ -65,7 +64,7 @@ const Movies = ({ user }) => {
       <Typography variant='h5' fontWeight='bold' gutterBottom sx={{ mt: 2, mb: 2 }}>
         Trending movies
       </Typography>
-      <Grid container spacing={4} columns={20} sx={{ mb: 3 }}>
+      <Grid container spacing={4} columns={20} sx={{ mb: 5 }}>
         {movies.map((movie) => (
           <Grid item key={movie.id} xs={10} sm={6} md={5} lg={4} style={{ display: 'flex' }}>
             <Card raised sx={{ borderRadius: 2.5 }}>
@@ -95,9 +94,6 @@ const Movies = ({ user }) => {
                     {movie.title}
                   </Typography>
                 </Link>
-                <Typography variant='body2' color='textSecondary'>
-                  {format(parseISO(movie.release_date), 'dd.MM.yyyy')}
-                </Typography>
               </CardContent>
               <Menu
                 id='movie-menu'
@@ -147,4 +143,4 @@ const Movies = ({ user }) => {
   )
 }
 
-export default Movies
+export default MoviesList

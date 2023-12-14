@@ -32,7 +32,7 @@ router.post('/login', async (req, res) => {
   }
 
   const token = jwt.sign(userForToken, config.JWT_SECRET, {
-    expiresIn: '2h'
+    // expiresIn: '2h' // Expiration temporarily disabled while developing
   })
   await Session.create({ token, userId: user.id })
 

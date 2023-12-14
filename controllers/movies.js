@@ -17,4 +17,9 @@ router.get('/:id', async (req, res) => {
   return res.json(movie)
 })
 
+router.get('/:id/credits', async (req, res) => {
+  const movieCredits = await moviedb.movieCredits(req.params.id)
+  return res.json(movieCredits)
+})
+
 module.exports = router

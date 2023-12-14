@@ -50,8 +50,10 @@ const Navbar = ({ handleLogout, user }) => {
             src='/the-movie-stead-logo.png'
             sx={{
               height: 40,
-              width: 300
+              width: 300,
+              cursor: 'pointer'
             }}
+            onClick={() => navigate('/')}
           />
           <Box sx={{
             display: 'flex',

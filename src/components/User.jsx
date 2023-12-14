@@ -1,4 +1,4 @@
-import { Container, Typography } from '@mui/material'
+import { Box, Container, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import userService from '../services/users'
@@ -29,8 +29,10 @@ const User = ({ user }) => {
 
   return (
     <Container>
-      <Typography>{userPage.name}</Typography>
-      <Typography>{userPage.email}</Typography>
+      <Box sx={{ mt: 1 }}>
+        <Typography>{userPage.name}</Typography>
+        <Typography>{userPage.email}</Typography>
+      </Box>
     </Container>
   )
 }

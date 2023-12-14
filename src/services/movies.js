@@ -11,4 +11,9 @@ const getMovie = async (id) => {
   return res.data
 }
 
-export default { getTrending, getMovie }
+const getMovieCredits = async (id) => {
+  const res = await axios.get(`${baseUrl}/${id}/credits`)
+  return res.data
+}
+
+export default { getTrending, getMovie, getMovieCredits }
