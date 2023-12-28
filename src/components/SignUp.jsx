@@ -60,7 +60,7 @@ const SignUp = ({ setUser }) => {
           window.localStorage.setItem('loggedTMSUser', JSON.stringify(user))
           setUser(user)
         }
-        navigate('/')
+        navigate('/trending/1')
       } catch (error) {
         setError(error.response.data)
         setTimeout(() => {

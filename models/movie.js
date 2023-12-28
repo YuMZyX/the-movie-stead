@@ -13,6 +13,10 @@ Movie.init({
   title: {
     type: DataTypes.STRING,
     allowNull: false
+  },
+  posterPath: {
+    type: DataTypes.STRING,
+    allowNull: false
   }
 }, {
   sequelize,

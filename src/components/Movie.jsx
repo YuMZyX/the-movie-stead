@@ -1,6 +1,6 @@
 import { Grid, Card, CardMedia, Paper, Typography,
   Container, Box, Table, TableRow, TableCell, TableBody,
-  Divider, IconButton, Link } from '@mui/material'
+  Divider, IconButton, Link, Tooltip } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import moviesService from '../services/movies'
@@ -8,25 +8,18 @@ import Progress from './Progress'
 import { Favorite, Remove, Star } from '@mui/icons-material'
 import { format, parseISO } from 'date-fns'
 import { uniqBy } from 'lodash'
+import watchlistsService from '../services/watchlists'
 
 const Movie = ({ user }) => {
 
   const movieId = useParams()
   const [movie, setMovie] = useState(null)
-  const [movieCredits, setMovieCredits] = useState(null)
   const imdbBaseUrl = 'https://www.imdb.com/title/'
 
   useEffect(() => {
     moviesService.getMovie(movieId.id)
       .then(response => {
         setMovie(response)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    moviesService.getMovieCredits(movieId.id)
-      .then(response => {
-        setMovieCredits(response)
       })
       .catch(error => {
         console.log(error)
@@ -39,12 +32,23 @@ const Movie = ({ user }) => {
     return hours + 'h ' + minutes + 'min'
   }
 
-  if (!movie || !movieCredits) {
+  const addToWatchlist = async (movie) => {
+    const movieToAdd = await watchlistsService.addToWatchlist({
+      user_id: user.id,
+      movie_id: movie.id,
+      title: movie.title,
+      poster_path: movie.poster_path
+    })
+    console.log(movieToAdd)
+  }
+
+  if (!movie) {
     return (
       <Progress />
     )
   }
 
+  const movieCredits = movie.credits
   const runtime = calculateRuntime(movie.runtime)
   const directors = movieCredits.crew.filter(crew => crew.job === 'Director')
   const stars = movieCredits.cast.slice(0, 4)
@@ -87,12 +91,16 @@ const Movie = ({ user }) => {
               </Typography>
               {user &&
               <Box sx={{ display: 'flex', justifyContent: 'flex-end', flexGrow: 1 }}>
-                <IconButton sx={{ boxShadow: 1, mr: 1 }}>
-                  <Favorite fontSize='medium' sx={{ color: 'red' }} />
-                </IconButton>
-                <IconButton sx={{ boxShadow: 1 }}>
-                  <Star fontSize='medium' sx={{ color: 'gold' }} />
-                </IconButton>
+                <Tooltip title='Add to watchlist'>
+                  <IconButton sx={{ boxShadow: 1, mr: 1 }} onClick={() => addToWatchlist(movie)}>
+                    <Favorite fontSize='medium' sx={{ color: 'red' }} />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title='Create a review'>
+                  <IconButton sx={{ boxShadow: 1 }}>
+                    <Star fontSize='medium' sx={{ color: 'gold' }} />
+                  </IconButton>
+                </Tooltip>
               </Box>
               }
             </Box>
@@ -111,7 +119,7 @@ const Movie = ({ user }) => {
                 {runtime}
               </Typography>
             </Box>
-            <Typography variant="body2" color="textSecondary" fontWeight='bold' sx={{ mt: 1 }} >
+            <Typography variant="body2" color="textSecondary" fontWeight='bold' sx={{ mt: 2 }} >
               <i>{movie.tagline}</i>
             </Typography>
             <Typography variant='subtitle2' sx={{ fontSize: 16, mt: 2 }}>

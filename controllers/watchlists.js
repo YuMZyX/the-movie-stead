@@ -1,11 +1,23 @@
 const router = require('express').Router()
 const Watchlist = require('../models/watchlist')
+const Movie = require('../models/movie')
 const { userExtractor } = require('../utils/middleware')
 
 router.post('/', userExtractor, async (req, res) => {
+  const { user_id, movie_id, title, poster_path } = req.body
+
+  const movie = await Movie.findByPk(movie_id)
+  if (!movie) {
+    await Movie.create({
+      id: movie_id,
+      title: title,
+      posterPath: poster_path
+    })
+  }
+
   const watchlist = await Watchlist.create({
-    userId: req.body.user_id,
-    movieId: req.body.movie_id
+    userId: user_id,
+    movieId: movie_id
   })
   res.json(watchlist)
 })

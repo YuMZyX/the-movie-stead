@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import Users from './components/Users'
 import User from './components/User'
 import Movie from './components/Movie'
+import NotFound from './components/NotFound'
 
 const App = () => {
   const [user, setUser] = useState(null)
@@ -37,12 +38,13 @@ const App = () => {
     <>
       <Navbar handleLogout={handleLogout} user={user} />
       <Routes>
-        <Route path='/' element={<MoviesList user={user} />} />
+        <Route path='/trending/:page' element={<MoviesList user={user} />} />
         <Route path='/movies/:id' element={<Movie user={user} />} />
         <Route path='/login' element={<Login setUser={setUser} />} />
         <Route path='/signup' element={<SignUp setUser={setUser} />} />
         <Route path='/users' element={<Users />} />
         <Route path='/users/:id' element={<User user={user} />} />
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </>
   )

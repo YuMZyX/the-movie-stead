@@ -42,7 +42,7 @@ const Login = ({ setUser }) => {
         const user = await sessionService.login({ email, password })
         window.localStorage.setItem('loggedTMSUser', JSON.stringify(user))
         setUser(user)
-        navigate('/')
+        navigate('/trending/1')
       } catch (error) {
         setError(error.response.data)
         setTimeout(() => {

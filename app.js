@@ -6,7 +6,7 @@ const middleware = require('./utils/middleware')
 
 const usersRouter = require('./controllers/users')
 const sessionsRouter = require('./controllers/sessions')
-const watchlistRouter = require('./controllers/watchlist')
+const watchlistRouter = require('./controllers/watchlists')
 const moviesRouter = require('./controllers/movies')
 
 app.use(cors())

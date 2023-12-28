@@ -23,13 +23,13 @@ const Navbar = ({ handleLogout, user }) => {
     if (!user) {
       return (
         <Box>
-          <Button color='inherit' onClick={() => navigate('/')}>Movies</Button>
+          <Button color='inherit' onClick={() => navigate('/trending/1')}>Movies</Button>
         </Box>
       )
     } else {
       return (
         <Box>
-          <Button color='inherit' onClick={() => navigate('/')}>Movies</Button>
+          <Button color='inherit' onClick={() => navigate('/trending/1')}>Movies</Button>
           <Button color='inherit'>My Reviews</Button>
           <Button color='inherit'>Watchlist</Button>
           {user.role === 'moderator' &&
@@ -53,7 +53,7 @@ const Navbar = ({ handleLogout, user }) => {
               width: 300,
               cursor: 'pointer'
             }}
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/trending/1')}
           />
           <Box sx={{
             display: 'flex',
