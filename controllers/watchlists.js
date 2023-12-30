@@ -11,8 +11,18 @@ router.post('/', userExtractor, async (req, res) => {
     await Movie.create({
       id: movie_id,
       title: title,
-      posterPath: poster_path
+      poster_path: poster_path
     })
+  }
+
+  const wlExists = await Watchlist.findOne({
+    where: {
+      userId: user_id,
+      movieId: movie_id
+    }
+  })
+  if (wlExists) {
+    return res.status(400).send('already exists on your watchlist')
   }
 
   const watchlist = await Watchlist.create({
@@ -32,6 +42,18 @@ router.delete('/:id', userExtractor, async (req, res) => {
     await watchlist.destroy()
   }
   res.status(204).end()
+})
+
+router.get('/:userId', userExtractor, async (req, res) => {
+  const watchlist = await Watchlist.findAll({
+    where: {
+      userId: req.params.userId
+    },
+    include: {
+      model: Movie
+    }
+  })
+  res.json(watchlist)
 })
 
 module.exports = router

@@ -10,6 +10,7 @@ import Users from './components/Users'
 import User from './components/User'
 import Movie from './components/Movie'
 import NotFound from './components/NotFound'
+import Watchlist from './components/Watchlist'
 
 const App = () => {
   const [user, setUser] = useState(null)
@@ -44,6 +45,7 @@ const App = () => {
         <Route path='/signup' element={<SignUp setUser={setUser} />} />
         <Route path='/users' element={<Users />} />
         <Route path='/users/:id' element={<User user={user} />} />
+        <Route path='/watchlist/:id' element={<Watchlist user={user} />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </>

@@ -1,3 +1,4 @@
+import React from 'react'
 import { Grid, Card, CardMedia, Paper, Typography,
   Container, Box, Table, TableRow, TableCell, TableBody,
   Divider, IconButton, Link, Tooltip } from '@mui/material'
@@ -9,10 +10,12 @@ import { Favorite, Remove, Star } from '@mui/icons-material'
 import { format, parseISO } from 'date-fns'
 import { uniqBy } from 'lodash'
 import watchlistsService from '../services/watchlists'
+import { useSnackbar } from 'notistack'
 
 const Movie = ({ user }) => {
 
   const movieId = useParams()
+  const { enqueueSnackbar } = useSnackbar()
   const [movie, setMovie] = useState(null)
   const imdbBaseUrl = 'https://www.imdb.com/title/'
 
@@ -33,13 +36,19 @@ const Movie = ({ user }) => {
   }
 
   const addToWatchlist = async (movie) => {
-    const movieToAdd = await watchlistsService.addToWatchlist({
-      user_id: user.id,
-      movie_id: movie.id,
-      title: movie.title,
-      poster_path: movie.poster_path
-    })
-    console.log(movieToAdd)
+    try {
+      await watchlistsService.addToWatchlist({
+        user_id: user.id,
+        movie_id: movie.id,
+        title: movie.title,
+        poster_path: movie.poster_path
+      })
+      enqueueSnackbar(`${movie.title} has been added to your watchlist`,
+        { variant: 'success' })
+    } catch (error) {
+      enqueueSnackbar(`${movie.title} ${error.response.data}`,
+        { variant: 'warning' })
+    }
   }
 
   if (!movie) {
@@ -140,9 +149,11 @@ const Movie = ({ user }) => {
                     {directors.map((d, index, array) =>
                       index === array.length - 1
                         ? <Typography key={d.id} sx={creditNameStyle}>{d.name}</Typography>
-                        : <><Typography key={d.id} sx={creditNameStyle}>{d.name}</Typography>
+                        : <React.Fragment key={d.id}>
+                          <Typography sx={creditNameStyle}>{d.name}</Typography>
                           <Divider orientation='vertical'
-                            sx={{ mr: 0.7, ml: 0.7, bgcolor: 'secondary.main' }}/></>
+                            sx={{ mr: 0.7, ml: 0.7, bgcolor: 'secondary.main' }}/>
+                        </React.Fragment>
                     )}
                   </TableCell>
                 </TableRow>
@@ -156,9 +167,11 @@ const Movie = ({ user }) => {
                     {writers.map((w, index, array) =>
                       index === array.length - 1
                         ? <Typography key={w.id} sx={creditNameStyle}>{w.name}</Typography>
-                        : <><Typography key={w.id} sx={creditNameStyle}>{w.name}</Typography>
+                        : <React.Fragment key={w.id}>
+                          <Typography sx={creditNameStyle}>{w.name}</Typography>
                           <Divider orientation='vertical'
-                            sx={{ mr: 0.7, ml: 0.7, bgcolor: 'secondary.main' }}/></>
+                            sx={{ mr: 0.7, ml: 0.7, bgcolor: 'secondary.main' }}/>
+                        </React.Fragment>
                     )}
                   </TableCell>
                 </TableRow>
@@ -172,9 +185,11 @@ const Movie = ({ user }) => {
                     {stars.map((s, index, array) =>
                       index === array.length - 1
                         ? <Typography key={s.id} sx={creditNameStyle}>{s.name}</Typography>
-                        : <><Typography key={s.id} sx={creditNameStyle}>{s.name}</Typography>
+                        : <React.Fragment key={s.id}>
+                          <Typography sx={creditNameStyle}>{s.name}</Typography>
                           <Divider orientation='vertical'
-                            sx={{ mr: 0.7, ml: 0.7, bgcolor: 'secondary.main' }}/></>
+                            sx={{ mr: 0.7, ml: 0.7, bgcolor: 'secondary.main' }}/>
+                        </React.Fragment>
                     )}
                   </TableCell>
                 </TableRow>

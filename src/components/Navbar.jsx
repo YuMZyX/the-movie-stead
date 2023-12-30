@@ -14,9 +14,12 @@ const Navbar = ({ handleLogout, user }) => {
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget)
   }
-
   const handleClose = () => {
     setAnchorEl(null)
+  }
+
+  const iconsStyles = {
+    color: 'primary.dark'
   }
 
   const navbarLinks = (user) => {
@@ -31,7 +34,7 @@ const Navbar = ({ handleLogout, user }) => {
         <Box>
           <Button color='inherit' onClick={() => navigate('/trending/1')}>Movies</Button>
           <Button color='inherit'>My Reviews</Button>
-          <Button color='inherit'>Watchlist</Button>
+          <Button color='inherit' onClick={() => navigate(`/watchlist/${user.id}`)}>Watchlist</Button>
           {user.role === 'moderator' &&
             <Button color='inherit' onClick={() => navigate('/users')}>Users</Button>
           }
@@ -41,9 +44,9 @@ const Navbar = ({ handleLogout, user }) => {
   }
 
   return (
-    <AppBar position='sticky' sx={{ backgroundColor: '#435585', borderRadius: 4 }}>
+    <AppBar position='sticky' sx={{ backgroundColor: 'primary.main', borderRadius: 4 }}>
       <Container>
-        <Toolbar disableGutters sx={{ color: '#F5E8C7' }}>
+        <Toolbar disableGutters sx={{ color: 'secondary.main' }}>
           <Box
             component='img'
             alt='The Movie Stead - Logo'
@@ -114,7 +117,7 @@ const Navbar = ({ handleLogout, user }) => {
                       navigate(`/users/${user.id}`)
                     }}>
                       <ListItemIcon>
-                        <AccountCircle />
+                        <AccountCircle sx={iconsStyles} />
                       </ListItemIcon>
                       My account
                     </MenuItem>
@@ -123,7 +126,7 @@ const Navbar = ({ handleLogout, user }) => {
                       handleClose()
                     }}>
                       <ListItemIcon>
-                        <Logout />
+                        <Logout sx={iconsStyles} />
                       </ListItemIcon>
                       Logout
                     </MenuItem>
@@ -135,7 +138,7 @@ const Navbar = ({ handleLogout, user }) => {
                       handleClose()
                     }}>
                       <ListItemIcon>
-                        <Login />
+                        <Login sx={iconsStyles} />
                       </ListItemIcon>
                       Login
                     </MenuItem>
@@ -144,7 +147,7 @@ const Navbar = ({ handleLogout, user }) => {
                       handleClose()
                     }}>
                       <ListItemIcon>
-                        <HowToReg />
+                        <HowToReg sx={iconsStyles} />
                       </ListItemIcon>
                       Sign Up
                     </MenuItem>

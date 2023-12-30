@@ -13,4 +13,20 @@ const addToWatchlist = async (movie) => {
   return res.data
 }
 
-export default { addToWatchlist }
+const getWatchlist = async (id) => {
+  const config = {
+    headers: { Authorization: getToken() }
+  }
+  const res = await axios.get(`${baseUrl}/${id}`, config)
+  return res.data
+}
+
+const removeFromWatchlist = async (id) => {
+  const config = {
+    headers: { Authorization: getToken() }
+  }
+  const res = await axios.delete(`${baseUrl}/${id}`, config)
+  return res.data
+}
+
+export default { addToWatchlist, getWatchlist, removeFromWatchlist }
