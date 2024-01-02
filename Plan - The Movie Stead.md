@@ -13,7 +13,7 @@ Visitors can:
 
 User can:
 - Do everything that Visitor can
-- Review movies
+- Review movies ✔️
 - Browse/sort own reviewed movies
 - Modify own reviews (only 1 review per movie)
 - Delete own reviews
