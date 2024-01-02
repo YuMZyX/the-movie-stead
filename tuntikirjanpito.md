@@ -22,7 +22,7 @@
 |           | 0,75   | Login lomakkeen validointi ja toiminnallisuus frontendissä |
 |           | 2      | Logout ja sessiot toiminnallisuus backendissä ja middlewarejen toteutus |
 | 3.12.2023 | 1,5    | Logout toiminnallisuus frontendissä & koodin refaktorointia |
-|           | 1      | Navingointipalkin alustava toteutus |
+|           | 1      | Navigointipalkin alustava toteutus |
 |           | 2      | Sivuston värien valintaa ja teeman luontia, alustavan logon suunnittelu ja toteutus |
 |           | 1      | Navigointipalkki -> Logon lisäys ja toimintojen ja linkkien toteutusta |
 |           | 0,5    | Login toiminnallisuuden parantelu |
