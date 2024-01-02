@@ -27,7 +27,7 @@ Review.init({
       max: 10
     }
   },
-  review: {
+  reviewText: {
     type: DataTypes.TEXT
   }
 }, {

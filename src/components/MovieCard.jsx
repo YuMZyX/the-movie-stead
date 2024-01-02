@@ -5,8 +5,9 @@ import { Card, CardContent, CardMedia, Typography, IconButton,
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import watchlistsService from '../services/watchlists'
 
-const MovieCard = ({ movie, watchlist, addToWatchlist, user }) => {
+const MovieCard = ({ movie, watchlist, reviews, addToWatchlist, removeFromWatchlist, user }) => {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const navigate = useNavigate()
@@ -24,23 +25,27 @@ const MovieCard = ({ movie, watchlist, addToWatchlist, user }) => {
     addToWatchlist(movie)
     handleMenuClose()
   }
+  const handleRemoveFromWatchlist = async () => {
+    try {
+      const watchlist = await watchlistsService.getWatchlistId(user.id, movie.id)
+      removeFromWatchlist(watchlist.id, movie)
+    } catch (error) {
+      console.log(error)
+    }
+    handleMenuClose()
+  }
 
   const userMenuItems = (movie) => {
     if (watchlist.some((watchlist) => watchlist.movieId === movie.id)) {
       return (
         <div>
-          <MenuItem onClick={handleAddToWatchlist}>
+          <MenuItem onClick={handleRemoveFromWatchlist}>
             <ListItemIcon>
               <FavoriteOutlined sx={{ color: 'red' }} />
             </ListItemIcon>
             Remove from Watchlist
           </MenuItem>
-          <MenuItem>
-            <ListItemIcon>
-              <StarOutlined sx={{ color: 'gold' }} />
-            </ListItemIcon>
-            Create a review
-          </MenuItem>
+          {reviewMenuItems(movie)}
         </div>
       )
     } else {
@@ -52,15 +57,33 @@ const MovieCard = ({ movie, watchlist, addToWatchlist, user }) => {
             </ListItemIcon>
             Add to Watchlist
           </MenuItem>
+          {reviewMenuItems(movie)}
+        </div>
+      )
+    }
+  }
+
+  const reviewMenuItems = (movie) => {
+    return (
+      <div>
+        {reviews.some((review) => review.movieId === movie.id)
+          ?
+          <MenuItem>
+            <ListItemIcon>
+              <StarOutlined sx={{ color: 'gold' }} />
+            </ListItemIcon>
+            Edit review
+          </MenuItem>
+          :
           <MenuItem>
             <ListItemIcon>
               <StarOutlined sx={{ color: 'primary.dark' }} />
             </ListItemIcon>
             Create a review
           </MenuItem>
-        </div>
-      )
-    }
+        }
+      </div>
+    )
   }
 
   const linkStyle = {
@@ -134,20 +157,3 @@ const MovieCard = ({ movie, watchlist, addToWatchlist, user }) => {
 }
 
 export default MovieCard
-
-/*
-<div>
-            <MenuItem onClick={handleAddToWatchlist}>
-              <ListItemIcon>
-                <FavoriteOutlined sx={{ color: 'red' }} />
-              </ListItemIcon>
-              Add to Watchlist
-            </MenuItem>
-            <MenuItem>
-              <ListItemIcon>
-                <StarOutlined sx={{ color: 'gold' }} />
-              </ListItemIcon>
-              Create a review
-            </MenuItem>
-          </div>
-*/

@@ -11,10 +11,18 @@ import User from './components/User'
 import Movie from './components/Movie'
 import NotFound from './components/NotFound'
 import Watchlist from './components/Watchlist'
+import watchlistsService from './services/watchlists'
+import { useSnackbar } from 'notistack'
 
 const App = () => {
   const [user, setUser] = useState(null)
   const navigate = useNavigate()
+  const { enqueueSnackbar } = useSnackbar()
+
+  useEffect(() => {
+    const user = JSON.parse(window.localStorage.getItem('loggedTMSUser'))
+    setUser(user)
+  }, [])
 
   const handleLogout = async () => {
     try {
@@ -30,22 +38,69 @@ const App = () => {
     navigate('/login')
   }
 
-  useEffect(() => {
-    const user = JSON.parse(window.localStorage.getItem('loggedTMSUser'))
-    setUser(user)
-  }, [])
+  const handleAddToWatchlist = async (movie) => {
+    try {
+      await watchlistsService.addToWatchlist({
+        user_id: user.id,
+        movie_id: movie.id,
+        title: movie.title,
+        poster_path: movie.poster_path
+      })
+      enqueueSnackbar(`${movie.title} has been added to your watchlist`,
+        { variant: 'success' })
+    } catch (error) {
+      enqueueSnackbar(`${movie.title} ${error.response.data}`,
+        { variant: 'warning' })
+    }
+  }
+
+  const handleRemoveFromWatchlist = async (watchlistId, movie) => {
+    try {
+      await watchlistsService.removeFromWatchlist(watchlistId)
+      enqueueSnackbar(`${movie.title} has been removed from your watchlist`,
+        { variant: 'info' })
+    } catch (error) {
+      enqueueSnackbar(`${movie.title} ${error.response.data}`,
+        { variant: 'error' })
+    }
+  }
+
 
   return (
     <>
       <Navbar handleLogout={handleLogout} user={user} />
       <Routes>
-        <Route path='/trending/:page' element={<MoviesList user={user} />} />
-        <Route path='/movies/:id' element={<Movie user={user} />} />
+        <Route
+          path='/trending/:page'
+          element={
+            <MoviesList
+              user={user}
+              addToWatchlist={handleAddToWatchlist}
+              removeFromWatchlist={handleRemoveFromWatchlist}
+            />}
+        />
+        <Route
+          path='/movies/:id'
+          element={
+            <Movie
+              user={user}
+              addToWatchlist={handleAddToWatchlist}
+              removeFromWatchlist={handleRemoveFromWatchlist}
+            />}
+        />
         <Route path='/login' element={<Login setUser={setUser} />} />
         <Route path='/signup' element={<SignUp setUser={setUser} />} />
         <Route path='/users' element={<Users />} />
         <Route path='/users/:id' element={<User user={user} />} />
-        <Route path='/watchlist/:id' element={<Watchlist user={user} />} />
+        <Route
+          path='/watchlist/:id'
+          element={
+            <Watchlist
+              user={user}
+              addToWatchlist={handleAddToWatchlist}
+              removeFromWatchlist={handleRemoveFromWatchlist}
+            />}
+        />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </>

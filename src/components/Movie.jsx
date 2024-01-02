@@ -5,18 +5,18 @@ import { Grid, Card, CardMedia, Paper, Typography,
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import moviesService from '../services/movies'
+import watchlistsService from '../services/watchlists'
 import Progress from './Progress'
 import { Favorite, Remove, Star } from '@mui/icons-material'
 import { format, parseISO } from 'date-fns'
 import { uniqBy } from 'lodash'
-import watchlistsService from '../services/watchlists'
-import { useSnackbar } from 'notistack'
 
-const Movie = ({ user }) => {
+const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
 
   const movieId = useParams()
-  const { enqueueSnackbar } = useSnackbar()
   const [movie, setMovie] = useState(null)
+  const [watchlist, setWatchlist] = useState([null])
+  const [addedOrRemoved, setAddedOrRemoved] = useState(null)
   const imdbBaseUrl = 'https://www.imdb.com/title/'
 
   useEffect(() => {
@@ -29,29 +29,40 @@ const Movie = ({ user }) => {
       })
   }, [])
 
+  useEffect(() => {
+    if (user) {
+      watchlistsService.getWatchlistMovies(user.id)
+        .then(response => {
+          setWatchlist(response)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    }
+  }, [addedOrRemoved])
+
   const calculateRuntime = (runtime) => {
     const hours = Math.floor(runtime / 60)
     const minutes = runtime % 60
     return hours + 'h ' + minutes + 'min'
   }
 
-  const addToWatchlist = async (movie) => {
+  const handleAddToWatchlist = async () => {
+    await addToWatchlist(movie)
+    setAddedOrRemoved(movie.id)
+  }
+
+  const handleRemoveFromWatchlist = async () => {
     try {
-      await watchlistsService.addToWatchlist({
-        user_id: user.id,
-        movie_id: movie.id,
-        title: movie.title,
-        poster_path: movie.poster_path
-      })
-      enqueueSnackbar(`${movie.title} has been added to your watchlist`,
-        { variant: 'success' })
+      const watchlist = await watchlistsService.getWatchlistId(user.id, movie.id)
+      await removeFromWatchlist(watchlist.id, movie)
+      setAddedOrRemoved(watchlist.id)
     } catch (error) {
-      enqueueSnackbar(`${movie.title} ${error.response.data}`,
-        { variant: 'warning' })
+      console.log(error)
     }
   }
 
-  if (!movie) {
+  if (!movie || (user && (!watchlist || watchlist[0] === null))) {
     return (
       <Progress />
     )
@@ -64,6 +75,40 @@ const Movie = ({ user }) => {
   const filteredWriters = movieCredits.crew
     .filter(crew => crew.job === 'Screenplay' || crew.department === 'Writing')
   const writers = uniqBy(filteredWriters, (writer) => writer.id).slice(0, 4)
+
+  const userIconButtons = () => {
+    if (watchlist.some((watchlist) => watchlist.movieId === movie.id)) {
+      return (
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', flexGrow: 1 }}>
+          <Tooltip title='Remove from Watchlist'>
+            <IconButton sx={{ boxShadow: 1, mr: 1 }} onClick={handleRemoveFromWatchlist}>
+              <Favorite fontSize='medium' sx={{ color: 'red' }} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title='Create a review'>
+            <IconButton sx={{ boxShadow: 1 }}>
+              <Star fontSize='medium' sx={{ color: 'primary.dark' }} />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      )
+    } else {
+      return (
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', flexGrow: 1 }}>
+          <Tooltip title='Add to watchlist'>
+            <IconButton sx={{ boxShadow: 1, mr: 1 }} onClick={handleAddToWatchlist}>
+              <Favorite fontSize='medium' sx={{ color: 'primary.dark' }} />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title='Create a review'>
+            <IconButton sx={{ boxShadow: 1 }}>
+              <Star fontSize='medium' sx={{ color: 'primary.dark' }} />
+            </IconButton>
+          </Tooltip>
+        </Box>
+      )
+    }
+  }
 
   const creditsStyle = {
     display: 'flex',
@@ -99,18 +144,7 @@ const Movie = ({ user }) => {
                 {movie.title}
               </Typography>
               {user &&
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', flexGrow: 1 }}>
-                <Tooltip title='Add to watchlist'>
-                  <IconButton sx={{ boxShadow: 1, mr: 1 }} onClick={() => addToWatchlist(movie)}>
-                    <Favorite fontSize='medium' sx={{ color: 'red' }} />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title='Create a review'>
-                  <IconButton sx={{ boxShadow: 1 }}>
-                    <Star fontSize='medium' sx={{ color: 'gold' }} />
-                  </IconButton>
-                </Tooltip>
-              </Box>
+                userIconButtons()
               }
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'row' }}>

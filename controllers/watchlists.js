@@ -44,7 +44,20 @@ router.delete('/:id', userExtractor, async (req, res) => {
   res.status(204).end()
 })
 
-router.get('/:userId', userExtractor, async (req, res) => {
+router.get('/:userId&:movieId', userExtractor, async(req, res) => {
+  const watchlist = await Watchlist.findOne({
+    where: {
+      userId: req.params.userId,
+      movieId: req.params.movieId
+    }
+  })
+  if (!watchlist) {
+    return res.status(404).send({ error: 'Watchlist not found' })
+  }
+  res.json(watchlist)
+})
+
+router.get('/user/:userId', userExtractor, async (req, res) => {
   const watchlist = await Watchlist.findAll({
     where: {
       userId: req.params.userId

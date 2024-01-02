@@ -13,11 +13,19 @@ const addToWatchlist = async (movie) => {
   return res.data
 }
 
-const getWatchlist = async (id) => {
+const getWatchlistId = async (userId, movieId) => {
   const config = {
     headers: { Authorization: getToken() }
   }
-  const res = await axios.get(`${baseUrl}/${id}`, config)
+  const res = await axios.get(`${baseUrl}/${userId}&${movieId}`, config)
+  return res.data
+}
+
+const getWatchlistMovies = async (id) => {
+  const config = {
+    headers: { Authorization: getToken() }
+  }
+  const res = await axios.get(`${baseUrl}/user/${id}`, config)
   return res.data
 }
 
@@ -29,4 +37,9 @@ const removeFromWatchlist = async (id) => {
   return res.data
 }
 
-export default { addToWatchlist, getWatchlist, removeFromWatchlist }
+export default {
+  addToWatchlist,
+  getWatchlistId,
+  getWatchlistMovies,
+  removeFromWatchlist,
+}

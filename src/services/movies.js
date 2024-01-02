@@ -11,6 +11,7 @@ const getMovie = async (id) => {
   return res.data
 }
 
+// REMOVE IF NO LONGER RELEVANT
 const getMovieCredits = async (id) => {
   const res = await axios.get(`${baseUrl}/${id}/credits`)
   return res.data

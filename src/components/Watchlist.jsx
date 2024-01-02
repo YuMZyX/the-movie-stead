@@ -1,45 +1,47 @@
 import { Typography, Grid, Container, Box } from '@mui/material'
-//import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-//import moviesService from '../services/movies'
 import Progress from './Progress'
 import MovieCard from './MovieCard'
 import watchlistsService from '../services/watchlists'
-import { useSnackbar } from 'notistack'
+import reviewsService from '../services/reviews'
 
-const Watchlist = ({ user }) => {
+const Watchlist = ({ user, addToWatchlist, removeFromWatchlist }) => {
 
-  //const navigate = useNavigate()
-  const { enqueueSnackbar } = useSnackbar()
   const [watchlist, setWatchlist] = useState([null])
+  const [reviews, setReviews] = useState([null])
+  const [removedOrAdded, setRemovedOrAdded] = useState(null)
 
   useEffect(() => {
-    watchlistsService.getWatchlist(user.id)
+    watchlistsService.getWatchlistMovies(user.id)
       .then(response => {
         setWatchlist(response)
       })
       .catch(error => {
         console.log(error)
       })
-  }, [user])
-
-  const handleAddToWatchlist = async (movie) => {
-    try {
-      await watchlistsService.addToWatchlist({
-        user_id: user.id,
-        movie_id: movie.id,
-        title: movie.title,
-        poster_path: movie.poster_path
+    reviewsService.getUserReviews(user.id)
+      .then(response => {
+        setReviews(response)
       })
-      enqueueSnackbar(`${movie.title} has been added to your watchlist`,
-        { variant: 'success' })
-    } catch (error) {
-      enqueueSnackbar(`${movie.title} ${error.response.data}`,
-        { variant: 'warning' })
-    }
+      .catch (error => {
+        console.log(error)
+      })
+  }, [user, removedOrAdded])
+
+  const handleAddToWatchlist = (movie) => {
+    addToWatchlist(movie)
+  }
+  const handleRemoveFromWatchlist = async (watchlistId, movie) => {
+    await removeFromWatchlist(watchlistId, movie)
+    setRemovedOrAdded(watchlistId)
   }
 
-  if (!watchlist || watchlist[0] === null) {
+  if (
+    !watchlist
+    || watchlist[0] === null
+    || ! reviews
+    || reviews[0] === null
+  ) {
     return (
       <Progress />
     )
@@ -68,7 +70,9 @@ const Watchlist = ({ user }) => {
               key={wl.movieId}
               movie={wl.movie}
               watchlist={watchlist}
+              reviews={reviews}
               addToWatchlist={handleAddToWatchlist}
+              removeFromWatchlist={handleRemoveFromWatchlist}
               user={user}
             />
           </Grid>
@@ -79,18 +83,3 @@ const Watchlist = ({ user }) => {
 }
 
 export default Watchlist
-
-/*
-<Grid container spacing={4} columns={20} sx={{ mb: 4 }}>
-        {watchlist.map((watchlist) => (
-          <Grid item key={watchlist.id} xs={10} sm={6} md={5} lg={4} style={{ display: 'flex' }}>
-            <MovieCard
-              key={watchlist.movieId}
-              movie={watchlist.movie}
-              addToWatchlist={handleRemoveFromWatchlist}
-              user={user}
-            />
-          </Grid>
-        ))}
-      </Grid>
-*/

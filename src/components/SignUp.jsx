@@ -1,12 +1,5 @@
-import {
-  Avatar,
-  Button,
-  TextField,
-  Grid,
-  Box,
-  Typography,
-  Container,
-} from '@mui/material'
+import { Avatar, Button, TextField, Grid, Box,
+  Typography, Container } from '@mui/material'
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined'
 import { Link } from 'react-router-dom'
 import Copyright from './Copyright'

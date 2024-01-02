@@ -7,16 +7,17 @@ import moviesService from '../services/movies'
 import Progress from './Progress'
 import MovieCard from './MovieCard'
 import watchlistsService from '../services/watchlists'
-import { useSnackbar } from 'notistack'
+import reviewsService from '../services/reviews'
 
-const MoviesList = ({ user }) => {
+const MoviesList = ({ user, addToWatchlist, removeFromWatchlist }) => {
 
   const moviesList = useParams()
   const navigate = useNavigate()
-  const { enqueueSnackbar } = useSnackbar()
   const [movies, setMovies] = useState([])
   const [totalPages, setTotalPages] = useState(null)
   const [watchlist, setWatchlist] = useState([null])
+  const [reviews, setReviews] = useState([null])
+  const [addedOrRemoved, setAddedOrRemoved] = useState(null)
 
   useEffect(() => {
     moviesService.getTrending(moviesList.page)
@@ -31,34 +32,34 @@ const MoviesList = ({ user }) => {
       .catch(error => {
         console.log(error)
       })
-  }, [moviesList.page])
+  }, [moviesList.page, addedOrRemoved])
 
   useEffect(() => {
     if (user) {
-      watchlistsService.getWatchlist(user.id)
+      watchlistsService.getWatchlistMovies(user.id)
         .then(response => {
           setWatchlist(response)
         })
         .catch(error => {
           console.log(error)
         })
+      reviewsService.getUserReviews(user.id)
+        .then(response => {
+          setReviews(response)
+        })
+        .catch (error => {
+          console.log(error)
+        })
     }
-  }, [moviesList.page, user])
+  }, [moviesList.page, user, addedOrRemoved])
 
   const handleAddToWatchlist = async (movie) => {
-    try {
-      await watchlistsService.addToWatchlist({
-        user_id: user.id,
-        movie_id: movie.id,
-        title: movie.title,
-        poster_path: movie.poster_path
-      })
-      enqueueSnackbar(`${movie.title} has been added to your watchlist`,
-        { variant: 'success' })
-    } catch (error) {
-      enqueueSnackbar(`${movie.title} ${error.response.data}`,
-        { variant: 'warning' })
-    }
+    await addToWatchlist(movie)
+    setAddedOrRemoved(movie.id)
+  }
+  const handleRemoveFromWatchlist = async (watchlistId, movie) => {
+    await removeFromWatchlist(watchlistId, movie)
+    setAddedOrRemoved(watchlistId)
   }
   /*
   const handleCreateReview = () => {
@@ -69,7 +70,12 @@ const MoviesList = ({ user }) => {
     navigate(`/trending/${value}`)
   }
 
-  if (!movies || movies.length === 0 || (user && (!watchlist || watchlist[0] === null))) {
+  if (
+    !movies
+    || movies.length === 0
+    || (user && (!watchlist || watchlist[0] === null))
+    || (user && (!reviews || reviews[0] === null))
+  ) {
     return (
       <Progress />
     )
@@ -87,7 +93,9 @@ const MoviesList = ({ user }) => {
               key={movie.id}
               movie={movie}
               watchlist={watchlist}
+              reviews={reviews}
               addToWatchlist={handleAddToWatchlist}
+              removeFromWatchlist={handleRemoveFromWatchlist}
               user={user}
             />
           </Grid>
