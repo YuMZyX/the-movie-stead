@@ -60,5 +60,9 @@
 | 1.1.2024  | 2      | Katselulistalta poiston toteutus tietokantaan asti + näkymän päivitys poiston/lisäyksen yhteydessä |
 |           | 0,5    | Katselulistalta poisto/lisäys yksittäisen elokuvan näkymässä + näkymän päivitys |
 | 2.1.2024  | 1,5    | Reviews migraatio, controller ja service sekä Review MenuItemit |
+|           | 1      | Review lomakkeen suunnittelua MUI:n Dialog ja Rating komponentteja käyttäen + route määrittelyt |
+|           | 2,5    | Review lomake + validoinnit & Review lomakkeen avaus Dialog ikkunaan |
+|           | 1      | Uuden arvostelun lisäämisen toiminnallisuus tietokantaan asti |
+|           | 1,5    | Review lomakkeen ulkoasun parannus ja validointivirheiden korjaus |
 |           |        |  |
-| YHT:      | 75,5   |  |
+| YHT:      | 81,5   |  |

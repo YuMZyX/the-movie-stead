@@ -22,10 +22,10 @@ router.post('/', userExtractor, async (req, res) => {
     }
   })
   if (reviewExists) {
-    return res.status(400).send('already reviewed')
+    return res.status(400).send('You have already reviewed this movie')
   }
 
-  const review = Review.create({
+  const review = await Review.create({
     userId: user_id,
     movieId: movie_id,
     rating: rating,

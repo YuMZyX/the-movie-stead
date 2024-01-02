@@ -7,7 +7,9 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import watchlistsService from '../services/watchlists'
 
-const MovieCard = ({ movie, watchlist, reviews, addToWatchlist, removeFromWatchlist, user }) => {
+const MovieCard = ({ movie, watchlist, reviews, addToWatchlist,
+  removeFromWatchlist, createReview, user }) => {
+
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const navigate = useNavigate()
@@ -21,6 +23,7 @@ const MovieCard = ({ movie, watchlist, reviews, addToWatchlist, removeFromWatchl
   const handleCardClick = (id) => {
     navigate(`/movies/${id}`)
   }
+
   const handleAddToWatchlist = () => {
     addToWatchlist(movie)
     handleMenuClose()
@@ -32,6 +35,11 @@ const MovieCard = ({ movie, watchlist, reviews, addToWatchlist, removeFromWatchl
     } catch (error) {
       console.log(error)
     }
+    handleMenuClose()
+  }
+
+  const handleCreateReview = () => {
+    createReview(movie)
     handleMenuClose()
   }
 
@@ -75,7 +83,7 @@ const MovieCard = ({ movie, watchlist, reviews, addToWatchlist, removeFromWatchl
             Edit review
           </MenuItem>
           :
-          <MenuItem>
+          <MenuItem onClick={handleCreateReview}>
             <ListItemIcon>
               <StarOutlined sx={{ color: 'primary.dark' }} />
             </ListItemIcon>

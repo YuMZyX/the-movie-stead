@@ -8,6 +8,7 @@ import Progress from './Progress'
 import MovieCard from './MovieCard'
 import watchlistsService from '../services/watchlists'
 import reviewsService from '../services/reviews'
+import ReviewDialog from './ReviewDialog'
 
 const MoviesList = ({ user, addToWatchlist, removeFromWatchlist }) => {
 
@@ -18,6 +19,8 @@ const MoviesList = ({ user, addToWatchlist, removeFromWatchlist }) => {
   const [watchlist, setWatchlist] = useState([null])
   const [reviews, setReviews] = useState([null])
   const [addedOrRemoved, setAddedOrRemoved] = useState(null)
+  const [reviewDialogOpen, setReviewDialogOpen] = useState(false)
+  const [movie, setMovie] = useState(null)
 
   useEffect(() => {
     moviesService.getTrending(moviesList.page)
@@ -61,13 +64,20 @@ const MoviesList = ({ user, addToWatchlist, removeFromWatchlist }) => {
     await removeFromWatchlist(watchlistId, movie)
     setAddedOrRemoved(watchlistId)
   }
-  /*
-  const handleCreateReview = () => {
-    // Implement logic for creating movie review
+
+  const handleCreateReview = async (movie) => {
+    setMovie(movie)
+    handleOpenDialog()
   }
-  */
+
   const handlePageChange = (event, value) => {
     navigate(`/trending/${value}`)
+  }
+  const handleOpenDialog = () => {
+    setReviewDialogOpen(true)
+  }
+  const handleCloseDialog = () => {
+    setReviewDialogOpen(false)
   }
 
   if (
@@ -96,11 +106,19 @@ const MoviesList = ({ user, addToWatchlist, removeFromWatchlist }) => {
               reviews={reviews}
               addToWatchlist={handleAddToWatchlist}
               removeFromWatchlist={handleRemoveFromWatchlist}
+              createReview={handleCreateReview}
               user={user}
             />
           </Grid>
         ))}
       </Grid>
+      <ReviewDialog
+        open={reviewDialogOpen}
+        handleCloseDialog={handleCloseDialog}
+        user={user}
+        movie={movie}
+        setAddedOrRemoved={setAddedOrRemoved}
+      />
       <Stack spacing={2} sx={{ alignItems: 'center', mb: 3 }}>
         <Pagination
           count={totalPages}
