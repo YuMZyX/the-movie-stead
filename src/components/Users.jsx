@@ -20,7 +20,7 @@ const Users = () => {
   const confirm = useConfirm()
 
   useEffect(() => {
-    userService.getAll()
+    userService.getAllUsers()
       .then(response => {
         setUsers(response)
       })
@@ -42,7 +42,8 @@ const Users = () => {
   }
   const handleDeleteClick = (id) => () => {
     const user = users.find((u) => u.id === id)
-    confirm({ title: 'Delete user?',
+    confirm({
+      title: 'Delete user?',
       description: user.name,
       confirmationText: 'Delete', dialogProps: {
         PaperProps: {
@@ -54,13 +55,16 @@ const Users = () => {
       } })
       .then(() => {
         setUsers(users.filter((user) => user.id !== id))
-        userService.remove(id)
+        userService.removeUser(id)
           .then(() => {
             console.log('DELETE: ', id)
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error)
           })
+      })
+      .catch(() => {
+        console.log('Deletion cancelled')
       })
   }
   const handleCancelClick = (id) => () => {
@@ -75,7 +79,7 @@ const Users = () => {
     }
   }
   const processRowUpdate = (newRow) => {
-    userService.edit(newRow.id, newRow)
+    userService.editUser(newRow.id, newRow)
       .then(response => {
         console.log('EDIT: ', response.id)
       })

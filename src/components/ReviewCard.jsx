@@ -1,15 +1,30 @@
+import React from 'react'
+import { Card, Box, CardMedia, IconButton, Menu, CardContent,
+  Typography, MenuItem, ListItemIcon, Avatar, CardActions, Collapse } from '@mui/material'
 import { FavoriteOutlined, MoreVertOutlined,
-  StarOutlined } from '@mui/icons-material'
-import { Card, CardContent, CardMedia, Typography, IconButton,
-  Menu, MenuItem, Box, ListItemIcon, } from '@mui/material'
+  StarOutlined, ExpandMoreOutlined } from '@mui/icons-material'
+import { styled } from '@mui/material/styles'
+import watchlistsService from '../services/watchlists'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
-import watchlistsService from '../services/watchlists'
 
-const MovieCard = ({ movie, watchlist, reviews, addToWatchlist,
-  removeFromWatchlist, createReview, editReview, user }) => {
+const ExpandMore = styled((props) => {
+  const { expand, ...other } = props
+  expand ? expand : expand
+  return <IconButton {...other} />
+})(({ theme, expand }) => ({
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}))
 
+const ReviewCard = ({ movie, watchlist, review, addToWatchlist,
+  removeFromWatchlist, editReview, user }) => {
+
+  const [expanded, setExpanded] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const navigate = useNavigate()
@@ -22,6 +37,9 @@ const MovieCard = ({ movie, watchlist, reviews, addToWatchlist,
   }
   const handleCardClick = (id) => {
     navigate(`/movies/${id}`)
+  }
+  const handleExpandClick = () => {
+    setExpanded(!expanded)
   }
 
   const handleAddToWatchlist = () => {
@@ -38,10 +56,6 @@ const MovieCard = ({ movie, watchlist, reviews, addToWatchlist,
     handleMenuClose()
   }
 
-  const handleCreateReview = () => {
-    createReview(movie)
-    handleMenuClose()
-  }
   const handleEditReview = (review) => {
     editReview(movie, review)
     handleMenuClose()
@@ -50,53 +64,39 @@ const MovieCard = ({ movie, watchlist, reviews, addToWatchlist,
   const userMenuItems = (movie) => {
     if (watchlist.some((watchlist) => watchlist.movieId === movie.id)) {
       return (
-        <div>
+        <Box>
           <MenuItem onClick={handleRemoveFromWatchlist}>
             <ListItemIcon>
               <FavoriteOutlined sx={{ color: 'red' }} />
             </ListItemIcon>
             Remove from Watchlist
           </MenuItem>
-          {reviewMenuItems(movie)}
-        </div>
+          <MenuItem onClick={() => handleEditReview(review)}>
+            <ListItemIcon>
+              <StarOutlined sx={{ color: 'gold' }} />
+            </ListItemIcon>
+            Edit review
+          </MenuItem>
+        </Box>
       )
     } else {
       return (
-        <div>
+        <Box>
           <MenuItem onClick={handleAddToWatchlist}>
             <ListItemIcon>
               <FavoriteOutlined sx={{ color: 'primary.dark' }} />
             </ListItemIcon>
             Add to Watchlist
           </MenuItem>
-          {reviewMenuItems(movie)}
-        </div>
-      )
-    }
-  }
-
-  const reviewMenuItems = (movie) => {
-    return (
-      <div>
-        {reviews.some((review) => review.movieId === movie.id)
-          ?
-          <MenuItem onClick={() => handleEditReview(reviews
-            .find(review => review.movieId === movie.id))}>
+          <MenuItem onClick={() => handleEditReview(review)}>
             <ListItemIcon>
               <StarOutlined sx={{ color: 'gold' }} />
             </ListItemIcon>
             Edit review
           </MenuItem>
-          :
-          <MenuItem onClick={handleCreateReview}>
-            <ListItemIcon>
-              <StarOutlined sx={{ color: 'primary.dark' }} />
-            </ListItemIcon>
-            Create a review
-          </MenuItem>
-        }
-      </div>
-    )
+        </Box>
+      )
+    }
   }
 
   const linkStyle = {
@@ -108,9 +108,14 @@ const MovieCard = ({ movie, watchlist, reviews, addToWatchlist,
     top: 0,
     right: 0,
   }
+  const ratingStyle = {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+  }
 
   return (
-    <Card raised sx={{ borderRadius: 2.5 }} key={movie.id}>
+    <Card raised sx={{ borderRadius: 2.5, display: 'flex', flexDirection: 'column' }} key={review.id}>
       <Box component='div' sx={{ position: 'relative' }}>
         <CardMedia
           component='img'
@@ -129,6 +134,10 @@ const MovieCard = ({ movie, watchlist, reviews, addToWatchlist,
           }}>
           <MoreVertOutlined fontSize='small' />
         </IconButton>
+        <Avatar style={ratingStyle} variant='rounded'
+          sx={{ m: 0.7, width: 50, height: 40, backgroundColor: 'rgba(245, 232, 199, 0.6)', color: 'black' }}>
+          <Typography variant='body1' fontWeight='bold'>{review.rating}/10</Typography>
+        </Avatar>
       </Box>
       <CardContent>
         <Link to={`/movies/${movie.id}`} style={linkStyle}>
@@ -138,6 +147,25 @@ const MovieCard = ({ movie, watchlist, reviews, addToWatchlist,
           </Typography>
         </Link>
       </CardContent>
+      {review.reviewText &&
+      <React.Fragment>
+        <CardActions sx={{ mt: 'auto' }}>
+          <ExpandMore
+            expand={expanded}
+            onClick={handleExpandClick}
+            aria-expanded={expanded}
+            aria-label='Show more'
+          >
+            <ExpandMoreOutlined />
+          </ExpandMore>
+        </CardActions>
+        <Collapse in={expanded} timeout='auto' unmountOnExit>
+          <CardContent>
+            <Typography>{review.reviewText}</Typography>
+          </CardContent>
+        </Collapse>
+      </React.Fragment>
+      }
       <Menu
         id='movie-menu'
         anchorEl={anchorEl}
@@ -153,20 +181,12 @@ const MovieCard = ({ movie, watchlist, reviews, addToWatchlist,
           horizontal: 'right',
         }}
       >
-        {user
-          ?
+        {user &&
           userMenuItems(movie)
-          :
-          <MenuItem style={{
-            backgroundColor: 'transparent',
-            cursor: 'default'
-          }}>
-            Log in to add movies to watchlist and to create movie reviews.
-          </MenuItem>
         }
       </Menu>
     </Card>
   )
 }
 
-export default MovieCard
+export default ReviewCard

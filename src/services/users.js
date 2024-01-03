@@ -5,7 +5,7 @@ const getToken = () => {
   return `Bearer ${JSON.parse(window.localStorage.getItem('loggedTMSUser')).token}`
 }
 
-const getAll = async () => {
+const getAllUsers = async () => {
   const config = {
     headers: { Authorization: getToken() }
   }
@@ -13,7 +13,7 @@ const getAll = async () => {
   return res.data
 }
 
-const getOne = async (id) => {
+const getUser = async (id) => {
   const config = {
     headers: { Authorization: getToken() }
   }
@@ -26,19 +26,25 @@ const signUp = async (credentials) => {
   return res.data
 }
 
-const edit = async (id, newObject) => {
+const editUser = async (id, user) => {
   const config = {
     headers: { Authorization: getToken() }
   }
-  const res = await axios.put(`${baseUrl}/${id}`, newObject, config)
+  const res = await axios.put(`${baseUrl}/${id}`, user, config)
   return res.data
 }
 
-const remove = async (id) => {
+const removeUser = async (id) => {
   const config = {
     headers: { Authorization: getToken() }
   }
   await axios.delete(`${baseUrl}/${id}`, config)
 }
 
-export default { getAll, signUp, getOne, edit, remove }
+export default {
+  getAllUsers,
+  signUp,
+  getUser,
+  editUser,
+  removeUser
+}

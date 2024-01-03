@@ -15,8 +15,8 @@ User can:
 - Do everything that Visitor can
 - Review movies ✔️
 - Browse/sort own reviewed movies
-- Modify own reviews (only 1 review per movie)
-- Delete own reviews
+- Modify own reviews (only 1 review per movie) ✔️
+- Delete own reviews ✔️
 - Add movies to watchlist ✔️
 - Browse/sort own watchlist
 - Remove movies from own watchlist ✔️

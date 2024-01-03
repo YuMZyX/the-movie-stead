@@ -33,7 +33,7 @@ const Navbar = ({ handleLogout, user }) => {
       return (
         <Box>
           <Button color='inherit' onClick={() => navigate('/trending/1')}>Movies</Button>
-          <Button color='inherit'>My Reviews</Button>
+          <Button color='inherit' onClick={() => navigate(`/myreviews/${user.id}`)}>My Reviews</Button>
           <Button color='inherit' onClick={() => navigate(`/watchlist/${user.id}`)}>Watchlist</Button>
           {user.role === 'moderator' &&
             <Button color='inherit' onClick={() => navigate('/users')}>Users</Button>

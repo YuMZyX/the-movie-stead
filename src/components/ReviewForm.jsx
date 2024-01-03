@@ -15,21 +15,21 @@ const validationSchema = yup.object({
     .max(1000, 'Review cannot exceed 1000 characters in length')
 })
 
-const ReviewForm = ({ user, movie, handleCloseDialog, setAddedOrRemoved }) => {
+const ReviewForm = ({ user, movie, review, edit, handleCloseDialog, setAddedOrRemoved }) => {
 
   const [error, setError] = useState('')
   const { enqueueSnackbar } = useSnackbar()
 
   const formik = useFormik({
     initialValues: {
-      rating: null,
-      review_text: ''
+      rating: review.rating,
+      review_text: review.review_text ? review.review_text : ''
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       const { rating, review_text } = values
       try {
-        const review = await reviewsService.createReview({
+        const newReview = await reviewsService.createReview({
           user_id: user.id,
           movie_id: movie.id,
           title: movie.title,
@@ -39,8 +39,8 @@ const ReviewForm = ({ user, movie, handleCloseDialog, setAddedOrRemoved }) => {
         })
         handleCloseDialog()
         enqueueSnackbar(`You reviewed ${movie.title}`,
-          { variant: 'info' })
-        setAddedOrRemoved(review.id)
+          { variant: 'success' })
+        setAddedOrRemoved(newReview.id)
       } catch (error) {
         console.log(error)
         setError(error.response.data)
@@ -50,6 +50,42 @@ const ReviewForm = ({ user, movie, handleCloseDialog, setAddedOrRemoved }) => {
       }
     }
   })
+
+  const handleEdit = async (values) => {
+    const { rating, review_text } = values
+    try {
+      await reviewsService.editReview(review.id, {
+        rating: rating,
+        review_text: review_text
+      })
+      handleCloseDialog()
+      enqueueSnackbar(`Edited review for ${movie.title}`,
+        { variant: 'info' })
+      setAddedOrRemoved(Math.random())
+    } catch (error) {
+      console.log(error)
+      setError(error.response.data)
+      setTimeout(() => {
+        setError('')
+      }, 5000)
+    }
+  }
+
+  const handleRemove = async () => {
+    try {
+      await reviewsService.deleteReview(review.id)
+      handleCloseDialog()
+      enqueueSnackbar(`Deleted review for ${movie.title}`,
+        { variant: 'info' })
+      setAddedOrRemoved(review.movieId)
+    } catch (error) {
+      console.log(error)
+      setError(error.response.data)
+      setTimeout(() => {
+        setError('')
+      }, 5000)
+    }
+  }
 
   return (
     <Container>
@@ -105,9 +141,24 @@ const ReviewForm = ({ user, movie, handleCloseDialog, setAddedOrRemoved }) => {
               {formik.touched.rating && formik.errors.rating}
             </Typography>
           }
-          <Button type='submit' fullWidth variant='contained' sx={{ mt: 2, mb: 2, color: 'secondary.main' }}>
-            Create review
-          </Button>
+          {edit
+            ?
+            <Box>
+              <Button fullWidth variant='contained' onClick={() => handleEdit(formik.values)}
+                sx={{ mt: 2, mb: 1, color: 'secondary.main' }}>
+                Edit review
+              </Button>
+              <Button fullWidth variant='contained' onClick={handleRemove}
+                color='error' sx={{ mt: 1, mb: 1, color: 'secondary.main' }}>
+                Delete review
+              </Button>
+            </Box>
+            :
+            <Button type='submit' fullWidth variant='contained'
+              sx={{ mt: 2, mb: 2, color: 'secondary.main' }}>
+              Create review
+            </Button>
+          }
         </Box>
       </Box>
     </Container>

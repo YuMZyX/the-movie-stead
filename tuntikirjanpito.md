@@ -64,5 +64,10 @@
 |           | 2,5    | Review lomake + validoinnit & Review lomakkeen avaus Dialog ikkunaan |
 |           | 1      | Uuden arvostelun lisäämisen toiminnallisuus tietokantaan asti |
 |           | 1,5    | Review lomakkeen ulkoasun parannus ja validointivirheiden korjaus |
+| 3.1.2024  | 1      | Arvostelujen muokkaus- ja poistamisvalintojen lisäys samaan Review lomakkeeseen |
+|           | 1,5    | Arvostelun poisto/muokkaus routet ja toiminnallisuus tietokantaan asti |
+|           | 0,5    | Arvostelun lisäys/poisto/muokkaus myös Watchlist näkymään + users services refaktorointi |
+|           | 0,5    | Arvostelun lisäys/poisto/muokkaus myös yksittäisen elokuvan näkymään + getReview route |
+|           | 3      | MyReviews näkymän ja ReviewCard komponentin toteutus sekä koodin refaktorointia |
 |           |        |  |
-| YHT:      | 81,5   |  |
+| YHT:      | 88     |  |

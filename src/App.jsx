@@ -13,6 +13,7 @@ import NotFound from './components/NotFound'
 import Watchlist from './components/Watchlist'
 import watchlistsService from './services/watchlists'
 import { useSnackbar } from 'notistack'
+import MyReviews from './components/MyReviews'
 
 const App = () => {
   const [user, setUser] = useState(null)
@@ -101,6 +102,14 @@ const App = () => {
               removeFromWatchlist={handleRemoveFromWatchlist}
             />}
         />
+        <Route
+          path='/myreviews/:id'
+          element={
+            <MyReviews
+              user={user}
+              addToWatchlist={handleAddToWatchlist}
+              removeFromWatchlist={handleRemoveFromWatchlist}
+            />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </>

@@ -12,12 +12,18 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   },
 }))
 
-const ReviewDialog = ({ open, handleCloseDialog, user, movie, setAddedOrRemoved }) => {
+const ReviewDialog = ({ open, handleCloseDialog, user, movie,
+  review, edit, setAddedOrRemoved, setEdit }) => {
+
+  const handleClose = () => {
+    handleCloseDialog()
+    setEdit(false)
+  }
 
   return (
-    <BootstrapDialog open={open} onClose={handleCloseDialog} fullWidth>
+    <BootstrapDialog open={open} onClose={handleClose} fullWidth>
       <IconButton
-        onClick={handleCloseDialog}
+        onClick={handleClose}
         sx={{
           position: 'absolute',
           right: 8,
@@ -31,7 +37,9 @@ const ReviewDialog = ({ open, handleCloseDialog, user, movie, setAddedOrRemoved 
         <ReviewForm
           user={user}
           movie={movie}
-          handleCloseDialog={handleCloseDialog}
+          review={review}
+          edit={edit}
+          handleCloseDialog={handleClose}
           setAddedOrRemoved={setAddedOrRemoved}
         />
       </DialogContent>

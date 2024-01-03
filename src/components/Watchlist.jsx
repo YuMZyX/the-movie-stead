@@ -4,42 +4,75 @@ import Progress from './Progress'
 import MovieCard from './MovieCard'
 import watchlistsService from '../services/watchlists'
 import reviewsService from '../services/reviews'
+import ReviewDialog from './ReviewDialog'
 
 const Watchlist = ({ user, addToWatchlist, removeFromWatchlist }) => {
 
   const [watchlist, setWatchlist] = useState([null])
   const [reviews, setReviews] = useState([null])
-  const [removedOrAdded, setRemovedOrAdded] = useState(null)
+  const [addedOrRemoved, setAddedOrRemoved] = useState(null)
+  const [reviewDialogOpen, setReviewDialogOpen] = useState(false)
+  const [movie, setMovie] = useState(null)
+  const [review, setReview] = useState(null)
+  const [edit, setEdit] = useState(false)
 
   useEffect(() => {
-    watchlistsService.getWatchlistMovies(user.id)
-      .then(response => {
-        setWatchlist(response)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    reviewsService.getUserReviews(user.id)
-      .then(response => {
-        setReviews(response)
-      })
-      .catch (error => {
-        console.log(error)
-      })
-  }, [user, removedOrAdded])
+    if (user) {
+      watchlistsService.getWatchlistMovies(user.id)
+        .then(response => {
+          setWatchlist(response)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      reviewsService.getUserReviews(user.id)
+        .then(response => {
+          setReviews(response)
+        })
+        .catch (error => {
+          console.log(error)
+        })
+    }
+  }, [user, addedOrRemoved])
 
   const handleAddToWatchlist = (movie) => {
     addToWatchlist(movie)
   }
   const handleRemoveFromWatchlist = async (watchlistId, movie) => {
     await removeFromWatchlist(watchlistId, movie)
-    setRemovedOrAdded(watchlistId)
+    setAddedOrRemoved(watchlistId)
+  }
+
+  const handleCreateReview = async (movie) => {
+    setMovie(movie)
+    setReview({
+      rating: null,
+      review_text: null
+    })
+    handleOpenDialog()
+  }
+  const handleEditReview = async (movie, review) => {
+    setMovie(movie)
+    setReview({
+      id: review.id,
+      rating: review.rating,
+      review_text: review.reviewText
+    })
+    setEdit(true)
+    handleOpenDialog()
+  }
+
+  const handleOpenDialog = () => {
+    setReviewDialogOpen(true)
+  }
+  const handleCloseDialog = () => {
+    setReviewDialogOpen(false)
   }
 
   if (
     !watchlist
     || watchlist[0] === null
-    || ! reviews
+    || !reviews
     || reviews[0] === null
   ) {
     return (
@@ -67,17 +100,28 @@ const Watchlist = ({ user, addToWatchlist, removeFromWatchlist }) => {
         {watchlist.map((wl) => (
           <Grid item key={wl.movieId} xs={10} sm={6} md={5} lg={4} style={{ display: 'flex' }}>
             <MovieCard
-              key={wl.movieId}
               movie={wl.movie}
               watchlist={watchlist}
               reviews={reviews}
               addToWatchlist={handleAddToWatchlist}
               removeFromWatchlist={handleRemoveFromWatchlist}
+              createReview={handleCreateReview}
+              editReview={handleEditReview}
               user={user}
             />
           </Grid>
         ))}
       </Grid>
+      <ReviewDialog
+        open={reviewDialogOpen}
+        handleCloseDialog={handleCloseDialog}
+        user={user}
+        movie={movie}
+        review={review}
+        edit={edit}
+        setAddedOrRemoved={setAddedOrRemoved}
+        setEdit={setEdit}
+      />
     </Container>
   )
 }

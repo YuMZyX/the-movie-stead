@@ -10,7 +10,7 @@ const User = ({ user }) => {
   const [userPage, setUserPage] = useState(null)
 
   useEffect(() => {
-    userService.getOne(userId.id)
+    userService.getUser(userId.id)
       .then(response => {
         setUserPage(response)
       })

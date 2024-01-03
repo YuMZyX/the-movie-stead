@@ -6,17 +6,22 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import moviesService from '../services/movies'
 import watchlistsService from '../services/watchlists'
+import reviewsService from '../services/reviews'
 import Progress from './Progress'
 import { Favorite, Remove, Star } from '@mui/icons-material'
 import { format, parseISO } from 'date-fns'
 import { uniqBy } from 'lodash'
+import ReviewDialog from './ReviewDialog'
 
 const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
 
   const movieId = useParams()
   const [movie, setMovie] = useState(null)
   const [watchlist, setWatchlist] = useState([null])
+  const [review, setReview] = useState()
   const [addedOrRemoved, setAddedOrRemoved] = useState(null)
+  const [reviewDialogOpen, setReviewDialogOpen] = useState(false)
+  const [edit, setEdit] = useState(false)
   const imdbBaseUrl = 'https://www.imdb.com/title/'
 
   useEffect(() => {
@@ -38,8 +43,16 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
         .catch(error => {
           console.log(error)
         })
+
+      reviewsService.getReview(user.id, movieId.id)
+        .then(response => {
+          setReview(response)
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
-  }, [addedOrRemoved])
+  }, [user, addedOrRemoved])
 
   const calculateRuntime = (runtime) => {
     const hours = Math.floor(runtime / 60)
@@ -51,7 +64,6 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
     await addToWatchlist(movie)
     setAddedOrRemoved(movie.id)
   }
-
   const handleRemoveFromWatchlist = async () => {
     try {
       const watchlist = await watchlistsService.getWatchlistId(user.id, movie.id)
@@ -62,7 +74,35 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
     }
   }
 
-  if (!movie || (user && (!watchlist || watchlist[0] === null))) {
+  const handleCreateReview = async () => {
+    setReview({
+      rating: null,
+      review_text: null
+    })
+    handleOpenDialog()
+  }
+  const handleEditReview = async () => {
+    setReview({
+      id: review.id,
+      rating: review.rating,
+      review_text: review.reviewText
+    })
+    setEdit(true)
+    handleOpenDialog()
+  }
+
+  const handleOpenDialog = () => {
+    setReviewDialogOpen(true)
+  }
+  const handleCloseDialog = () => {
+    setReviewDialogOpen(false)
+  }
+
+  if (
+    !movie
+    || (user && (!watchlist || watchlist[0] === null))
+    || review === undefined
+  ) {
     return (
       <Progress />
     )
@@ -85,11 +125,7 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
               <Favorite fontSize='medium' sx={{ color: 'red' }} />
             </IconButton>
           </Tooltip>
-          <Tooltip title='Create a review'>
-            <IconButton sx={{ boxShadow: 1 }}>
-              <Star fontSize='medium' sx={{ color: 'primary.dark' }} />
-            </IconButton>
-          </Tooltip>
+          {reviewIconButtons()}
         </Box>
       )
     } else {
@@ -100,14 +136,31 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
               <Favorite fontSize='medium' sx={{ color: 'primary.dark' }} />
             </IconButton>
           </Tooltip>
-          <Tooltip title='Create a review'>
-            <IconButton sx={{ boxShadow: 1 }}>
-              <Star fontSize='medium' sx={{ color: 'primary.dark' }} />
-            </IconButton>
-          </Tooltip>
+          {reviewIconButtons()}
         </Box>
       )
     }
+  }
+
+  const reviewIconButtons = () => {
+    return (
+      <div>
+        {review
+          ?
+          <Tooltip title='Edit review'>
+            <IconButton sx={{ boxShadow: 1 }} onClick={handleEditReview}>
+              <Star fontSize='medium' sx={{ color: 'gold' }} />
+            </IconButton>
+          </Tooltip>
+          :
+          <Tooltip title='Create a review'>
+            <IconButton sx={{ boxShadow: 1 }} onClick={handleCreateReview}>
+              <Star fontSize='medium' sx={{ color: 'primary.dark' }} />
+            </IconButton>
+          </Tooltip>
+        }
+      </div>
+    )
   }
 
   const creditsStyle = {
@@ -137,6 +190,16 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
             />
           </Card>
         </Grid>
+        <ReviewDialog
+          open={reviewDialogOpen}
+          handleCloseDialog={handleCloseDialog}
+          user={user}
+          movie={movie}
+          review={review}
+          edit={edit}
+          setAddedOrRemoved={setAddedOrRemoved}
+          setEdit={setEdit}
+        />
         <Grid item xs={12} md={8}>
           <Paper elevation={7} sx={{ padding: 2.5 }}>
             <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'top' }}>
@@ -182,8 +245,10 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
                   <TableCell padding='none' sx={{ border: 'none', display: 'flex' }}>
                     {directors.map((d, index, array) =>
                       index === array.length - 1
-                        ? <Typography key={d.id} sx={creditNameStyle}>{d.name}</Typography>
-                        : <React.Fragment key={d.id}>
+                        ?
+                        <Typography key={d.id} sx={creditNameStyle}>{d.name}</Typography>
+                        :
+                        <React.Fragment key={d.id}>
                           <Typography sx={creditNameStyle}>{d.name}</Typography>
                           <Divider orientation='vertical'
                             sx={{ mr: 0.7, ml: 0.7, bgcolor: 'secondary.main' }}/>
@@ -200,8 +265,10 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
                   <TableCell padding='none' sx={{ border: 'none', display: 'flex' }}>
                     {writers.map((w, index, array) =>
                       index === array.length - 1
-                        ? <Typography key={w.id} sx={creditNameStyle}>{w.name}</Typography>
-                        : <React.Fragment key={w.id}>
+                        ?
+                        <Typography key={w.id} sx={creditNameStyle}>{w.name}</Typography>
+                        :
+                        <React.Fragment key={w.id}>
                           <Typography sx={creditNameStyle}>{w.name}</Typography>
                           <Divider orientation='vertical'
                             sx={{ mr: 0.7, ml: 0.7, bgcolor: 'secondary.main' }}/>
@@ -218,8 +285,10 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
                   <TableCell padding='none' sx={{ border: 'none', display: 'flex' }}>
                     {stars.map((s, index, array) =>
                       index === array.length - 1
-                        ? <Typography key={s.id} sx={creditNameStyle}>{s.name}</Typography>
-                        : <React.Fragment key={s.id}>
+                        ?
+                        <Typography key={s.id} sx={creditNameStyle}>{s.name}</Typography>
+                        :
+                        <React.Fragment key={s.id}>
                           <Typography sx={creditNameStyle}>{s.name}</Typography>
                           <Divider orientation='vertical'
                             sx={{ mr: 0.7, ml: 0.7, bgcolor: 'secondary.main' }}/>

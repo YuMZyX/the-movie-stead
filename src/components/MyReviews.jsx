@@ -1,21 +1,13 @@
-import { Typography, Grid, Container, Stack,
-  Pagination } from '@mui/material'
-import { useParams } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { Typography, Grid, Container, Box } from '@mui/material'
 import { useEffect, useState } from 'react'
-import moviesService from '../services/movies'
-import Progress from './Progress'
-import MovieCard from './MovieCard'
 import watchlistsService from '../services/watchlists'
 import reviewsService from '../services/reviews'
+import Progress from './Progress'
+import ReviewCard from './ReviewCard'
 import ReviewDialog from './ReviewDialog'
 
-const MoviesList = ({ user, addToWatchlist, removeFromWatchlist }) => {
+const MyReviews = ({ user, addToWatchlist, removeFromWatchlist }) => {
 
-  const moviesList = useParams()
-  const navigate = useNavigate()
-  const [movies, setMovies] = useState([])
-  const [totalPages, setTotalPages] = useState(null)
   const [watchlist, setWatchlist] = useState([null])
   const [reviews, setReviews] = useState([null])
   const [addedOrRemoved, setAddedOrRemoved] = useState(null)
@@ -23,21 +15,6 @@ const MoviesList = ({ user, addToWatchlist, removeFromWatchlist }) => {
   const [movie, setMovie] = useState(null)
   const [review, setReview] = useState(null)
   const [edit, setEdit] = useState(false)
-
-  useEffect(() => {
-    moviesService.getTrending(moviesList.page)
-      .then(response => {
-        setMovies(response.results)
-        if (response.total_pages >= 20) {
-          setTotalPages(20)
-        } else {
-          setTotalPages(response.total_pages)
-        }
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  }, [moviesList.page, addedOrRemoved])
 
   useEffect(() => {
     if (user) {
@@ -56,7 +33,7 @@ const MoviesList = ({ user, addToWatchlist, removeFromWatchlist }) => {
           console.log(error)
         })
     }
-  }, [moviesList.page, user, addedOrRemoved])
+  }, [user, addedOrRemoved])
 
   const handleAddToWatchlist = async (movie) => {
     await addToWatchlist(movie)
@@ -67,14 +44,6 @@ const MoviesList = ({ user, addToWatchlist, removeFromWatchlist }) => {
     setAddedOrRemoved(watchlistId)
   }
 
-  const handleCreateReview = async (movie) => {
-    setMovie(movie)
-    setReview({
-      rating: null,
-      review_text: null
-    })
-    handleOpenDialog()
-  }
   const handleEditReview = async (movie, review) => {
     setMovie(movie)
     setReview({
@@ -86,9 +55,6 @@ const MoviesList = ({ user, addToWatchlist, removeFromWatchlist }) => {
     handleOpenDialog()
   }
 
-  const handlePageChange = (event, value) => {
-    navigate(`/trending/${value}`)
-  }
   const handleOpenDialog = () => {
     setReviewDialogOpen(true)
   }
@@ -97,31 +63,41 @@ const MoviesList = ({ user, addToWatchlist, removeFromWatchlist }) => {
   }
 
   if (
-    !movies
-    || movies.length === 0
-    || (user && (!watchlist || watchlist[0] === null))
-    || (user && (!reviews || reviews[0] === null))
+    !watchlist
+    || watchlist[0] === null
+    || !reviews
+    || reviews[0] === null
   ) {
     return (
       <Progress />
+    )
+  }
+  if (reviews.length === 0) {
+    return (
+      <Container>
+        <Box sx={{ mt: 2, ml: 2 }}>
+          <Typography variant='h6'>
+            You have not reviewed any movies yet
+          </Typography>
+        </Box>
+      </Container>
     )
   }
 
   return (
     <Container>
       <Typography variant='h5' fontWeight='bold' gutterBottom sx={{ mt: 2, mb: 2 }}>
-        Trending movies
+        Your reviews
       </Typography>
       <Grid container spacing={4} columns={20} sx={{ mb: 4 }}>
-        {movies.map((movie) => (
-          <Grid item key={movie.id} xs={10} sm={6} md={5} lg={4} style={{ display: 'flex' }}>
-            <MovieCard
-              movie={movie}
+        {reviews.map((reviewItem) => (
+          <Grid item key={reviewItem.id} xs={10} sm={7} md={6} lg={5} style={{ display: 'flex' }}>
+            <ReviewCard
+              movie={reviewItem.movie}
               watchlist={watchlist}
-              reviews={reviews}
+              review={reviewItem}
               addToWatchlist={handleAddToWatchlist}
               removeFromWatchlist={handleRemoveFromWatchlist}
-              createReview={handleCreateReview}
               editReview={handleEditReview}
               user={user}
             />
@@ -138,19 +114,8 @@ const MoviesList = ({ user, addToWatchlist, removeFromWatchlist }) => {
         setAddedOrRemoved={setAddedOrRemoved}
         setEdit={setEdit}
       />
-      <Stack spacing={2} sx={{ alignItems: 'center', mb: 3 }}>
-        <Pagination
-          count={totalPages}
-          page={parseInt(moviesList.page)}
-          onChange={handlePageChange}
-          variant='outlined'
-          showFirstButton
-          showLastButton
-          color='primary'
-        />
-      </Stack>
     </Container>
   )
 }
 
-export default MoviesList
+export default MyReviews

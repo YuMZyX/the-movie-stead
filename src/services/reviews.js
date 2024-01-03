@@ -21,7 +21,34 @@ const getUserReviews = async (id) => {
   return res.data
 }
 
+const getReview = async (userId, movieId) => {
+  const config = {
+    headers: { Authorization: getToken() }
+  }
+  const res = await axios.get(`${baseUrl}/${userId}&${movieId}`, config)
+  return res.data
+}
+
+const deleteReview = async (id) => {
+  const config = {
+    headers: { Authorization: getToken() }
+  }
+  const res = await axios.delete(`${baseUrl}/${id}`, config)
+  return res.data
+}
+
+const editReview = async (id, review) => {
+  const config = {
+    headers: { Authorization: getToken() }
+  }
+  const res = await axios.put(`${baseUrl}/${id}`, review, config)
+  return res.data
+}
+
 export default {
   createReview,
-  getUserReviews
+  getUserReviews,
+  getReview,
+  deleteReview,
+  editReview
 }

@@ -46,4 +46,43 @@ router.get('/user/:userId', userExtractor, async (req, res) => {
   res.json(reviews)
 })
 
+router.get('/:userId&:movieId', userExtractor, async (req, res) => {
+  const review = await Review.findOne({
+    where: {
+      userId: req.params.userId,
+      movieId: req.params.movieId
+    }
+  })
+  res.json(review)
+})
+
+router.delete('/:id', userExtractor, async (req, res) => {
+  const review = await Review.findByPk(req.params.id)
+
+  if (review && (req.user.id === review.userId || req.user.role === 'moderator')) {
+    await review.destroy()
+  }
+  else {
+    return res.status(401)
+      .send({ error: 'You can only delete reviews created by yourself' })
+  }
+
+  res.status(204).end()
+})
+
+router.put('/:id', userExtractor, async (req, res) => {
+  const { rating, review_text } = req.body
+  const review = await Review.findByPk(req.params.id)
+
+  if (review) {
+    review.rating = rating
+    review.reviewText = review_text
+    await review.save()
+    res.json(review)
+  }
+  else {
+    res.status(404).send('Review does not exist in database')
+  }
+})
+
 module.exports = router

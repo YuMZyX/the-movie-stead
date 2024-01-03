@@ -9,7 +9,7 @@ const Redirect = () => {
 
   const handleClose = () => {
     setOpen(false)
-    navigate('/')
+    navigate('/trending/1')
   }
 
   return (
