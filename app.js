@@ -17,6 +17,13 @@ app.use(express.json())
 app.use(middleware.requestLogger)
 
 app.use(express.static(path.join(__dirname, 'dist')))
+
+app.use('/api/users', usersRouter)
+app.use('/api', sessionsRouter)
+app.use('/api/watchlists', watchlistRouter)
+app.use('/api/movies', moviesRouter)
+app.use('/api/reviews', reviewsRouter)
+
 app.get('/*'), function (req, res) {
   res.sendFile(path.join(__dirname, 'dist/index.html'), function (err) {
     if (err) {
@@ -25,16 +32,9 @@ app.get('/*'), function (req, res) {
   })
 }
 
-
 app.get('/test', (req, res) => {
   res.send('test')
 })
-
-app.use('/api/users', usersRouter)
-app.use('/api', sessionsRouter)
-app.use('/api/watchlists', watchlistRouter)
-app.use('/api/movies', moviesRouter)
-app.use('/api/reviews', reviewsRouter)
 
 app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
