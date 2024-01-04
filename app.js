@@ -24,6 +24,7 @@ app.use('/api/watchlists', watchlistRouter)
 app.use('/api/movies', moviesRouter)
 app.use('/api/reviews', reviewsRouter)
 
+/*
 app.get('/*'), function (req, res) {
   res.sendFile(path.join(__dirname, 'dist/index.html'), function (err) {
     if (err) {
@@ -31,6 +32,7 @@ app.get('/*'), function (req, res) {
     }
   })
 }
+*/
 
 app.get('/test', (req, res) => {
   res.send('test')
