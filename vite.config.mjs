@@ -11,7 +11,7 @@ export default defineConfig(() => {
         }
       })
     ],
-
+    appType: 'spa',
     build: {
       chunkSizeWarningLimit: 1000,
       rollupOptions: {
@@ -24,7 +24,6 @@ export default defineConfig(() => {
         }
       }
     },
-
     server: {
       proxy: {
         '/api': 'http://localhost:3001'
