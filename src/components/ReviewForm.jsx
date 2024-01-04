@@ -5,6 +5,7 @@ import * as yup from 'yup'
 import { useState } from 'react'
 import reviewsService from '../services/reviews'
 import { useSnackbar } from 'notistack'
+import { useConfirm } from 'material-ui-confirm'
 
 const validationSchema = yup.object({
   rating: yup
@@ -19,6 +20,7 @@ const ReviewForm = ({ user, movie, review, edit, handleCloseDialog, setAddedOrRe
 
   const [error, setError] = useState('')
   const { enqueueSnackbar } = useSnackbar()
+  const confirm = useConfirm()
 
   const formik = useFormik({
     initialValues: {
@@ -72,19 +74,33 @@ const ReviewForm = ({ user, movie, review, edit, handleCloseDialog, setAddedOrRe
   }
 
   const handleRemove = async () => {
-    try {
-      await reviewsService.deleteReview(review.id)
-      handleCloseDialog()
-      enqueueSnackbar(`Deleted review for ${movie.title}`,
-        { variant: 'info' })
-      setAddedOrRemoved(review.movieId)
-    } catch (error) {
-      console.log(error)
-      setError(error.response.data)
-      setTimeout(() => {
-        setError('')
-      }, 5000)
-    }
+    confirm({
+      title: 'Delete review?',
+      description: movie.title,
+      confirmationText: 'Delete', dialogProps: {
+        PaperProps: {
+          sx: {
+            width: 'auto',
+            minWidth: '13%'
+          }
+        }
+      } })
+      .then(async () => {
+        try {
+          await reviewsService.deleteReview(review.id)
+          handleCloseDialog()
+          enqueueSnackbar(`Deleted review for ${movie.title}`,
+            { variant: 'info' })
+          setAddedOrRemoved(review.movieId)
+        } catch (error) {
+          console.log(error)
+          setError(error.response.data)
+          setTimeout(() => {
+            setError('')
+          }, 5000)
+        }
+      })
+      .catch(() => {})
   }
 
   return (

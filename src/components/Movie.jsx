@@ -19,6 +19,7 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
   const [movie, setMovie] = useState(null)
   const [watchlist, setWatchlist] = useState([null])
   const [review, setReview] = useState()
+  const [reviewProps, setReviewProps] = useState()
   const [addedOrRemoved, setAddedOrRemoved] = useState(null)
   const [reviewDialogOpen, setReviewDialogOpen] = useState(false)
   const [edit, setEdit] = useState(false)
@@ -75,14 +76,14 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
   }
 
   const handleCreateReview = async () => {
-    setReview({
+    setReviewProps({
       rating: null,
       review_text: null
     })
     handleOpenDialog()
   }
   const handleEditReview = async () => {
-    setReview({
+    setReviewProps({
       id: review.id,
       rating: review.rating,
       review_text: review.reviewText
@@ -195,7 +196,7 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
           handleCloseDialog={handleCloseDialog}
           user={user}
           movie={movie}
-          review={review}
+          review={reviewProps}
           edit={edit}
           setAddedOrRemoved={setAddedOrRemoved}
           setEdit={setEdit}

@@ -56,16 +56,12 @@ const Users = () => {
       .then(() => {
         setUsers(users.filter((user) => user.id !== id))
         userService.removeUser(id)
-          .then(() => {
-            console.log('DELETE: ', id)
-          })
+          .then(() => {})
           .catch((error) => {
             console.log(error)
           })
       })
-      .catch(() => {
-        console.log('Deletion cancelled')
-      })
+      .catch(() => {})
   }
   const handleCancelClick = (id) => () => {
     setRowModesModel({
@@ -80,9 +76,7 @@ const Users = () => {
   }
   const processRowUpdate = (newRow) => {
     userService.editUser(newRow.id, newRow)
-      .then(response => {
-        console.log('EDIT: ', response.id)
-      })
+      .then(() => {})
       .catch(error => {
         console.log(error)
       })

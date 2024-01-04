@@ -1,6 +1,7 @@
 import React from 'react'
 import { Card, Box, CardMedia, IconButton, Menu, CardContent,
-  Typography, MenuItem, ListItemIcon, Avatar, CardActions, Collapse } from '@mui/material'
+  Typography, MenuItem, ListItemIcon, CardActions,
+  Collapse, Tooltip } from '@mui/material'
 import { FavoriteOutlined, MoreVertOutlined,
   StarOutlined, ExpandMoreOutlined } from '@mui/icons-material'
 import { styled } from '@mui/material/styles'
@@ -8,14 +9,25 @@ import watchlistsService from '../services/watchlists'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
+import StarIcon from './StarIcon'
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props
-  expand ? expand : expand
-  return <IconButton {...other} />
+  return (
+    <Tooltip title={ expand ? 'Hide review' : 'Show review' }>
+      <IconButton
+        color='secondary'
+        size='small'
+        sx={{
+          ml: 'auto',
+          backgroundColor: 'rgba(67, 85, 133, 0.7)',
+          '&:hover': { backgroundColor: 'primary.main' }
+        }}
+        {...other} />
+    </Tooltip>
+  )
 })(({ theme, expand }) => ({
   transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
   transition: theme.transitions.create('transform', {
     duration: theme.transitions.duration.shortest,
   }),
@@ -108,11 +120,6 @@ const ReviewCard = ({ movie, watchlist, review, addToWatchlist,
     top: 0,
     right: 0,
   }
-  const ratingStyle = {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-  }
 
   return (
     <Card raised sx={{ borderRadius: 2.5, display: 'flex', flexDirection: 'column' }} key={review.id}>
@@ -134,10 +141,7 @@ const ReviewCard = ({ movie, watchlist, review, addToWatchlist,
           }}>
           <MoreVertOutlined fontSize='small' />
         </IconButton>
-        <Avatar style={ratingStyle} variant='rounded'
-          sx={{ m: 0.7, width: 50, height: 40, backgroundColor: 'rgba(245, 232, 199, 0.6)', color: 'black' }}>
-          <Typography variant='body1' fontWeight='bold'>{review.rating}/10</Typography>
-        </Avatar>
+        <StarIcon value={review.rating} />
       </Box>
       <CardContent>
         <Link to={`/movies/${movie.id}`} style={linkStyle}>
