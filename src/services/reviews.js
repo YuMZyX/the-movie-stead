@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = `${import.meta.env.VITE_BACKEND_URL}/reviews`
+const baseUrl = '/api/reviews'
 
 const getToken = () => {
   return `Bearer ${JSON.parse(window.localStorage.getItem('loggedTMSUser')).token}`

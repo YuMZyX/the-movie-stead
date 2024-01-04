@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = `${import.meta.env.VITE_BACKEND_URL}/watchlists`
+const baseUrl = '/api/watchlists'
 
 const getToken = () => {
   return `Bearer ${JSON.parse(window.localStorage.getItem('loggedTMSUser')).token}`
