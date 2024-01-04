@@ -1,5 +1,6 @@
 const express = require('express')
 require('express-async-errors')
+const path = require('path')
 const app = express()
 const cors = require('cors')
 const middleware = require('./utils/middleware')
@@ -12,10 +13,13 @@ const reviewsRouter = require('./controllers/reviews')
 
 app.use(cors())
 app.use(express.json())
-app.use(express.static('dist'))
+app.use(express.static(path.join(__dirname, 'dist')))
 
 app.use(middleware.requestLogger)
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'))
+})
 app.get('/test', (req, res) => {
   res.send('test')
 })
