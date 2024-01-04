@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = `${import.meta.env.VITE_BACKEND_URL}/movies`
+const baseUrl = 'api/movies'
 
 const getTrending = async (page) => {
   const res = await axios.get(`${baseUrl}/trending/${page}`)
