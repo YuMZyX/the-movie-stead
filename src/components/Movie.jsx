@@ -102,7 +102,7 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
   if (
     !movie
     || (user && (!watchlist || watchlist[0] === null))
-    || review === undefined
+    || (user && review === undefined)
   ) {
     return (
       <Progress />
