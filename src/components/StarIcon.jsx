@@ -1,7 +1,7 @@
 import { StarOutlined } from '@mui/icons-material'
-import { Avatar, Typography } from '@mui/material'
+import { IconButton, Tooltip, Typography } from '@mui/material'
 
-const StarIcon = ({ value }) => {
+const StarIcon = ({ value, review, editReview }) => {
 
   const avatarStyle = {
     position: 'absolute',
@@ -9,7 +9,6 @@ const StarIcon = ({ value }) => {
     right: 0,
     width: 70,
     height: 70,
-    backgroundColor: 'transparent',
   }
   const ratingIconStyle = {
     position: 'absolute',
@@ -23,19 +22,25 @@ const StarIcon = ({ value }) => {
   }
 
   return (
-    <Avatar
-      style={avatarStyle}
-      sx={{ alignContent: 'center' }}
-    >
-      <StarOutlined style={ratingIconStyle} sx={{ strokeWidth: 0.4, stroke: 'black' }} />
-      <Typography
-        color='black'
-        fontWeight='bold'
-        style={ratingValueStyle}
+    <Tooltip title='Edit review'>
+      <IconButton
+        style={avatarStyle}
+        sx={{
+          alignContent: 'center',
+          '&:hover': { backgroundColor: 'rgba(245, 232, 199, 0.4)' }
+        }}
+        onClick={() => editReview(review)}
       >
-        {value}
-      </Typography>
-    </Avatar>
+        <StarOutlined style={ratingIconStyle} sx={{ strokeWidth: 0.4, stroke: 'black' }} />
+        <Typography
+          color='black'
+          fontWeight='bold'
+          style={ratingValueStyle}
+        >
+          {value}
+        </Typography>
+      </IconButton>
+    </Tooltip>
   )
 }
 

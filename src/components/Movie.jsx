@@ -121,22 +121,26 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
     if (watchlist.some((watchlist) => watchlist.movieId === movie.id)) {
       return (
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', flexGrow: 1 }}>
-          <Tooltip title='Remove from Watchlist'>
-            <IconButton sx={{ boxShadow: 1, mr: 1 }} onClick={handleRemoveFromWatchlist}>
-              <Favorite fontSize='medium' sx={{ color: 'red' }} />
-            </IconButton>
-          </Tooltip>
+          <Box>
+            <Tooltip title='Remove from Watchlist'>
+              <IconButton sx={{ boxShadow: 1, mr: 1 }} onClick={handleRemoveFromWatchlist}>
+                <Favorite fontSize='medium' sx={{ color: 'red' }} />
+              </IconButton>
+            </Tooltip>
+          </Box>
           {reviewIconButtons()}
         </Box>
       )
     } else {
       return (
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', flexGrow: 1 }}>
-          <Tooltip title='Add to watchlist'>
-            <IconButton sx={{ boxShadow: 1, mr: 1 }} onClick={handleAddToWatchlist}>
-              <Favorite fontSize='medium' sx={{ color: 'primary.dark' }} />
-            </IconButton>
-          </Tooltip>
+          <Box>
+            <Tooltip title='Add to watchlist'>
+              <IconButton sx={{ boxShadow: 1, mr: 1 }} onClick={handleAddToWatchlist}>
+                <Favorite fontSize='medium' sx={{ color: 'primary.dark' }} />
+              </IconButton>
+            </Tooltip>
+          </Box>
           {reviewIconButtons()}
         </Box>
       )
@@ -145,7 +149,7 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
 
   const reviewIconButtons = () => {
     return (
-      <div>
+      <Box>
         {review
           ?
           <Tooltip title='Edit review'>
@@ -160,7 +164,7 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
             </IconButton>
           </Tooltip>
         }
-      </div>
+      </Box>
     )
   }
 
@@ -203,7 +207,7 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
         />
         <Grid item xs={12} md={8}>
           <Paper elevation={7} sx={{ padding: 2.5 }}>
-            <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'top' }}>
+            <Box sx={{ display: 'flex', alignItems: 'top' }}>
               <Typography variant="h5"  fontWeight='bold'>
                 {movie.title}
               </Typography>
@@ -211,7 +215,7 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
                 userIconButtons()
               }
             </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', mt: 0.3 }}>
               <Typography variant='caption' fontWeight='bold' sx={{ mr: 0.5 }}>
                 {format(parseISO(movie.release_date), 'dd.MM.yyyy')}
               </Typography>

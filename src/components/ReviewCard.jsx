@@ -141,7 +141,7 @@ const ReviewCard = ({ movie, watchlist, review, addToWatchlist,
           }}>
           <MoreVertOutlined fontSize='small' />
         </IconButton>
-        <StarIcon value={review.rating} />
+        <StarIcon value={review.rating} review={review} editReview={handleEditReview} />
       </Box>
       <CardContent>
         <Link to={`/movies/${movie.id}`} style={linkStyle}>

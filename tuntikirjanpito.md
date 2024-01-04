@@ -69,5 +69,10 @@
 |           | 0,5    | Arvostelun lisäys/poisto/muokkaus myös Watchlist näkymään + users services refaktorointi |
 |           | 0,5    | Arvostelun lisäys/poisto/muokkaus myös yksittäisen elokuvan näkymään + getReview route |
 |           | 3      | MyReviews näkymän ja ReviewCard komponentin toteutus sekä koodin refaktorointia |
+| 4.1.2024  | 2      | Ensimmäinen deploy Railway palveluun + tarvittavat konfiguroinnit, korjaukset |
+|           | 2      | client-side routing ongelman korjaus ottamalla käyttöön HashRouter |
+|           | 0,5    | Arvostelun poistamisen varmistus Dialog komponentilla |
+|           | 1,5    | ReviewCard visuaalisen ilmeen parantelua + StarIcon komponentti |
+|           | 1,5    | Watchlist näkymän filter ja sort toimintojen alustava toteutus |
 |           |        |  |
-| YHT:      | 88     |  |
+| YHT:      | 95,5   |  |
