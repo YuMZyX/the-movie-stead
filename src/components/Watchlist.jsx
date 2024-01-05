@@ -1,13 +1,19 @@
-import { Typography, Grid, Container, Box, TextField,
-  Select, MenuItem, FormControl, InputLabel,
-  InputAdornment } from '@mui/material'
+import { Typography, Grid, Container, Box } from '@mui/material'
 import { useEffect, useState } from 'react'
 import Progress from './Progress'
 import MovieCard from './MovieCard'
 import watchlistsService from '../services/watchlists'
 import reviewsService from '../services/reviews'
-import { SearchRounded } from '@mui/icons-material'
 import ReviewDialog from './ReviewDialog'
+import FilterSort from './FilterSort'
+import Redirect from './Redirect'
+
+const sortItems = [
+  { value: 'Date, DESC', selectText: 'Date added, descending' },
+  { value: 'Date, ASC', selectText: 'Date added, ascending' },
+  { value: 'Title, DESC', selectText: 'Movie title, A - Z' },
+  { value: 'Title, ASC', selectText: 'Movie title, Z - A' },
+]
 
 const Watchlist = ({ user, addToWatchlist, removeFromWatchlist }) => {
 
@@ -81,6 +87,9 @@ const Watchlist = ({ user, addToWatchlist, removeFromWatchlist }) => {
     setWlFilter(event.target.value)
   }
 
+  if (!user) {
+    return <Redirect />
+  }
   if (
     !watchlist
     || watchlist[0] === null
@@ -105,44 +114,37 @@ const Watchlist = ({ user, addToWatchlist, removeFromWatchlist }) => {
 
   const filterSortWatchlist = watchlist
     .filter((wl) => wl.movie.title.toLowerCase().includes(wlFilter.toLowerCase()))
+    .sort((a, b) => {
+      switch (sortOption) {
+      case 'Date, DESC':
+        return new Date(b.createdAt) - new Date(a.createdAt)
+      case 'Date, ASC':
+        return new Date(a.createdAt) - new Date(b.createdAt)
+      case 'Title, DESC':
+        return a.movie.title.localeCompare(b.movie.title)
+      case 'Title, ASC':
+        return b.movie.title.localeCompare(a.movie.title)
+      default:
+        return new Date(b.createdAt) - new Date(a.createdAt)
+      }
+    })
 
   return (
     <Container>
       <Typography variant='h5' fontWeight='bold' gutterBottom sx={{ mt: 2, mb: 2 }}>
         Your watchlist
       </Typography>
-      <Box sx={{ display: 'flex', mb: 2 }}>
-        <TextField
-          label='Filter watchlist'
-          sx={{ mr: 2 }}
-          fullWidth
-          value={wlFilter}
-          onChange={handleFilterChange}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position='end'>
-                <SearchRounded />
-              </InputAdornment>
-            )
-          }}
-        />
-        <FormControl sx={{ minWidth: 230 }}>
-          <InputLabel>Sort By</InputLabel>
-          <Select
-            value={sortOption}
-            onChange={handleSortChange}
-            label='Sort by'
-          >
-            <MenuItem value='Date, DESC'>Date added, descending</MenuItem>
-            <MenuItem value='Date, ASC'>Date added, ascending</MenuItem>
-            <MenuItem value='Title, DESC'>Movie title, descending</MenuItem>
-            <MenuItem value='Title, ASC'>Movie title, descending</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
-      <Grid container spacing={4} columns={20} sx={{ mb: 4 }}>
+      <FilterSort
+        filter={wlFilter}
+        sortOption={sortOption}
+        handleFilterChange={handleFilterChange}
+        handleSortChange={handleSortChange}
+        sortItems={sortItems}
+        label='Filter watchlist'
+      />
+      <Grid container spacing={4} columns={18} sx={{ mb: 4 }}>
         {filterSortWatchlist.map((wl) => (
-          <Grid item key={wl.movieId} xs={10} sm={6} md={5} lg={4} style={{ display: 'flex' }}>
+          <Grid item key={wl.movieId} xs={9} sm={6} md={4.5} lg={3.6} style={{ display: 'flex' }}>
             <MovieCard
               movie={wl.movie}
               watchlist={watchlist}

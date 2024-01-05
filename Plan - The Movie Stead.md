@@ -8,17 +8,17 @@ STACK: React JS / Node.js / PostgreSQL
 
 Visitors can:
 - Browse movies ✔️
-- Search/filter movies by different category
+- Search movies by different search/filter options
 - Sign up / Login ✔️
 
 User can:
 - Do everything that Visitor can
 - Review movies ✔️
-- Browse/sort own reviewed movies
+- Browse/sort own reviewed movies ✔️
 - Modify own reviews (only 1 review per movie) ✔️
 - Delete own reviews ✔️
 - Add movies to watchlist ✔️
-- Browse/sort own watchlist
+- Browse/sort own watchlist ✔️
 - Remove movies from own watchlist ✔️
 - View 'My account' page with details
 

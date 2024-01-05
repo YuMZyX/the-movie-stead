@@ -1,5 +1,5 @@
-import { Typography, Grid, Container, Stack,
-  Pagination } from '@mui/material'
+import { Typography, Grid, Container, Stack, Button,
+  Pagination, TextField, IconButton, Box } from '@mui/material'
 import { useParams } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
@@ -9,8 +9,9 @@ import MovieCard from './MovieCard'
 import watchlistsService from '../services/watchlists'
 import reviewsService from '../services/reviews'
 import ReviewDialog from './ReviewDialog'
+import { SearchOutlined } from '@mui/icons-material'
 
-const MoviesList = ({ user, addToWatchlist, removeFromWatchlist }) => {
+const MoviesList = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
 
   const moviesList = useParams()
   const navigate = useNavigate()
@@ -23,6 +24,7 @@ const MoviesList = ({ user, addToWatchlist, removeFromWatchlist }) => {
   const [movie, setMovie] = useState(null)
   const [review, setReview] = useState(null)
   const [edit, setEdit] = useState(false)
+  const [movieSearch, setMovieSearch] = useState('')
 
   useEffect(() => {
     moviesService.getTrending(moviesList.page)
@@ -96,6 +98,15 @@ const MoviesList = ({ user, addToWatchlist, removeFromWatchlist }) => {
     setReviewDialogOpen(false)
   }
 
+  const handleMovieSearch = (event) => {
+    event.preventDefault()
+    console.log(movieSearch)
+    setMovieSearch('')
+  }
+  const handleSearchChange = (event) => {
+    setMovieSearch(event.target.value)
+  }
+
   if (
     !movies
     || movies.length === 0
@@ -109,12 +120,36 @@ const MoviesList = ({ user, addToWatchlist, removeFromWatchlist }) => {
 
   return (
     <Container>
+      <Box sx={{ display: 'flex', mt: 2 }}>
+        <Box component='form' onSubmit={handleMovieSearch} sx={{ flexGrow: 1 }}>
+          <TextField
+            fullWidth
+            label='Search for a movie...'
+            value={movieSearch}
+            onChange={handleSearchChange}
+            InputProps={{
+              endAdornment: (
+                <IconButton type='submit'>
+                  <SearchOutlined />
+                </IconButton>
+              )
+            }}
+          />
+        </Box>
+        <Button
+          variant='contained'
+          sx={{ ml: 2, color: 'secondary.main' }}
+          onClick={() => navigate('/')}
+        >
+          Advanced search
+        </Button>
+      </Box>
       <Typography variant='h5' fontWeight='bold' gutterBottom sx={{ mt: 2, mb: 2 }}>
         Trending movies
       </Typography>
-      <Grid container spacing={4} columns={20} sx={{ mb: 4 }}>
+      <Grid container spacing={4} columns={18} sx={{ mb: 4 }}>
         {movies.map((movie) => (
-          <Grid item key={movie.id} xs={10} sm={6} md={5} lg={4} style={{ display: 'flex' }}>
+          <Grid item key={movie.id} xs={9} sm={6} md={4.5} lg={3.6} style={{ display: 'flex' }}>
             <MovieCard
               movie={movie}
               watchlist={watchlist}
@@ -146,6 +181,8 @@ const MoviesList = ({ user, addToWatchlist, removeFromWatchlist }) => {
           variant='outlined'
           showFirstButton
           showLastButton
+          hidePrevButton={isMobile}
+          hideNextButton={isMobile}
           color='primary'
         />
       </Stack>

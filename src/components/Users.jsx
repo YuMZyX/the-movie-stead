@@ -25,7 +25,8 @@ const Users = () => {
         setUsers(response)
       })
       .catch(error => {
-        setError(error.response.data)
+        console.log(error)
+        setError(error)
       })
   }, [])
 

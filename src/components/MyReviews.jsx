@@ -5,6 +5,17 @@ import reviewsService from '../services/reviews'
 import Progress from './Progress'
 import ReviewCard from './ReviewCard'
 import ReviewDialog from './ReviewDialog'
+import FilterSort from './FilterSort'
+import Redirect from './Redirect'
+
+const sortItems = [
+  { value: 'Date, DESC', selectText: 'Date added, descending' },
+  { value: 'Date, ASC', selectText: 'Date added, ascending' },
+  { value: 'Title, DESC', selectText: 'Movie title, A - Z' },
+  { value: 'Title, ASC', selectText: 'Movie title, Z - A' },
+  { value: 'Rating, DESC', selectText: 'Your rating, descending' },
+  { value: 'Rating, ASC', selectText: 'Your rating, ascending' },
+]
 
 const MyReviews = ({ user, addToWatchlist, removeFromWatchlist }) => {
 
@@ -15,6 +26,8 @@ const MyReviews = ({ user, addToWatchlist, removeFromWatchlist }) => {
   const [movie, setMovie] = useState(null)
   const [review, setReview] = useState(null)
   const [edit, setEdit] = useState(false)
+  const [reviewFilter, setReviewFilter] = useState('')
+  const [sortOption, setSortOption] = useState('Date, DESC')
 
   useEffect(() => {
     if (user) {
@@ -62,6 +75,16 @@ const MyReviews = ({ user, addToWatchlist, removeFromWatchlist }) => {
     setReviewDialogOpen(false)
   }
 
+  const handleSortChange = (event) => {
+    setSortOption(event.target.value)
+  }
+  const handleFilterChange = (event) => {
+    setReviewFilter(event.target.value)
+  }
+
+  if (!user) {
+    return <Redirect />
+  }
   if (
     !watchlist
     || watchlist[0] === null
@@ -84,14 +107,43 @@ const MyReviews = ({ user, addToWatchlist, removeFromWatchlist }) => {
     )
   }
 
+  const filterSortReviews = reviews
+    .filter((review) => review.movie.title.toLowerCase().includes(reviewFilter.toLowerCase()))
+    .sort((a, b) => {
+      switch (sortOption) {
+      case 'Date, DESC':
+        return new Date(b.createdAt) - new Date(a.createdAt)
+      case 'Date, ASC':
+        return new Date(a.createdAt) - new Date(b.createdAt)
+      case 'Title, DESC':
+        return a.movie.title.localeCompare(b.movie.title)
+      case 'Title, ASC':
+        return b.movie.title.localeCompare(a.movie.title)
+      case 'Rating, DESC':
+        return b.rating - a.rating
+      case 'Rating, ASC':
+        return a.rating - b.rating
+      default:
+        return new Date(b.createdAt) - new Date(a.createdAt)
+      }
+    })
+
   return (
     <Container>
       <Typography variant='h5' fontWeight='bold' gutterBottom sx={{ mt: 2, mb: 2 }}>
         Your reviews
       </Typography>
-      <Grid container spacing={4} columns={20} sx={{ mb: 4 }}>
-        {reviews.map((reviewItem) => (
-          <Grid item key={reviewItem.id} xs={10} sm={7} md={6} lg={5} style={{ display: 'flex' }}>
+      <FilterSort
+        filter={reviewFilter}
+        sortOption={sortOption}
+        handleFilterChange={handleFilterChange}
+        handleSortChange={handleSortChange}
+        sortItems={sortItems}
+        label='Filter reviews'
+      />
+      <Grid container spacing={4} sx={{ mb: 4 }}>
+        {filterSortReviews.map((reviewItem) => (
+          <Grid item key={reviewItem.id} xs={6} sm={4} md={3} style={{ display: 'flex' }}>
             <ReviewCard
               movie={reviewItem.movie}
               watchlist={watchlist}

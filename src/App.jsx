@@ -15,6 +15,7 @@ import { useSnackbar } from 'notistack'
 import MyReviews from './components/MyReviews'
 
 const App = () => {
+  const [windowDimension, setWindowDimension] = useState(null)
   const [user, setUser] = useState(null)
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
@@ -23,6 +24,19 @@ const App = () => {
     const user = JSON.parse(window.localStorage.getItem('loggedTMSUser'))
     setUser(user)
   }, [])
+
+  useEffect(() => {
+    setWindowDimension(window.innerWidth)
+  }, [])
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowDimension(window.innerWidth)
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  })
 
   const handleLogout = async () => {
     try {
@@ -65,10 +79,17 @@ const App = () => {
     }
   }
 
+  const isMobile = windowDimension <= 640
+  const isTablet = windowDimension < 1280 && windowDimension > 640
 
   return (
     <>
-      <Navbar handleLogout={handleLogout} user={user} />
+      <Navbar
+        handleLogout={handleLogout}
+        user={user}
+        isMobile={isMobile}
+        isTablet={isTablet}
+      />
       <Routes>
         <Route path='/' element={<Navigate to='/trending/1' />} />
         <Route
@@ -78,6 +99,7 @@ const App = () => {
               user={user}
               addToWatchlist={handleAddToWatchlist}
               removeFromWatchlist={handleRemoveFromWatchlist}
+              isMobile={isMobile}
             />}
         />
         <Route

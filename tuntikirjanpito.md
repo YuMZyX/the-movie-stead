@@ -74,5 +74,9 @@
 |           | 0,5    | Arvostelun poistamisen varmistus Dialog komponentilla |
 |           | 1,5    | ReviewCard visuaalisen ilmeen parantelua + StarIcon komponentti |
 |           | 1,5    | Watchlist näkymän filter ja sort toimintojen alustava toteutus |
+| 5.1.2024  | 0,5    | Sort toiminnallisuuden toteutus loppuun asti |
+|           | 1      | SortFilter eriyttäminen omaksi komponentiksi ja toteutus myös MyReviews näkymään |
+|           | 2      | Navigointipalkin optimointi pienemmille näytöille ja mobiililaitteille |
+|           | 2      | Lisää optimointia & korjauksia + elokuvien hakupalkin toteutus |
 |           |        |  |
-| YHT:      | 95,5   |  |
+| YHT:      | 101    |  |

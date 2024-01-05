@@ -2,20 +2,29 @@ import { AppBar, Toolbar, IconButton, Button, Menu, MenuItem, Container,
   Tooltip, Box, ListItemIcon, Divider, Avatar } from '@mui/material'
 import AccountCircle from '@mui/icons-material/AccountCircle'
 import { useState } from 'react'
-import { Login, Logout, HowToReg } from '@mui/icons-material'
+import { Login, Logout, HowToReg, MenuOutlined, VideocamOutlined, StarOutlined, FavoriteOutlined, PersonOutlined } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 
-const Navbar = ({ handleLogout, user }) => {
+const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
 
-  const [anchorEl, setAnchorEl] = useState(null)
-  const open = Boolean(anchorEl)
+  const [accountAnchorEl, setAccountAnchorEl] = useState(null)
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null)
+  const accountOpen = Boolean(accountAnchorEl)
+  const menuOpen = Boolean(menuAnchorEl)
   const navigate = useNavigate()
 
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget)
+  const handleAccountMenu = (event) => {
+    setAccountAnchorEl(event.currentTarget)
   }
-  const handleClose = () => {
-    setAnchorEl(null)
+  const handleAccountMenuClose = () => {
+    setAccountAnchorEl(null)
+  }
+
+  const handleAppMenu = (event) => {
+    setMenuAnchorEl(event.currentTarget)
+  }
+  const handleAppMenuClose = () => {
+    setMenuAnchorEl(null)
   }
 
   const iconsStyles = {
@@ -32,11 +41,82 @@ const Navbar = ({ handleLogout, user }) => {
     } else {
       return (
         <Box>
-          <Button color='inherit' onClick={() => navigate('/trending/1')}>Movies</Button>
-          <Button color='inherit' onClick={() => navigate(`/myreviews/${user.id}`)}>My Reviews</Button>
-          <Button color='inherit' onClick={() => navigate(`/watchlist/${user.id}`)}>Watchlist</Button>
-          {user.role === 'moderator' &&
-            <Button color='inherit' onClick={() => navigate('/users')}>Users</Button>
+          {isMobile || isTablet
+            ?
+            <Box>
+              <IconButton
+                color='inherit'
+                aria-controls={menuOpen ? 'app-menu' : undefined}
+                aria-haspopup='true'
+                aria-expanded={menuOpen ? 'true' : undefined}
+                onClick={handleAppMenu}
+              >
+                <MenuOutlined />
+              </IconButton>
+              <Menu
+                id='app-menu'
+                anchorEl={menuAnchorEl}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={menuOpen}
+                onClose={handleAppMenuClose}
+              >
+                <MenuItem onClick={() => {
+                  handleAppMenuClose()
+                  navigate('/trending/1')
+                }}>
+                  <ListItemIcon>
+                    <VideocamOutlined sx={iconsStyles} />
+                  </ListItemIcon>
+                  Movies
+                </MenuItem>
+                <MenuItem onClick={() => {
+                  handleAppMenuClose()
+                  navigate(`/myreviews/${user.id}`)
+                }}>
+                  <ListItemIcon>
+                    <StarOutlined sx={iconsStyles} />
+                  </ListItemIcon>
+                  My Reviews
+                </MenuItem>
+                <MenuItem onClick={() => {
+                  handleAppMenuClose()
+                  navigate(`/watchlist/${user.id}`)
+                }}>
+                  <ListItemIcon>
+                    <FavoriteOutlined sx={iconsStyles} />
+                  </ListItemIcon>
+                  Watchlist
+                </MenuItem>
+                {user.role === 'moderator' &&
+                  <MenuItem onClick={() => {
+                    handleAppMenuClose()
+                    navigate('/users')
+                  }}>
+                    <ListItemIcon>
+                      <PersonOutlined sx={iconsStyles} />
+                    </ListItemIcon>
+                    Users
+                  </MenuItem>
+                }
+              </Menu>
+            </Box>
+            :
+            <Box>
+              <Button color='inherit' onClick={() => navigate('/trending/1')}>Movies</Button>
+              <Button color='inherit' onClick={() => navigate(`/myreviews/${user.id}`)}>My Reviews</Button>
+              <Button color='inherit' onClick={() => navigate(`/watchlist/${user.id}`)}>Watchlist</Button>
+              {user.role === 'moderator' &&
+                <Button color='inherit' onClick={() => navigate('/users')}>Users</Button>
+              }
+            </Box>
           }
         </Box>
       )
@@ -47,17 +127,32 @@ const Navbar = ({ handleLogout, user }) => {
     <AppBar position='sticky' sx={{ backgroundColor: 'primary.main', borderRadius: 4 }}>
       <Container>
         <Toolbar disableGutters sx={{ color: 'secondary.main' }}>
-          <Box
-            component='img'
-            alt='The Movie Stead - Logo'
-            src='/the-movie-stead-logo.png'
-            sx={{
-              height: 40,
-              width: 300,
-              cursor: 'pointer'
-            }}
-            onClick={() => navigate('/trending/1')}
-          />
+          {isMobile
+            ?
+            <Box
+              component='img'
+              alt='The Movie Stead - Logo'
+              src='/the-movie-stead-logo-mobile.png'
+              sx={{
+                height: 40,
+                width: 130,
+                cursor: 'pointer'
+              }}
+              onClick={() => navigate('/trending/1')}
+            />
+            :
+            <Box
+              component='img'
+              alt='The Movie Stead - Logo'
+              src='/the-movie-stead-logo.png'
+              sx={{
+                height: 40,
+                width: 300,
+                cursor: 'pointer'
+              }}
+              onClick={() => navigate('/trending/1')}
+            />
+          }
           <Box sx={{
             display: 'flex',
             flexDirection: 'row',
@@ -71,18 +166,18 @@ const Navbar = ({ handleLogout, user }) => {
                 <IconButton
                   size='small'
                   color='inherit'
-                  aria-controls={open ? 'account-menu' : undefined}
+                  aria-controls={accountOpen ? 'account-menu' : undefined}
                   aria-haspopup='true'
-                  aria-expanded={open ? 'true' : undefined}
-                  onClick={handleMenu}
-                  sx={{ ml: 2 }}
+                  aria-expanded={accountOpen ? 'true' : undefined}
+                  onClick={handleAccountMenu}
+                  sx={{ ml: 1 }}
                 >
                   <AccountCircle />
                 </IconButton>
               </Tooltip>
               <Menu
                 id='account-menu'
-                anchorEl={anchorEl}
+                anchorEl={accountAnchorEl}
                 anchorOrigin={{
                   vertical: 'bottom',
                   horizontal: 'right',
@@ -92,8 +187,8 @@ const Navbar = ({ handleLogout, user }) => {
                   vertical: 'top',
                   horizontal: 'right',
                 }}
-                open={open}
-                onClose={handleClose}
+                open={accountOpen}
+                onClose={handleAccountMenuClose}
               >
                 {user
                   ?
@@ -113,7 +208,7 @@ const Navbar = ({ handleLogout, user }) => {
                     </MenuItem>
                     <Divider />
                     <MenuItem onClick={() => {
-                      handleClose()
+                      handleAccountMenuClose()
                       navigate(`/users/${user.id}`)
                     }}>
                       <ListItemIcon>
@@ -123,7 +218,7 @@ const Navbar = ({ handleLogout, user }) => {
                     </MenuItem>
                     <MenuItem onClick={() => {
                       handleLogout()
-                      handleClose()
+                      handleAccountMenuClose()
                     }}>
                       <ListItemIcon>
                         <Logout sx={iconsStyles} />
@@ -135,7 +230,7 @@ const Navbar = ({ handleLogout, user }) => {
                   <div>
                     <MenuItem onClick={() => {
                       navigate('/login')
-                      handleClose()
+                      handleAccountMenuClose()
                     }}>
                       <ListItemIcon>
                         <Login sx={iconsStyles} />
@@ -144,7 +239,7 @@ const Navbar = ({ handleLogout, user }) => {
                     </MenuItem>
                     <MenuItem onClick={() => {
                       navigate('/signup')
-                      handleClose()
+                      handleAccountMenuClose()
                     }}>
                       <ListItemIcon>
                         <HowToReg sx={iconsStyles} />
