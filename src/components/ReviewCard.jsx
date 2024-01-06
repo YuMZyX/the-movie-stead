@@ -120,18 +120,36 @@ const ReviewCard = ({ movie, watchlist, review, addToWatchlist,
     top: 0,
     right: 0,
   }
+  const posterStyle = {
+    objectFit: 'cover',
+    aspectRatio: '0.67/1'
+  }
 
   return (
     <Card raised sx={{ borderRadius: 2.5, display: 'flex', flexDirection: 'column' }} key={review.id}>
       <Box component='div' sx={{ position: 'relative' }}>
-        <CardMedia
-          component='img'
-          alt={movie.title}
-          image={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-          title={movie.title}
-          sx={{ objectFit: 'contain', cursor: 'pointer', borderBottom: 1 }}
-          onClick={() => handleCardClick(movie.id)}
-        />
+        {movie.poster_path === 'NO_POSTER'
+          ?
+          <CardMedia
+            component='img'
+            alt={movie.title}
+            image={'/MoviePosterNotFound.png'}
+            title={movie.title}
+            sx={{ cursor: 'pointer', borderBottom: 1 }}
+            style={posterStyle}
+            onClick={() => handleCardClick(movie.id)}
+          />
+          :
+          <CardMedia
+            component='img'
+            alt={movie.title}
+            image={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+            title={movie.title}
+            sx={{ cursor: 'pointer', borderBottom: 1 }}
+            style={posterStyle}
+            onClick={() => handleCardClick(movie.id)}
+          />
+        }
         <IconButton style={iconStyle} onClick={handleMenuClick} size='small'
           sx={{
             backgroundColor: 'rgba(245, 232, 199, 0.4)',

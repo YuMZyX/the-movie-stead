@@ -11,10 +11,20 @@ const getMovie = async (id) => {
   return res.data
 }
 
+const searchMovies = async (query, page) => {
+  const res = await axios.get(`${baseUrl}/search/${query}&${page}`)
+  return res.data
+}
+
 // REMOVE IF NO LONGER RELEVANT
 const getMovieCredits = async (id) => {
   const res = await axios.get(`${baseUrl}/${id}/credits`)
   return res.data
 }
 
-export default { getTrending, getMovie, getMovieCredits }
+export default {
+  getTrending,
+  getMovie,
+  searchMovies,
+  getMovieCredits
+}

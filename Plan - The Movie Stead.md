@@ -2,6 +2,7 @@ The Movie Stead
 
 STACK: React JS / Node.js / PostgreSQL
 
+* For web & mobile
 * Uses TMDB API
 * ROLES: Visitor / User / Moderator
 

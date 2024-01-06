@@ -130,7 +130,7 @@ const MyReviews = ({ user, addToWatchlist, removeFromWatchlist }) => {
 
   return (
     <Container>
-      <Typography variant='h5' fontWeight='bold' gutterBottom sx={{ mt: 2, mb: 2 }}>
+      <Typography variant='h5' fontWeight='bold' gutterBottom sx={{ mt: 2 }}>
         Your reviews
       </Typography>
       <FilterSort

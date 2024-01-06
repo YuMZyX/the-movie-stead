@@ -13,6 +13,7 @@ import Watchlist from './components/Watchlist'
 import watchlistsService from './services/watchlists'
 import { useSnackbar } from 'notistack'
 import MyReviews from './components/MyReviews'
+import MovieSearch from './components/MovieSearch'
 
 const App = () => {
   const [windowDimension, setWindowDimension] = useState(null)
@@ -58,7 +59,7 @@ const App = () => {
         user_id: user.id,
         movie_id: movie.id,
         title: movie.title,
-        poster_path: movie.poster_path
+        poster_path: movie.poster_path || 'NO_POSTER'
       })
       enqueueSnackbar(`${movie.title} has been added to your watchlist`,
         { variant: 'success' })
@@ -131,7 +132,18 @@ const App = () => {
               user={user}
               addToWatchlist={handleAddToWatchlist}
               removeFromWatchlist={handleRemoveFromWatchlist}
-            />} />
+            />}
+        />
+        <Route
+          path='/moviesearch/:page'
+          element={
+            <MovieSearch
+              user={user}
+              addToWatchlist={handleAddToWatchlist}
+              removeFromWatchlist={handleRemoveFromWatchlist}
+              isMobile={isMobile}
+            />}
+        />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </>

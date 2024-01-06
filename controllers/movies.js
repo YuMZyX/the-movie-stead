@@ -21,6 +21,23 @@ router.get('/:id', async (req, res) => {
   return res.json(movie)
 })
 
+router.get('/search/:query&:page', async (req, res) => {
+  const movies = await moviedb.searchMovie({
+    query: req.params.query,
+    page: req.params.page
+  })
+  return res.json(movies)
+})
+
+router.get('/discover/:query&:page', async (req, res) => {
+  const movies = await moviedb.discoverMovie({
+    with_release_type: 2,
+    'vote_count.gte': 10,
+    with_genres: req.params.query.genres
+  })
+  return res.json(movies)
+})
+
 // REMOVE IF NO LONGER RELEVANT
 router.get('/:id/credits', async (req, res) => {
   const movieCredits = await moviedb.movieCredits(req.params.id)

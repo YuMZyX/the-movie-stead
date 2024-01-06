@@ -6,7 +6,7 @@ const FilterSort = ({ filter, sortOption, handleFilterChange,
   handleSortChange, sortItems, label }) => {
 
   return (
-    <Box sx={{ display: 'flex', mb: 2 }}>
+    <Box sx={{ display: 'flex', mb: 2, mt: 2 }}>
       <TextField
         sx={{ mr: 2 }}
         label={label}
@@ -24,7 +24,7 @@ const FilterSort = ({ filter, sortOption, handleFilterChange,
           shrink: true
         }}
       />
-      <FormControl sx={{ minWidth: 230 }}>
+      <FormControl sx={{ minWidth: 240 }}>
         <InputLabel>Sort By</InputLabel>
         <Select
           value={sortOption}

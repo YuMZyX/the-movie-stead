@@ -110,7 +110,7 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
   }
 
   const movieCredits = movie.credits
-  const runtime = calculateRuntime(movie.runtime)
+  const runtime = movie.runtime > 0 ? calculateRuntime(movie.runtime) : 'N/A'
   const directors = movieCredits.crew.filter(crew => crew.job === 'Director')
   const stars = movieCredits.cast.slice(0, 4)
   const filteredWriters = movieCredits.crew
@@ -186,13 +186,24 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
       <Grid container spacing={2} sx={{ mt: 0 }}>
         <Grid item xs={12} md={4}>
           <Card raised sx={{ height: '100%' }}>
-            <CardMedia
-              component="img"
-              alt={movie.title}
-              image={`https://image.tmdb.org/t/p/w780/${movie.poster_path}`}
-              title={movie.title}
-              style={{ objectFit: 'cover' }}
-            />
+            {movie.poster_path
+              ?
+              <CardMedia
+                component="img"
+                alt={movie.title}
+                image={`https://image.tmdb.org/t/p/w780/${movie.poster_path}`}
+                title={movie.title}
+                style={{ objectFit: 'cover' }}
+              />
+              :
+              <CardMedia
+                component="img"
+                alt={movie.title}
+                image={'/MoviePosterNotFound.png'}
+                title={movie.title}
+                style={{ objectFit: 'cover' }}
+              />
+            }
           </Card>
         </Grid>
         <ReviewDialog
@@ -216,15 +227,29 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
               }
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'row', mt: 0.3 }}>
-              <Typography variant='caption' fontWeight='bold' sx={{ mr: 0.5 }}>
-                {format(parseISO(movie.release_date), 'dd.MM.yyyy')}
-              </Typography>
+              {movie.release_date
+                ?
+                <Typography variant='caption' fontWeight='bold' sx={{ mr: 0.5 }}>
+                  {format(parseISO(movie.release_date), 'dd.MM.yyyy')}
+                </Typography>
+                :
+                <Typography variant='caption' fontWeight='bold' sx={{ mr: 0.5 }}>
+                  N/A
+                </Typography>
+              }
               <Remove fontSize='small'/>
-              <Typography variant='caption' fontWeight='bold' sx={{ mr: 0.5, ml: 0.5 }}>
-                {movie.genres.map((g, index) =>
-                  (index ? ', ' : '') + g.name
-                ).slice(0, 3)}
-              </Typography>
+              {movie.genres.length > 0
+                ?
+                <Typography variant='caption' fontWeight='bold' sx={{ mr: 0.5, ml: 0.5 }}>
+                  {movie.genres.map((g, index) =>
+                    (index ? ', ' : '') + g.name
+                  ).slice(0, 3)}
+                </Typography>
+                :
+                <Typography variant='caption' fontWeight='bold' sx={{ mr: 0.5, ml: 0.5 }}>
+                  N/A
+                </Typography>
+              }
               <Remove fontSize='small'/>
               <Typography variant='caption' fontWeight='bold' sx={{ ml: 0.5 }}>
                 {runtime}
@@ -233,74 +258,82 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
             <Typography variant="body2" color="textSecondary" fontWeight='bold' sx={{ mt: 2 }} >
               <i>{movie.tagline}</i>
             </Typography>
-            <Typography variant='subtitle2' sx={{ fontSize: 16, mt: 2 }}>
-              Overview
-            </Typography>
+            {movie.overview &&
+              <Typography variant='subtitle2' sx={{ fontSize: 16, mt: 2 }}>
+                Overview
+              </Typography>
+            }
             <Typography variant="body2" sx={{ mt: 0.5, mb: 1.5 }}>
               {movie.overview}
             </Typography>
             <Table size='small'>
               <TableBody>
-                <TableRow sx={creditsStyle}>
-                  <TableCell width='70' padding='none' sx={{ border: 'none' }}>
-                    <Typography sx={creditTitleStyle}>
-                      {directors.length > 1 ? 'Directors' : 'Director'}
-                    </Typography>
-                  </TableCell>
-                  <TableCell padding='none' sx={{ border: 'none', display: 'flex' }}>
-                    {directors.map((d, index, array) =>
-                      index === array.length - 1
-                        ?
-                        <Typography key={d.id} sx={creditNameStyle}>{d.name}</Typography>
-                        :
-                        <React.Fragment key={d.id}>
-                          <Typography sx={creditNameStyle}>{d.name}</Typography>
-                          <Divider orientation='vertical'
-                            sx={{ mr: 0.7, ml: 0.7, bgcolor: 'secondary.main' }}/>
-                        </React.Fragment>
-                    )}
-                  </TableCell>
-                </TableRow>
-                <TableRow sx={creditsStyle}>
-                  <TableCell width='70' padding='none' sx={{ border: 'none' }}>
-                    <Typography sx={creditTitleStyle}>
-                      {writers.length > 1 ? 'Writers' : 'Writer'}
-                    </Typography>
-                  </TableCell>
-                  <TableCell padding='none' sx={{ border: 'none', display: 'flex' }}>
-                    {writers.map((w, index, array) =>
-                      index === array.length - 1
-                        ?
-                        <Typography key={w.id} sx={creditNameStyle}>{w.name}</Typography>
-                        :
-                        <React.Fragment key={w.id}>
-                          <Typography sx={creditNameStyle}>{w.name}</Typography>
-                          <Divider orientation='vertical'
-                            sx={{ mr: 0.7, ml: 0.7, bgcolor: 'secondary.main' }}/>
-                        </React.Fragment>
-                    )}
-                  </TableCell>
-                </TableRow>
-                <TableRow sx={creditsStyle}>
-                  <TableCell width='70' padding='none' sx={{ border: 'none' }}>
-                    <Typography sx={creditTitleStyle}>
-                      {stars.length > 1 ? 'Stars' : 'Star'}
-                    </Typography>
-                  </TableCell>
-                  <TableCell padding='none' sx={{ border: 'none', display: 'flex' }}>
-                    {stars.map((s, index, array) =>
-                      index === array.length - 1
-                        ?
-                        <Typography key={s.id} sx={creditNameStyle}>{s.name}</Typography>
-                        :
-                        <React.Fragment key={s.id}>
-                          <Typography sx={creditNameStyle}>{s.name}</Typography>
-                          <Divider orientation='vertical'
-                            sx={{ mr: 0.7, ml: 0.7, bgcolor: 'secondary.main' }}/>
-                        </React.Fragment>
-                    )}
-                  </TableCell>
-                </TableRow>
+                {directors.length > 0 &&
+                  <TableRow sx={creditsStyle}>
+                    <TableCell width='70' padding='none' sx={{ border: 'none' }}>
+                      <Typography sx={creditTitleStyle}>
+                        {directors.length > 1 ? 'Directors' : 'Director'}
+                      </Typography>
+                    </TableCell>
+                    <TableCell padding='none' sx={{ border: 'none', display: 'flex' }}>
+                      {directors.map((d, index, array) =>
+                        index === array.length - 1
+                          ?
+                          <Typography key={d.id} sx={creditNameStyle}>{d.name}</Typography>
+                          :
+                          <React.Fragment key={d.id}>
+                            <Typography sx={creditNameStyle}>{d.name}</Typography>
+                            <Divider orientation='vertical'
+                              sx={{ mr: 0.7, ml: 0.7, bgcolor: 'secondary.main' }}/>
+                          </React.Fragment>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                }
+                {writers.length > 0 &&
+                  <TableRow sx={creditsStyle}>
+                    <TableCell width='70' padding='none' sx={{ border: 'none' }}>
+                      <Typography sx={creditTitleStyle}>
+                        {writers.length > 1 ? 'Writers' : 'Writer'}
+                      </Typography>
+                    </TableCell>
+                    <TableCell padding='none' sx={{ border: 'none', display: 'flex' }}>
+                      {writers.map((w, index, array) =>
+                        index === array.length - 1
+                          ?
+                          <Typography key={w.id} sx={creditNameStyle}>{w.name}</Typography>
+                          :
+                          <React.Fragment key={w.id}>
+                            <Typography sx={creditNameStyle}>{w.name}</Typography>
+                            <Divider orientation='vertical'
+                              sx={{ mr: 0.7, ml: 0.7, bgcolor: 'secondary.main' }}/>
+                          </React.Fragment>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                }
+                {stars.length > 0 &&
+                  <TableRow sx={creditsStyle}>
+                    <TableCell width='70' padding='none' sx={{ border: 'none' }}>
+                      <Typography sx={creditTitleStyle}>
+                        {stars.length > 1 ? 'Stars' : 'Star'}
+                      </Typography>
+                    </TableCell>
+                    <TableCell padding='none' sx={{ border: 'none', display: 'flex' }}>
+                      {stars.map((s, index, array) =>
+                        index === array.length - 1
+                          ?
+                          <Typography key={s.id} sx={creditNameStyle}>{s.name}</Typography>
+                          :
+                          <React.Fragment key={s.id}>
+                            <Typography sx={creditNameStyle}>{s.name}</Typography>
+                            <Divider orientation='vertical'
+                              sx={{ mr: 0.7, ml: 0.7, bgcolor: 'secondary.main' }}/>
+                          </React.Fragment>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                }
               </TableBody>
             </Table>
             <Link target='_blank' href={`${imdbBaseUrl}${movie.imdb_id}/`}>

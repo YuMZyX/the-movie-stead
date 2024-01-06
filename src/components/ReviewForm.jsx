@@ -35,7 +35,7 @@ const ReviewForm = ({ user, movie, review, edit, handleCloseDialog, setAddedOrRe
           user_id: user.id,
           movie_id: movie.id,
           title: movie.title,
-          poster_path: movie.poster_path,
+          poster_path: movie.poster_path || 'NO_POSTER',
           rating: rating,
           review_text: review_text || null
         })
@@ -115,13 +115,24 @@ const ReviewForm = ({ user, movie, review, edit, handleCloseDialog, setAddedOrRe
           {movie.title}
         </Typography>
         <Card raised sx={{ mt: 2, mb: 2 }}>
-          <CardMedia
-            component='img'
-            alt={movie.title}
-            image={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
-            title={movie.title}
-            height='280'
-          />
+          {(!movie.poster_path || movie.poster_path === 'NO_POSTER')
+            ?
+            <CardMedia
+              component='img'
+              alt={movie.title}
+              image={'/MoviePosterNotFound.png'}
+              title={movie.title}
+              height='280'
+            />
+            :
+            <CardMedia
+              component='img'
+              alt={movie.title}
+              image={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+              title={movie.title}
+              height='280'
+            />
+          }
         </Card>
         <Box component='form' onSubmit={formik.handleSubmit} noValidate sx={{ mt: 1 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

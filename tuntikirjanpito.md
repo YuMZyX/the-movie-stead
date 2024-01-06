@@ -78,5 +78,11 @@
 |           | 1      | SortFilter eriyttäminen omaksi komponentiksi ja toteutus myös MyReviews näkymään |
 |           | 2      | Navigointipalkin optimointi pienemmille näytöille ja mobiililaitteille |
 |           | 2      | Lisää optimointia & korjauksia + elokuvien hakupalkin toteutus |
+| 6.1.2024  | 2      | Elokuvien haku toiminnallisuuden toteutusta |
+|           | 1      | "Not found julisteen" toteutus elokuville, joille ei löydy julistetta API:sta |
+|           | 1      | Elokuvien haun käsittely query parametrien avulla käyttäen useSearchParams hookia |
+|           | 1      | Yksittäisen elokuvan näkymän refaktorointia elokuville, joista osa tiedoista puuttuu |
+|           | 1      | Vanhojen elokuvien erikokoisten julisteiden aiheuttaman layout ongelman ratkaisu |
+|           | 2      | SearchForm ja DiscoverMovies komponenttien toteutusta + mobiili optimointia |
 |           |        |  |
 | YHT:      | 101    |  |
