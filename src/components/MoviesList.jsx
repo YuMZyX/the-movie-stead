@@ -23,8 +23,6 @@ const MoviesList = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => 
   const [movie, setMovie] = useState(null)
   const [review, setReview] = useState(null)
   const [edit, setEdit] = useState(false)
-  const [movieSearch, setMovieSearch] = useState('')
-  const [yearSearch, setYearSearch] = useState(null)
 
   useEffect(() => {
     moviesService.getTrending(moviesList.page)
@@ -100,16 +98,6 @@ const MoviesList = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => 
     setReviewDialogOpen(false)
   }
 
-  const handleMovieSearch = (event) => {
-    event.preventDefault()
-    const year = yearSearch.getFullYear()
-    navigate(`/moviesearch/1?q=${movieSearch}&y=${year}`)
-    setMovieSearch('')
-  }
-  const handleSearchChange = (event) => {
-    setMovieSearch(event.target.value)
-  }
-
   if (
     !movies
     || movies.length === 0
@@ -123,15 +111,8 @@ const MoviesList = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => 
 
   return (
     <Container>
-      <SearchForm
-        movieSearch={movieSearch}
-        year={yearSearch}
-        handleMovieSearch={handleMovieSearch}
-        handleSearchChange={handleSearchChange}
-        handleYearChange={setYearSearch}
-        isMobile={isMobile}
-      />
-      <Typography variant='h5' fontWeight='bold' gutterBottom sx={{ mt: 2, mb: 2 }}>
+      <SearchForm isMobile={isMobile}/>
+      <Typography variant='h5' fontWeight='bold' gutterBottom sx={{ mt: 1.5, mb: 2 }}>
         Trending movies
       </Typography>
       <Grid container spacing={4} columns={18} sx={{ mb: 4 }}>

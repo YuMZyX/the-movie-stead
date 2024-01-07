@@ -29,11 +29,20 @@ const MovieSearch = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) =>
 
   useEffect(() => {
     setSearch(searchParams.get('q'))
-  }, [])
+    if (searchParams.get('y')) {
+      const yearParam = new Date(searchParams.get('y'))
+      setYear(yearParam)
+    } else {
+      setYear(null)
+    }
+  }, [searchParams])
 
   useEffect(() => {
     if (search) {
-      moviesService.searchMovies(search, moviesList.page)
+      moviesService.searchMovies({
+        search: search,
+        year: year
+      }, moviesList.page)
         .then(response => {
           setMovies(response.results)
           if (response.total_pages >= 20) {
@@ -46,7 +55,7 @@ const MovieSearch = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) =>
     } else if (!searchParams.get('q')) {
       setMovies([])
     }
-  }, [moviesList.page, addedOrRemoved, search])
+  }, [moviesList.page, addedOrRemoved, search, year])
 
   useEffect(() => {
     if (user) {
@@ -106,16 +115,6 @@ const MovieSearch = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) =>
     setReviewDialogOpen(false)
   }
 
-  const handleMovieSearch = (event) => {
-    event.preventDefault()
-    const year = year.getFullYear()
-    navigate(`/moviesearch/1?q=${search}&y=${year}`)
-    setSearch('')
-  }
-  const handleSearchChange = (event) => {
-    setSearch(event.target.value)
-  }
-
   if (
     !movies
     || movies[0] === null
@@ -126,25 +125,21 @@ const MovieSearch = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) =>
       <Progress />
     )
   }
-  console.log(movies)
 
   return (
     <Container>
       <SearchForm
-        movieSearch={search}
-        year={year}
-        handleMovieSearch={handleMovieSearch}
-        handleSearchChange={handleSearchChange}
-        handleYearChange={setYear}
+        setMovies={setMovies}
+        setAddedOrRemoved={setAddedOrRemoved}
         isMobile={isMobile}
       />
       {(movies.length > 0 && totalResults > 0) &&
-        <Typography variant='h6' fontWeight='bold' gutterBottom sx={{ mt: 2, mb: 2 }}>
+        <Typography variant='h6' fontWeight='bold' gutterBottom sx={{ mt: 1.5, mb: 2 }}>
           {totalResults} Movies matched your search
         </Typography>
       }
       {(totalResults === 0) &&
-        <Typography variant='h6' fontWeight='bold' gutterBottom sx={{ mt: 2, mb: 2 }}>
+        <Typography variant='h6' fontWeight='bold' gutterBottom sx={{ mt: 1.5, mb: 2 }}>
           Could not find any movies :(
         </Typography>
       }

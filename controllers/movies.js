@@ -22,9 +22,11 @@ router.get('/:id', async (req, res) => {
 })
 
 router.get('/search/:query&:page', async (req, res) => {
+  const queryObject = JSON.parse(req.params.query)
   const movies = await moviedb.searchMovie({
-    query: req.params.query,
-    page: req.params.page
+    query: queryObject.search,
+    page: req.params.page,
+    primary_release_year: queryObject.year
   })
   return res.json(movies)
 })

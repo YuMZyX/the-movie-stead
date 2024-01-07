@@ -84,5 +84,6 @@
 |           | 1      | Yksittäisen elokuvan näkymän refaktorointia elokuville, joista osa tiedoista puuttuu |
 |           | 1      | Vanhojen elokuvien erikokoisten julisteiden aiheuttaman layout ongelman ratkaisu |
 |           | 2      | SearchForm ja DiscoverMovies komponenttien toteutusta + mobiili optimointia |
+| 7.1.2024  | 3      | SearchForm toimintojen loppuun saattaminen, haku myös julkaisuvuoden perusteella |
 |           |        |  |
-| YHT:      | 101    |  |
+| YHT:      | 112    |  |

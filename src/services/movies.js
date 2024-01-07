@@ -12,7 +12,8 @@ const getMovie = async (id) => {
 }
 
 const searchMovies = async (query, page) => {
-  const res = await axios.get(`${baseUrl}/search/${query}&${page}`)
+  const queryObject = JSON.stringify(query)
+  const res = await axios.get(`${baseUrl}/search/${queryObject}&${page}`)
   return res.data
 }
 
