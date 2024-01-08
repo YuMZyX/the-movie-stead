@@ -110,6 +110,8 @@ const App = () => {
               user={user}
               addToWatchlist={handleAddToWatchlist}
               removeFromWatchlist={handleRemoveFromWatchlist}
+              isMobile={isMobile}
+              isTablet={isTablet}
             />}
         />
         <Route path='/login' element={<Login setUser={setUser} />} />

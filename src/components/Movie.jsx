@@ -13,7 +13,7 @@ import { format, parseISO } from 'date-fns'
 import { uniqBy } from 'lodash'
 import ReviewDialog from './ReviewDialog'
 
-const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
+const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTablet }) => {
 
   const movieId = useParams()
   const [movie, setMovie] = useState(null)
@@ -111,11 +111,27 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
 
   const movieCredits = movie.credits
   const runtime = movie.runtime > 0 ? calculateRuntime(movie.runtime) : 'N/A'
-  const directors = movieCredits.crew.filter(crew => crew.job === 'Director')
-  const stars = movieCredits.cast.slice(0, 4)
+  const releaseDate = movie.release_date
+    ? format(parseISO(movie.release_date), 'dd.MM.yyyy')
+    : 'N/A'
+  const directors = isMobile
+    ? movieCredits.crew.filter(crew => crew.job === 'Director').slice(0, 2)
+    : movieCredits.crew.filter(crew => crew.job === 'Director').slice(0, 3)
+  const stars = isMobile
+    ? movieCredits.cast.slice(0, 2)
+    : isTablet
+      ? movieCredits.cast.slice(0, 3)
+      : movieCredits.cast.slice(0, 4)
   const filteredWriters = movieCredits.crew
     .filter(crew => crew.job === 'Screenplay' || crew.department === 'Writing')
-  const writers = uniqBy(filteredWriters, (writer) => writer.id).slice(0, 4)
+  const writers = isMobile
+    ? uniqBy(filteredWriters, (writer) => writer.id).slice(0, 2)
+    : isTablet
+      ? uniqBy(filteredWriters, (writer) => writer.id).slice(0, 3)
+      : uniqBy(filteredWriters, (writer) => writer.id).slice(0, 4)
+  const genres = movie.genres.length > 0
+    ? movie.genres.map((g, index) => (index ? ', ' : '') + g.name).slice(0, 3)
+    : 'N/A'
 
   const userIconButtons = () => {
     if (watchlist.some((watchlist) => watchlist.movieId === movie.id)) {
@@ -180,12 +196,16 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
   const creditNameStyle = {
     fontSize: 14
   }
+  const posterStyle = {
+    objectFit: 'cover',
+    aspectRatio: '0.67/1'
+  }
 
   return (
     <Container>
       <Grid container spacing={2} sx={{ mt: 0 }}>
         <Grid item xs={12} md={4}>
-          <Card raised sx={{ height: '100%' }}>
+          <Card raised>
             {movie.poster_path
               ?
               <CardMedia
@@ -193,7 +213,7 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
                 alt={movie.title}
                 image={`https://image.tmdb.org/t/p/w780/${movie.poster_path}`}
                 title={movie.title}
-                style={{ objectFit: 'cover' }}
+                style={posterStyle}
               />
               :
               <CardMedia
@@ -201,7 +221,7 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
                 alt={movie.title}
                 image={'/MoviePosterNotFound.png'}
                 title={movie.title}
-                style={{ objectFit: 'cover' }}
+                style={posterStyle}
               />
             }
           </Card>
@@ -226,35 +246,34 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist }) => {
                 userIconButtons()
               }
             </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'row', mt: 0.3 }}>
-              {movie.release_date
-                ?
+            {isMobile
+              ?
+              <Box sx={{ display: 'flex', flexDirection: 'column', mt: 0.5 }}>
                 <Typography variant='caption' fontWeight='bold' sx={{ mr: 0.5 }}>
-                  {format(parseISO(movie.release_date), 'dd.MM.yyyy')}
+                  Release date: {releaseDate}
                 </Typography>
-                :
                 <Typography variant='caption' fontWeight='bold' sx={{ mr: 0.5 }}>
-                  N/A
+                  {genres}
                 </Typography>
-              }
-              <Remove fontSize='small'/>
-              {movie.genres.length > 0
-                ?
-                <Typography variant='caption' fontWeight='bold' sx={{ mr: 0.5, ml: 0.5 }}>
-                  {movie.genres.map((g, index) =>
-                    (index ? ', ' : '') + g.name
-                  ).slice(0, 3)}
+                <Typography variant='caption' fontWeight='bold' sx={{ mr: 0.5 }}>
+                  Runtime: {runtime}
                 </Typography>
-                :
-                <Typography variant='caption' fontWeight='bold' sx={{ mr: 0.5, ml: 0.5 }}>
-                  N/A
+              </Box>
+              :
+              <Box sx={{ display: 'flex', flexDirection: 'row', mt: 0.3 }}>
+                <Typography variant='caption' fontWeight='bold' sx={{ mr: 0.5 }}>
+                  {releaseDate}
                 </Typography>
-              }
-              <Remove fontSize='small'/>
-              <Typography variant='caption' fontWeight='bold' sx={{ ml: 0.5 }}>
-                {runtime}
-              </Typography>
-            </Box>
+                <Remove fontSize='small'/>
+                <Typography variant='caption' fontWeight='bold' sx={{ mr: 0.5 }}>
+                  {genres}
+                </Typography>
+                <Remove fontSize='small'/>
+                <Typography variant='caption' fontWeight='bold' sx={{ ml: 0.5 }}>
+                  {runtime}
+                </Typography>
+              </Box>
+            }
             <Typography variant="body2" color="textSecondary" fontWeight='bold' sx={{ mt: 2 }} >
               <i>{movie.tagline}</i>
             </Typography>
