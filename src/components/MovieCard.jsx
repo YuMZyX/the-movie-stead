@@ -175,11 +175,13 @@ const MovieCard = ({ movie, watchlist, reviews, addToWatchlist,
           ?
           userMenuItems(movie)
           :
-          <MenuItem style={{
-            backgroundColor: 'transparent',
-            cursor: 'default'
-          }}>
-            Log in to add movies to watchlist and to create movie reviews.
+          <MenuItem
+            style={{
+              backgroundColor: 'transparent',
+            }}
+            onClick={() => navigate('/login')}
+          >
+            Log in to review or favorite movies.
           </MenuItem>
         }
       </Menu>
