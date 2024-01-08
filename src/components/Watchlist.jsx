@@ -15,7 +15,7 @@ const sortItems = [
   { value: 'Title, ASC', selectText: 'Movie title, Z - A' },
 ]
 
-const Watchlist = ({ user, addToWatchlist, removeFromWatchlist }) => {
+const Watchlist = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
 
   const [watchlist, setWatchlist] = useState([null])
   const [reviews, setReviews] = useState([null])
@@ -141,6 +141,7 @@ const Watchlist = ({ user, addToWatchlist, removeFromWatchlist }) => {
         handleSortChange={handleSortChange}
         sortItems={sortItems}
         label='Filter watchlist'
+        isMobile={isMobile}
       />
       <Grid container spacing={4} columns={18} sx={{ mb: 4 }}>
         {filterSortWatchlist.map((wl) => (

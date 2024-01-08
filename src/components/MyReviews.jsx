@@ -17,7 +17,7 @@ const sortItems = [
   { value: 'Rating, ASC', selectText: 'Your rating, ascending' },
 ]
 
-const MyReviews = ({ user, addToWatchlist, removeFromWatchlist }) => {
+const MyReviews = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
 
   const [watchlist, setWatchlist] = useState([null])
   const [reviews, setReviews] = useState([null])
@@ -140,6 +140,7 @@ const MyReviews = ({ user, addToWatchlist, removeFromWatchlist }) => {
         handleSortChange={handleSortChange}
         sortItems={sortItems}
         label='Filter reviews'
+        isMobile={isMobile}
       />
       <Grid container spacing={4} sx={{ mb: 4 }}>
         {filterSortReviews.map((reviewItem) => (

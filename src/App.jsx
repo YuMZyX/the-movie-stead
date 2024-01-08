@@ -125,6 +125,7 @@ const App = () => {
               user={user}
               addToWatchlist={handleAddToWatchlist}
               removeFromWatchlist={handleRemoveFromWatchlist}
+              isMobile={isMobile}
             />}
         />
         <Route
@@ -134,6 +135,7 @@ const App = () => {
               user={user}
               addToWatchlist={handleAddToWatchlist}
               removeFromWatchlist={handleRemoveFromWatchlist}
+              isMobile={isMobile}
             />}
         />
         <Route
