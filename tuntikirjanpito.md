@@ -85,5 +85,12 @@
 |           | 1      | Vanhojen elokuvien erikokoisten julisteiden aiheuttaman layout ongelman ratkaisu |
 |           | 2      | SearchForm ja DiscoverMovies komponenttien toteutusta + mobiili optimointia |
 | 7.1.2024  | 3      | SearchForm toimintojen loppuun saattaminen, haku myös julkaisuvuoden perusteella |
+| 8.1.2024  | 2      | Yksittäisen elokuvan näkymän optimointi mobiililaitteille + MenuItem korjaus |
+|           | 3      | DiscoverMovies ja SearchFormAdvanced toteutusta & elokuvien genrejen haku + route |
+| 9.1.2024  | 2      | Discover lomakkeen kenttien debounce ja parametrit useSearchParams hookilla |
+|           | 2      | Haku toiminnallisuuksien loppuun saattaminen |
+|           | 1      | DiscoverMovies ja SearchFormAdvanced mobiili optimointi |
+|           | 1      | Moderaattorin oikeuksien rajoittaminen + middlewarejen refaktorointi |
+|           | 1      | Admin roolin lisäys + moderaattori roolin antaminen/poistaminen |
 |           |        |  |
-| YHT:      | 112    |  |
+| YHT:      | 124    |  |
