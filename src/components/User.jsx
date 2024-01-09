@@ -21,7 +21,10 @@ const User = ({ user }) => {
       <Progress />
     )
   }
-  if (!(user.email === userPage.email || user.role === 'moderator')) {
+  if (
+    !(user.email === userPage.email
+    || user.role === 'moderator'
+    || user.role === 'admin')) {
     return (
       <Redirect />
     )

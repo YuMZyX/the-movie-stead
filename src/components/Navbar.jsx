@@ -2,7 +2,8 @@ import { AppBar, Toolbar, IconButton, Button, Menu, MenuItem, Container,
   Tooltip, Box, ListItemIcon, Divider, Avatar } from '@mui/material'
 import AccountCircle from '@mui/icons-material/AccountCircle'
 import { useState } from 'react'
-import { Login, Logout, HowToReg, MenuOutlined, VideocamOutlined, StarOutlined, FavoriteOutlined, PersonOutlined } from '@mui/icons-material'
+import { Login, Logout, HowToReg, MenuOutlined, VideocamOutlined,
+  StarOutlined, FavoriteOutlined, PersonOutlined } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 
 const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
@@ -95,7 +96,7 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
                   </ListItemIcon>
                   Watchlist
                 </MenuItem>
-                {user.role === 'moderator' &&
+                {(user.role === 'moderator' || user.role === 'admin') &&
                   <MenuItem onClick={() => {
                     handleAppMenuClose()
                     navigate('/users')
@@ -113,7 +114,7 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
               <Button color='inherit' onClick={() => navigate('/trending/1')}>Movies</Button>
               <Button color='inherit' onClick={() => navigate(`/myreviews/${user.id}`)}>My Reviews</Button>
               <Button color='inherit' onClick={() => navigate(`/watchlist/${user.id}`)}>Watchlist</Button>
-              {user.role === 'moderator' &&
+              {(user.role === 'moderator' || user.role === 'admin') &&
                 <Button color='inherit' onClick={() => navigate('/users')}>Users</Button>
               }
             </Box>

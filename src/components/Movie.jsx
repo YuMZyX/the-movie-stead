@@ -114,21 +114,15 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTablet }
   const releaseDate = movie.release_date
     ? format(parseISO(movie.release_date), 'dd.MM.yyyy')
     : 'N/A'
-  const directors = isMobile
-    ? movieCredits.crew.filter(crew => crew.job === 'Director').slice(0, 2)
-    : movieCredits.crew.filter(crew => crew.job === 'Director').slice(0, 3)
-  const stars = isMobile
-    ? movieCredits.cast.slice(0, 2)
-    : isTablet
-      ? movieCredits.cast.slice(0, 3)
-      : movieCredits.cast.slice(0, 4)
+  const directors = movieCredits.crew.filter(crew => crew.job === 'Director').slice(0, 3)
+  const stars = isMobile || isTablet
+    ? movieCredits.cast.slice(0, 3)
+    : movieCredits.cast.slice(0, 4)
   const filteredWriters = movieCredits.crew
     .filter(crew => crew.job === 'Screenplay' || crew.department === 'Writing')
-  const writers = isMobile
-    ? uniqBy(filteredWriters, (writer) => writer.id).slice(0, 2)
-    : isTablet
-      ? uniqBy(filteredWriters, (writer) => writer.id).slice(0, 3)
-      : uniqBy(filteredWriters, (writer) => writer.id).slice(0, 4)
+  const writers = isMobile || isTablet
+    ? uniqBy(filteredWriters, (writer) => writer.id).slice(0, 3)
+    : uniqBy(filteredWriters, (writer) => writer.id).slice(0, 4)
   const genres = movie.genres.length > 0
     ? movie.genres.map((g, index) => (index ? ', ' : '') + g.name).slice(0, 3)
     : 'N/A'
@@ -199,6 +193,24 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTablet }
   const posterStyle = {
     objectFit: 'cover',
     aspectRatio: '0.67/1'
+  }
+  const tableCellStyle = {
+    border: 'none',
+    display: 'flex'
+  }
+  const tableCellMobileStyle = {
+    border: 'none',
+    display: 'flex',
+    flexDirection: 'column'
+  }
+  const mobileBoxStyle = {
+    display: 'flex',
+    ml : 2
+  }
+  const dividerStyle = {
+    mr: 0.8,
+    ml: 0.8,
+    bgcolor: 'secondary.main'
   }
 
   return (
@@ -294,19 +306,32 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTablet }
                         {directors.length > 1 ? 'Directors' : 'Director'}
                       </Typography>
                     </TableCell>
-                    <TableCell padding='none' sx={{ border: 'none', display: 'flex' }}>
-                      {directors.map((d, index, array) =>
-                        index === array.length - 1
-                          ?
-                          <Typography key={d.id} sx={creditNameStyle}>{d.name}</Typography>
-                          :
-                          <React.Fragment key={d.id}>
-                            <Typography sx={creditNameStyle}>{d.name}</Typography>
-                            <Divider orientation='vertical'
-                              sx={{ mr: 0.7, ml: 0.7, bgcolor: 'secondary.main' }}/>
-                          </React.Fragment>
-                      )}
-                    </TableCell>
+                    {isMobile
+                      ?
+                      <TableCell padding='none' sx={tableCellMobileStyle}>
+                        {directors.map((d) =>
+                          <Box key={d.id} sx={mobileBoxStyle}>
+                            <li />
+                            <Typography sx={creditNameStyle}>
+                              {d.name}
+                            </Typography>
+                          </Box>
+                        )}
+                      </TableCell>
+                      :
+                      <TableCell padding='none' sx={tableCellStyle}>
+                        {directors.map((d, index, array) =>
+                          index === array.length - 1
+                            ?
+                            <Typography key={d.id} sx={creditNameStyle}>{d.name}</Typography>
+                            :
+                            <React.Fragment key={d.id}>
+                              <Typography sx={creditNameStyle}>{d.name}</Typography>
+                              <Divider orientation='vertical' sx={dividerStyle}/>
+                            </React.Fragment>
+                        )}
+                      </TableCell>
+                    }
                   </TableRow>
                 }
                 {writers.length > 0 &&
@@ -316,19 +341,32 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTablet }
                         {writers.length > 1 ? 'Writers' : 'Writer'}
                       </Typography>
                     </TableCell>
-                    <TableCell padding='none' sx={{ border: 'none', display: 'flex' }}>
-                      {writers.map((w, index, array) =>
-                        index === array.length - 1
-                          ?
-                          <Typography key={w.id} sx={creditNameStyle}>{w.name}</Typography>
-                          :
-                          <React.Fragment key={w.id}>
-                            <Typography sx={creditNameStyle}>{w.name}</Typography>
-                            <Divider orientation='vertical'
-                              sx={{ mr: 0.7, ml: 0.7, bgcolor: 'secondary.main' }}/>
-                          </React.Fragment>
-                      )}
-                    </TableCell>
+                    {isMobile
+                      ?
+                      <TableCell padding='none' sx={tableCellMobileStyle}>
+                        {writers.map((w) =>
+                          <Box key={w.id} sx={mobileBoxStyle}>
+                            <li />
+                            <Typography sx={creditNameStyle}>
+                              {w.name}
+                            </Typography>
+                          </Box>
+                        )}
+                      </TableCell>
+                      :
+                      <TableCell padding='none' sx={tableCellStyle}>
+                        {writers.map((w, index, array) =>
+                          index === array.length - 1
+                            ?
+                            <Typography key={w.id} sx={creditNameStyle}>{w.name}</Typography>
+                            :
+                            <React.Fragment key={w.id}>
+                              <Typography sx={creditNameStyle}>{w.name}</Typography>
+                              <Divider orientation='vertical' sx={dividerStyle}/>
+                            </React.Fragment>
+                        )}
+                      </TableCell>
+                    }
                   </TableRow>
                 }
                 {stars.length > 0 &&
@@ -338,19 +376,32 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTablet }
                         {stars.length > 1 ? 'Stars' : 'Star'}
                       </Typography>
                     </TableCell>
-                    <TableCell padding='none' sx={{ border: 'none', display: 'flex' }}>
-                      {stars.map((s, index, array) =>
-                        index === array.length - 1
-                          ?
-                          <Typography key={s.id} sx={creditNameStyle}>{s.name}</Typography>
-                          :
-                          <React.Fragment key={s.id}>
-                            <Typography sx={creditNameStyle}>{s.name}</Typography>
-                            <Divider orientation='vertical'
-                              sx={{ mr: 0.7, ml: 0.7, bgcolor: 'secondary.main' }}/>
-                          </React.Fragment>
-                      )}
-                    </TableCell>
+                    {isMobile
+                      ?
+                      <TableCell padding='none' sx={tableCellMobileStyle}>
+                        {stars.map((s) =>
+                          <Box key={s.id} sx={mobileBoxStyle}>
+                            <li />
+                            <Typography sx={creditNameStyle}>
+                              {s.name}
+                            </Typography>
+                          </Box>
+                        )}
+                      </TableCell>
+                      :
+                      <TableCell padding='none' sx={tableCellStyle}>
+                        {stars.map((s, index, array) =>
+                          index === array.length - 1
+                            ?
+                            <Typography key={s.id} sx={creditNameStyle}>{s.name}</Typography>
+                            :
+                            <React.Fragment key={s.id}>
+                              <Typography sx={creditNameStyle}>{s.name}</Typography>
+                              <Divider orientation='vertical' sx={dividerStyle}/>
+                            </React.Fragment>
+                        )}
+                      </TableCell>
+                    }
                   </TableRow>
                 }
               </TableBody>

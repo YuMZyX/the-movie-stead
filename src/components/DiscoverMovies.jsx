@@ -1,42 +1,71 @@
 import { Container, Typography, Grid, Stack, Pagination } from '@mui/material'
-import FilterSort from './FilterSort'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-//import moviesService from '../services/movies'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import watchlistsService from '../services/watchlists'
 import reviewsService from '../services/reviews'
+import moviesService from '../services/movies'
 import Progress from './Progress'
 import MovieCard from './MovieCard'
 import ReviewDialog from './ReviewDialog'
-
-const sortItems = [
-  { value: 'Popularity, DESC', selectText: 'Popularity, descending' },
-  { value: 'Popularity, ASC', selectText: 'Popularity, ascending' },
-  { value: 'Date, DESC', selectText: 'Release date, descending' },
-  { value: 'Date, ASC', selectText: 'Release date, ascending' },
-  { value: 'Title, DESC', selectText: 'Movie title, A - Z' },
-  { value: 'Title, ASC', selectText: 'Movie title, Z - A' },
-]
+import SearchFormAdvanced from './SearchFormAdvanced'
 
 const DiscoverMovies = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
 
   const moviesList = useParams()
-  const [movieFilter, setMovieFilter] = useState('')
   const [movies, setMovies] = useState([null])
   const [addedOrRemoved, setAddedOrRemoved] = useState(null)
   const [reviewDialogOpen, setReviewDialogOpen] = useState(false)
   const [movie, setMovie] = useState(null)
   const [review, setReview] = useState(null)
   const [edit, setEdit] = useState(false)
-  const [sortOption, setSortOption] = useState('Popularity, DESC')
   const [watchlist, setWatchlist] = useState([null])
   const [reviews, setReviews] = useState([null])
   const [totalResults, setTotalResults] = useState(null)
   const [totalPages, setTotalPages] = useState(null)
+  const [movieFilter, setMovieFilter] = useState('')
+  const [searchParams] = useSearchParams()
   const navigate = useNavigate()
 
-  setTotalResults(0)
-  setTotalPages(0)
+  useEffect(() => {
+    if(searchParams.size > 0) {
+      const releaseDateMin = searchParams.get('release_date_gte') === 'null'
+        ? ''
+        : searchParams.get('release_date_gte')
+      const releaseDateMax = searchParams.get('release_date_lte') === 'null'
+        ? ''
+        : searchParams.get('release_date_lte')
+      moviesService.discoverMovies({
+        sort_by: searchParams.get('sort_by'),
+        with_genres: searchParams.getAll('with_genres'),
+        with_runtime_gte: searchParams.get('with_runtime_gte'),
+        with_runtime_lte: searchParams.get('with_runtime_lte'),
+        release_date_gte: releaseDateMin,
+        release_date_lte: releaseDateMax,
+      }, moviesList.page)
+        .then(response => {
+          setMovies(response.results)
+          if (response.total_pages >= 20) {
+            setTotalPages(20)
+          } else {
+            setTotalPages(response.total_pages)
+          }
+          setTotalResults(response.total_results)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    } else {
+      moviesService.getTopRated()
+        .then(response => {
+          setMovies(response.results)
+          setTotalPages(1)
+          setTotalResults(null)
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    }
+  }, [searchParams, moviesList.page, addedOrRemoved])
 
   useEffect(() => {
     if (user) {
@@ -87,20 +116,15 @@ const DiscoverMovies = ({ user, addToWatchlist, removeFromWatchlist, isMobile })
 
   const handlePageChange = (event, value) => {
     setMovies([null])
-    navigate(`/moviesearch/${value}`)
+    setMovieFilter('')
+    navigate(`/discover/${value}?${searchParams.toString()}`)
   }
+
   const handleOpenDialog = () => {
     setReviewDialogOpen(true)
   }
   const handleCloseDialog = () => {
     setReviewDialogOpen(false)
-  }
-
-  const handleFilterChange = (event) => {
-    setMovieFilter(event.target.value)
-  }
-  const handleSortChange = (event) => {
-    setSortOption(event.target.value)
   }
 
   if (
@@ -113,50 +137,38 @@ const DiscoverMovies = ({ user, addToWatchlist, removeFromWatchlist, isMobile })
       <Progress />
     )
   }
-  console.log(movies)
 
-  const filterSortMovies = movies
-    .sort((a, b) => {
-      switch (sortOption) {
-      case 'Popularity, DESC':
-        return b.popularity - a.popularity
-      case 'Popularity, ASC':
-        return a.popularity - b.popularity
-      case 'Date, DESC':
-        return new Date(b.release_date) - new Date(a.release_date)
-      case 'Date, ASC':
-        return new Date(a.release_date) - new Date(b.release_date)
-      case 'Title, DESC':
-        return a.title.localeCompare(b.title)
-      case 'Title, ASC':
-        return b.title.localeCompare(a.title)
-      default:
-        return new Date(b.createdAt) - new Date(a.createdAt)
-      }
-    })
+  if (movies.length === 0 && totalResults > 0) {
+    navigate(`/discover/1?${searchParams.toString()}`)
+  }
+
+  const filteredMovies = movies
+    .filter((movie) => movie.title.toLowerCase().includes(movieFilter.toLowerCase()))
 
   return (
     <Container>
-      <FilterSort
-        label='Search for a movie'
-        sortItems={sortItems}
-        filter={movieFilter}
-        sortOption={sortOption}
-        handleFilterChange={handleFilterChange}
-        handleSortChange={handleSortChange}
+      <SearchFormAdvanced
+        movieFilter={movieFilter}
+        setMovieFilter={setMovieFilter}
+        isMobile={isMobile}
       />
-      {(movies.length > 0 && totalResults > 0) &&
-        <Typography variant='h6' fontWeight='bold' gutterBottom sx={{ mt: 2, mb: 2 }}>
-          {totalResults} Movies matched your search
-        </Typography>
-      }
       {(totalResults === 0) &&
-        <Typography variant='h6' fontWeight='bold' gutterBottom sx={{ mt: 2, mb: 2 }}>
+        <Typography variant='h6' fontWeight='bold' gutterBottom sx={{ mb: 2 }}>
           Could not find any movies :(
         </Typography>
       }
+      {(totalResults > 0) &&
+        <Typography variant='h6' fontWeight='bold' gutterBottom sx={{ mb: 2 }}>
+          {totalResults} Movies matched your search
+        </Typography>
+      }
+      {(totalResults === null) &&
+        <Typography variant='h5' fontWeight='bold' gutterBottom sx={{ mt: 1.5, mb: 2 }}>
+          Discover movies
+        </Typography>
+      }
       <Grid container spacing={4} columns={18} sx={{ mb: 4 }}>
-        {filterSortMovies.map((movie) => (
+        {filteredMovies.map((movie) => (
           <Grid item key={movie.id} xs={9} sm={6} md={4.5} lg={3.6} style={{ display: 'flex' }}>
             <MovieCard
               movie={movie}
@@ -181,7 +193,7 @@ const DiscoverMovies = ({ user, addToWatchlist, removeFromWatchlist, isMobile })
         setAddedOrRemoved={setAddedOrRemoved}
         setEdit={setEdit}
       />
-      {movies.length > 0 &&
+      {(movies.length > 0 && totalPages > 1) &&
         <Stack spacing={2} sx={{ alignItems: 'center', mb: 3 }}>
           <Pagination
             count={totalPages}

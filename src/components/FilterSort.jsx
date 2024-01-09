@@ -6,7 +6,7 @@ const FilterSort = ({ filter, sortOption, handleFilterChange,
   handleSortChange, sortItems, label, isMobile }) => {
 
   const flexDirection = isMobile ? 'column' : 'row'
-  const marginTop = isMobile ? 1.5 : 0
+  const marginTop = isMobile ? 2 : 0
 
   return (
     <Box sx={{ display: 'flex', flexDirection: flexDirection, mb: 2, mt: 2 }}>
@@ -28,11 +28,11 @@ const FilterSort = ({ filter, sortOption, handleFilterChange,
         }}
       />
       <FormControl sx={{ minWidth: 240, mt: marginTop }}>
-        <InputLabel>Sort By</InputLabel>
+        <InputLabel>Sort by</InputLabel>
         <Select
           value={sortOption}
           onChange={handleSortChange}
-          label='Sort By'
+          label='Sort by'
           fullWidth
         >
           {sortItems.map((sortItem) => (

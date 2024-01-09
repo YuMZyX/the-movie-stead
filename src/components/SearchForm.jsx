@@ -101,7 +101,7 @@ const SearchForm = ({ setMovies, setAddedOrRemoved, isMobile }) => {
           </Button>
         </Box>
       </Box>
-      <Link to='/discover' style={linkStyle}>
+      <Link to='/discover/1' style={linkStyle}>
         <Typography
           variant='subtitle2'
           sx={{ mt: 0.5, ml: 1, '&:hover': { color: 'secondary.dark' }, fontSize: 16 }}

@@ -11,9 +11,25 @@ const getMovie = async (id) => {
   return res.data
 }
 
+const getGenres = async () => {
+  const res = await axios.get(`${baseUrl}/genres`)
+  return res.data
+}
+
+const getTopRated = async () => {
+  const res = await axios.get(`${baseUrl}/toprated`)
+  return res.data
+}
+
 const searchMovies = async (query, page) => {
   const queryObject = JSON.stringify(query)
   const res = await axios.get(`${baseUrl}/search/${queryObject}&${page}`)
+  return res.data
+}
+
+const discoverMovies = async (query, page) => {
+  const queryObject = JSON.stringify(query)
+  const res = await axios.get(`${baseUrl}/discover/${queryObject}&${page}`)
   return res.data
 }
 
@@ -26,6 +42,9 @@ const getMovieCredits = async (id) => {
 export default {
   getTrending,
   getMovie,
+  getGenres,
+  getTopRated,
   searchMovies,
+  discoverMovies,
   getMovieCredits
 }

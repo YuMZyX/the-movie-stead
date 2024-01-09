@@ -1,6 +1,5 @@
 import { Box } from '@mui/material'
 import {
-  GridToolbarColumnsButton,
   GridToolbarContainer,
   GridToolbarDensitySelector,
   GridToolbarFilterButton,
@@ -11,7 +10,6 @@ const CustomToolbar = () => {
     <GridToolbarContainer>
       <GridToolbarQuickFilter sx={{ ml: 1 }} />
       <Box sx={{ ml: 'auto' }}>
-        <GridToolbarColumnsButton />
         <GridToolbarFilterButton />
         <GridToolbarDensitySelector />
       </Box>

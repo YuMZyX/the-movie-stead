@@ -26,7 +26,7 @@ User.init({
     allowNull: false
   },
   role: {
-    type: DataTypes.ENUM('user', 'moderator'),
+    type: DataTypes.ENUM('user', 'moderator', 'admin'),
     allowNull: false
   },
   disabled: {

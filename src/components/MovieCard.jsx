@@ -1,5 +1,5 @@
 import { FavoriteOutlined, MoreVertOutlined,
-  StarOutlined } from '@mui/icons-material'
+  StarOutlined, Login } from '@mui/icons-material'
 import { Card, CardContent, CardMedia, Typography, IconButton,
   Menu, MenuItem, Box, ListItemIcon } from '@mui/material'
 import { Link } from 'react-router-dom'
@@ -176,11 +176,11 @@ const MovieCard = ({ movie, watchlist, reviews, addToWatchlist,
           userMenuItems(movie)
           :
           <MenuItem
-            style={{
-              backgroundColor: 'transparent',
-            }}
             onClick={() => navigate('/login')}
           >
+            <ListItemIcon>
+              <Login sx={{ color: 'primary.dark' }} />
+            </ListItemIcon>
             Log in to review or favorite movies.
           </MenuItem>
         }

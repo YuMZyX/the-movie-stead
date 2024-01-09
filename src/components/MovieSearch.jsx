@@ -106,7 +106,12 @@ const MovieSearch = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) =>
 
   const handlePageChange = (event, value) => {
     setMovies([null])
-    navigate(`/moviesearch/${value}?q=${search}`)
+    if (year) {
+      const yearParam = year.getFullYear()
+      navigate(`/moviesearch/${value}?q=${search}&y=${yearParam}`)
+    } else {
+      navigate(`/moviesearch/${value}?q=${search}`)
+    }
   }
   const handleOpenDialog = () => {
     setReviewDialogOpen(true)

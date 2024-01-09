@@ -16,7 +16,7 @@ Movie.belongsToMany(User, { through: Watchlist, as: 'watchlist_movies' })
 Movie.hasMany(Watchlist)
 Watchlist.belongsTo(Movie)
 
-User.hasMany(Session)
+User.hasMany(Session, { onDelete: 'cascade', hooks: true })
 Session.belongsTo(User)
 
 module.exports = {

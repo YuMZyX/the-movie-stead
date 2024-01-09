@@ -10,7 +10,17 @@ router.get('/trending/:page', async (req, res) => {
     time_window: 'week',
     page: req.params.page
   })
-  return res.json(trendingMovies)
+  res.json(trendingMovies)
+})
+
+router.get('/genres', async (req, res) => {
+  const genres = await moviedb.genreMovieList()
+  res.json(genres)
+})
+
+router.get('/toprated', async (req, res) => {
+  const topRatedMovies = await moviedb.movieTopRated()
+  res.json(topRatedMovies)
 })
 
 router.get('/:id', async (req, res) => {
@@ -18,7 +28,7 @@ router.get('/:id', async (req, res) => {
     id: req.params.id,
     append_to_response: 'credits'
   })
-  return res.json(movie)
+  res.json(movie)
 })
 
 router.get('/search/:query&:page', async (req, res) => {
@@ -28,22 +38,29 @@ router.get('/search/:query&:page', async (req, res) => {
     page: req.params.page,
     primary_release_year: queryObject.year
   })
-  return res.json(movies)
+  res.json(movies)
 })
 
 router.get('/discover/:query&:page', async (req, res) => {
+  const queryObject = JSON.parse(req.params.query)
+  console.log('QUERYOBJECT: ', queryObject)
   const movies = await moviedb.discoverMovie({
-    with_release_type: 2,
-    'vote_count.gte': 10,
-    with_genres: req.params.query.genres
+    'vote_count.gte': 100,
+    'with_runtime.gte': queryObject.with_runtime_gte || 1,
+    'with_runtime.lte': queryObject.with_runtime_lte,
+    with_genres: queryObject.with_genres.toString(),
+    sort_by: queryObject.sort_by,
+    'primary_release_date.gte': queryObject.release_date_gte,
+    'primary_release_date.lte': queryObject.release_date_lte,
+    page: req.params.page,
   })
-  return res.json(movies)
+  res.json(movies)
 })
 
 // REMOVE IF NO LONGER RELEVANT
 router.get('/:id/credits', async (req, res) => {
   const movieCredits = await moviedb.movieCredits(req.params.id)
-  return res.json(movieCredits)
+  res.json(movieCredits)
 })
 
 module.exports = router

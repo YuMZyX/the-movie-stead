@@ -9,6 +9,14 @@ const getAllUsers = async () => {
   const config = {
     headers: { Authorization: getToken() }
   }
+  const res = await axios.get(`${baseUrl}/admin`, config)
+  return res.data
+}
+
+const getUsers = async () => {
+  const config = {
+    headers: { Authorization: getToken() }
+  }
   const res = await axios.get(baseUrl, config)
   return res.data
 }
@@ -30,6 +38,14 @@ const editUser = async (id, user) => {
   const config = {
     headers: { Authorization: getToken() }
   }
+  const res = await axios.put(`${baseUrl}/${id}/admin`, user, config)
+  return res.data
+}
+
+const editDisabled = async (id, user) => {
+  const config = {
+    headers: { Authorization: getToken() }
+  }
   const res = await axios.put(`${baseUrl}/${id}`, user, config)
   return res.data
 }
@@ -43,8 +59,10 @@ const removeUser = async (id) => {
 
 export default {
   getAllUsers,
+  getUsers,
   signUp,
   getUser,
   editUser,
+  editDisabled,
   removeUser
 }

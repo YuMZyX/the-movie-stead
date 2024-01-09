@@ -1,13 +1,27 @@
 const router = require('express').Router()
 const bcrypt = require('bcrypt')
-const { User } = require('../models')
-const { moderatorExtractor, userExtractor } = require('../utils/middleware')
+const { User, Review, Watchlist } = require('../models')
+const { moderatorExtractor, userExtractor,
+  adminExtractor } = require('../utils/middleware')
+const { Op } = require('sequelize')
 
 router.get('/', moderatorExtractor, async (req, res) => {
   const users = await User.findAll({
     attributes: { exclude: ['password'] },
     where: {
       role: 'user'
+    }
+  })
+  res.json(users)
+})
+
+router.get('/admin', adminExtractor, async (req, res) => {
+  const users = await User.findAll({
+    attributes: { exclude: ['password'] },
+    where: {
+      role: {
+        [Op.or]: ['user', 'moderator']
+      }
     }
   })
   res.json(users)
@@ -60,8 +74,30 @@ router.put('/:id', moderatorExtractor, async (req, res) => {
   }
 })
 
-router.delete('/:id', moderatorExtractor, async (req, res) => {
+router.put('/:id/admin', adminExtractor, async (req, res) => {
   const user = await User.findByPk(req.params.id)
+  if (user) {
+    user.disabled = req.body.disabled
+    user.role = req.body.role
+    await user.save()
+    res.json(user)
+  } else {
+    return res.status(404).send('User not found')
+  }
+})
+
+router.delete('/:id', adminExtractor, async (req, res) => {
+  const user = await User.findByPk(req.params.id)
+  await Watchlist.destroy({
+    where: {
+      userId: user.id
+    }
+  })
+  await Review.destroy({
+    where: {
+      userId: user.id
+    }
+  })
   if (user) {
     await user.destroy()
     res.status(204).end()

@@ -14,6 +14,7 @@ import watchlistsService from './services/watchlists'
 import { useSnackbar } from 'notistack'
 import MyReviews from './components/MyReviews'
 import MovieSearch from './components/MovieSearch'
+import DiscoverMovies from './components/DiscoverMovies'
 
 const App = () => {
   const [windowDimension, setWindowDimension] = useState(null)
@@ -116,7 +117,7 @@ const App = () => {
         />
         <Route path='/login' element={<Login setUser={setUser} />} />
         <Route path='/signup' element={<SignUp setUser={setUser} />} />
-        <Route path='/users' element={<Users />} />
+        <Route path='/users' element={<Users user={user} />} />
         <Route path='/users/:id' element={<User user={user} />} />
         <Route
           path='/watchlist/:id'
@@ -142,6 +143,16 @@ const App = () => {
           path='/moviesearch/:page'
           element={
             <MovieSearch
+              user={user}
+              addToWatchlist={handleAddToWatchlist}
+              removeFromWatchlist={handleRemoveFromWatchlist}
+              isMobile={isMobile}
+            />}
+        />
+        <Route
+          path='/discover/:page'
+          element={
+            <DiscoverMovies
               user={user}
               addToWatchlist={handleAddToWatchlist}
               removeFromWatchlist={handleRemoveFromWatchlist}

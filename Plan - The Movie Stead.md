@@ -1,19 +1,20 @@
 The Movie Stead
 
 STACK: React JS / Node.js / PostgreSQL
+UI-Framework: Material-UI
 
 * For web & mobile
 * Uses TMDB API
-* ROLES: Visitor / User / Moderator
+* ROLES: Visitor / User / Moderator / Admin
 
 
-Visitors can:
+Visitor:
 - Browse movies ✔️
-- Search movies by different search/filter options
+- Search movies by different search/filter options ✔️
 - Sign up / Login ✔️
 
-User can:
-- Do everything that Visitor can
+User:
+- Do everything that Visitor can ✔️
 - Review movies ✔️
 - Browse/sort own reviewed movies ✔️
 - Modify own reviews (only 1 review per movie) ✔️
@@ -23,11 +24,15 @@ User can:
 - Remove movies from own watchlist ✔️
 - View 'My account' page with details
 
-Moderator can:
+Moderator:
 - Do everything that User can
 - Browse/sort users ✔️
-- Disable or remove users ✔️
+- Disable users ✔️
 - View each users reviews
 - View each users 'My account' page ✔️
 - Modify or delete unappropriate reviews by users
-- Appoint new moderators of existing users
+
+Admin:
+- Do everything that Moderator can
+- Remove users completely ✔️
+- Appoint or demote moderators ✔️
