@@ -2,8 +2,11 @@ const { Sequelize } = require('sequelize')
 const config = require('./config')
 const logger = require('./logger')
 const { Umzug, SequelizeStorage } = require('umzug')
+require('dotenv').config()
 
-const sequelize = new Sequelize(config.DATABASE_URL)
+const sequelize = process.env.NODE_ENV === 'test'
+  ? new Sequelize(config.TEST_DATABASE_URL)
+  : new Sequelize(config.DATABASE_URL)
 
 const migrationConf = {
   migrations: {

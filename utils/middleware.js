@@ -75,8 +75,10 @@ const userExtractor = async (req, res, next) => {
 
 const moderatorExtractor = async (req, res, next) => {
   userExtractor(req, res, () => {
-    if (req.user.role !== 'moderator' || req.user.role !== 'admin') {
-      return res.status(401).json({ error: 'Not allowed to access this content' })
+    if (req.user.role !== 'moderator') {
+      if (req.user.role !== 'admin') {
+        return res.status(401).json({ error: 'Not allowed to access this content' })
+      }
     }
   })
   next()

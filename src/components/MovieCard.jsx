@@ -7,12 +7,14 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import watchlistsService from '../services/watchlists'
 
-const MovieCard = ({ movie, watchlist, reviews, addToWatchlist,
-  removeFromWatchlist, createReview, editReview, user }) => {
+const MovieCard = ({ movie, watchlist, reviews, addToWatchlist, removeFromWatchlist,
+  createReview, editReview, user, isMobile, isTablet }) => {
 
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const navigate = useNavigate()
+
+  const iconButtonSize = (isMobile || isTablet ) ? 'medium' : 'small'
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget)
@@ -138,14 +140,14 @@ const MovieCard = ({ movie, watchlist, reviews, addToWatchlist,
             onClick={() => handleCardClick(movie.id)}
           />
         }
-        <IconButton style={iconStyle} onClick={handleMenuClick} size='small'
+        <IconButton style={iconStyle} onClick={handleMenuClick} size='{iconButtonSize}'
           sx={{
             backgroundColor: 'rgba(245, 232, 199, 0.4)',
             m: 0.7,
             color: 'black',
             '&:hover': { backgroundColor: 'secondary.main' }
           }}>
-          <MoreVertOutlined fontSize='small' />
+          <MoreVertOutlined fontSize={iconButtonSize} />
         </IconButton>
       </Box>
       <CardContent>

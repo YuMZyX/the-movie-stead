@@ -34,12 +34,14 @@ const ExpandMore = styled((props) => {
 }))
 
 const ReviewCard = ({ movie, watchlist, review, addToWatchlist,
-  removeFromWatchlist, editReview, user }) => {
+  removeFromWatchlist, editReview, user, isMobile, isTablet }) => {
 
   const [expanded, setExpanded] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
   const navigate = useNavigate()
+
+  const iconButtonSize = (isMobile || isTablet ) ? 'medium' : 'small'
 
   const handleMenuClick = (event) => {
     setAnchorEl(event.currentTarget)
@@ -150,14 +152,14 @@ const ReviewCard = ({ movie, watchlist, review, addToWatchlist,
             onClick={() => handleCardClick(movie.id)}
           />
         }
-        <IconButton style={iconStyle} onClick={handleMenuClick} size='small'
+        <IconButton style={iconStyle} onClick={handleMenuClick} size={iconButtonSize}
           sx={{
             backgroundColor: 'rgba(245, 232, 199, 0.4)',
             m: 0.7,
             color: 'black',
             '&:hover': { backgroundColor: 'secondary.main' }
           }}>
-          <MoreVertOutlined fontSize='small' />
+          <MoreVertOutlined fontSize={iconButtonSize} />
         </IconButton>
         <StarIcon value={review.rating} review={review} editReview={handleEditReview} />
       </Box>

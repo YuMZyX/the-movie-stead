@@ -15,7 +15,7 @@ const sortItems = [
   { value: 'Title, ASC', selectText: 'Movie title, Z - A' },
 ]
 
-const Watchlist = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
+const Watchlist = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTablet }) => {
 
   const [watchlist, setWatchlist] = useState([null])
   const [reviews, setReviews] = useState([null])
@@ -112,7 +112,7 @@ const Watchlist = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
     )
   }
 
-  const filterSortWatchlist = watchlist
+  const filterSortWatchlist = watchlist.rows
     .filter((wl) => wl.movie.title.toLowerCase().includes(wlFilter.toLowerCase()))
     .sort((a, b) => {
       switch (sortOption) {
@@ -148,13 +148,15 @@ const Watchlist = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
           <Grid item key={wl.movieId} xs={9} sm={6} md={4.5} lg={3.6} style={{ display: 'flex' }}>
             <MovieCard
               movie={wl.movie}
-              watchlist={watchlist}
-              reviews={reviews}
+              watchlist={watchlist.rows}
+              reviews={reviews.rows}
               addToWatchlist={handleAddToWatchlist}
               removeFromWatchlist={handleRemoveFromWatchlist}
               createReview={handleCreateReview}
               editReview={handleEditReview}
               user={user}
+              isMobile={isMobile}
+              isTablet={isTablet}
             />
           </Grid>
         ))}

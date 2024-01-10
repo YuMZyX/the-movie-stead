@@ -102,6 +102,7 @@ const App = () => {
               addToWatchlist={handleAddToWatchlist}
               removeFromWatchlist={handleRemoveFromWatchlist}
               isMobile={isMobile}
+              isTablet={isTablet}
             />}
         />
         <Route
@@ -127,6 +128,7 @@ const App = () => {
               addToWatchlist={handleAddToWatchlist}
               removeFromWatchlist={handleRemoveFromWatchlist}
               isMobile={isMobile}
+              isTablet={isTablet}
             />}
         />
         <Route
@@ -137,6 +139,7 @@ const App = () => {
               addToWatchlist={handleAddToWatchlist}
               removeFromWatchlist={handleRemoveFromWatchlist}
               isMobile={isMobile}
+              isTablet={isTablet}
             />}
         />
         <Route
@@ -147,6 +150,7 @@ const App = () => {
               addToWatchlist={handleAddToWatchlist}
               removeFromWatchlist={handleRemoveFromWatchlist}
               isMobile={isMobile}
+              isTablet={isTablet}
             />}
         />
         <Route
@@ -157,6 +161,7 @@ const App = () => {
               addToWatchlist={handleAddToWatchlist}
               removeFromWatchlist={handleRemoveFromWatchlist}
               isMobile={isMobile}
+              isTablet={isTablet}
             />}
         />
         <Route path='*' element={<NotFound />} />

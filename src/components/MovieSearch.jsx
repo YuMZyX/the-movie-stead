@@ -154,8 +154,8 @@ const MovieSearch = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) =>
             <MovieCard
               movie={movie}
               user={user}
-              watchlist={watchlist}
-              reviews={reviews}
+              watchlist={watchlist.rows}
+              reviews={reviews.rows}
               addToWatchlist={handleAddToWatchlist}
               removeFromWatchlist={handleRemoveFromWatchlist}
               createReview={handleCreateReview}

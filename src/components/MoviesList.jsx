@@ -10,7 +10,8 @@ import reviewsService from '../services/reviews'
 import ReviewDialog from './ReviewDialog'
 import SearchForm from './SearchForm'
 
-const MoviesList = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
+const MoviesList = ({ user, addToWatchlist, removeFromWatchlist,
+  isMobile, isTablet }) => {
 
   const moviesList = useParams()
   const navigate = useNavigate()
@@ -120,13 +121,15 @@ const MoviesList = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => 
           <Grid item key={movie.id} xs={9} sm={6} md={4.5} lg={3.6} style={{ display: 'flex' }}>
             <MovieCard
               movie={movie}
-              watchlist={watchlist}
-              reviews={reviews}
+              watchlist={watchlist.rows}
+              reviews={reviews.rows}
               addToWatchlist={handleAddToWatchlist}
               removeFromWatchlist={handleRemoveFromWatchlist}
               createReview={handleCreateReview}
               editReview={handleEditReview}
               user={user}
+              isMobile={isMobile}
+              isTablet={isTablet}
             />
           </Grid>
         ))}

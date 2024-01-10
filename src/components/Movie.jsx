@@ -1,7 +1,7 @@
 import React from 'react'
 import { Grid, Card, CardMedia, Paper, Typography,
   Container, Box, Table, TableRow, TableCell, TableBody,
-  Divider, IconButton, Link, Tooltip } from '@mui/material'
+  Divider, IconButton, Link, Tooltip, CardContent } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import moviesService from '../services/movies'
@@ -12,6 +12,7 @@ import { Favorite, Remove, Star } from '@mui/icons-material'
 import { format, parseISO } from 'date-fns'
 import { uniqBy } from 'lodash'
 import ReviewDialog from './ReviewDialog'
+import StarIcon from './StarIcon'
 
 const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTablet }) => {
 
@@ -20,6 +21,8 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTablet }
   const [watchlist, setWatchlist] = useState([null])
   const [review, setReview] = useState()
   const [reviewProps, setReviewProps] = useState()
+  const [avgRating, setAvgRating] = useState(null)
+  const [movieReviews, setMovieReviews] = useState([null])
   const [addedOrRemoved, setAddedOrRemoved] = useState(null)
   const [reviewDialogOpen, setReviewDialogOpen] = useState(false)
   const [edit, setEdit] = useState(false)
@@ -33,7 +36,23 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTablet }
       .catch(error => {
         console.log(error)
       })
-  }, [])
+    reviewsService.getMovieReviews(movieId.id)
+      .then(response => {
+        setMovieReviews(response)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    reviewsService.getMovieRating(movieId.id)
+      .then(response => {
+        if (response) {
+          setAvgRating(response.avgRating)
+        }
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }, [addedOrRemoved])
 
   useEffect(() => {
     if (user) {
@@ -103,6 +122,7 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTablet }
     !movie
     || (user && (!watchlist || watchlist[0] === null))
     || (user && review === undefined)
+    || movieReviews[0] === null
   ) {
     return (
       <Progress />
@@ -128,7 +148,7 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTablet }
     : 'N/A'
 
   const userIconButtons = () => {
-    if (watchlist.some((watchlist) => watchlist.movieId === movie.id)) {
+    if (watchlist.rows.some((watchlist) => watchlist.movieId === movie.id)) {
       return (
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', flexGrow: 1 }}>
           <Box>
@@ -213,29 +233,39 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTablet }
     bgcolor: 'secondary.main'
   }
 
+  console.log(movieReviews)
+
   return (
     <Container>
       <Grid container spacing={2} sx={{ mt: 0 }}>
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12} sm={6} md={3.9}>
           <Card raised>
-            {movie.poster_path
-              ?
-              <CardMedia
-                component="img"
-                alt={movie.title}
-                image={`https://image.tmdb.org/t/p/w780/${movie.poster_path}`}
-                title={movie.title}
-                style={posterStyle}
-              />
-              :
-              <CardMedia
-                component="img"
-                alt={movie.title}
-                image={'/MoviePosterNotFound.png'}
-                title={movie.title}
-                style={posterStyle}
-              />
-            }
+            <Box component='div' sx={{ position: 'relative' }}>
+              {movie.poster_path
+                ?
+                <CardMedia
+                  component="img"
+                  alt={movie.title}
+                  image={`https://image.tmdb.org/t/p/w780/${movie.poster_path}`}
+                  title={movie.title}
+                  style={posterStyle}
+                />
+                :
+                <CardMedia
+                  component="img"
+                  alt={movie.title}
+                  image={'/MoviePosterNotFound.png'}
+                  title={movie.title}
+                  style={posterStyle}
+                />
+              }
+              {review &&
+                <StarIcon value={review.rating} review={review} editReview={handleEditReview} />
+              }
+              {avgRating &&
+                <StarIcon value={Math.round(avgRating*10)/10} avg={true} />
+              }
+            </Box>
           </Card>
         </Grid>
         <ReviewDialog
@@ -248,7 +278,7 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTablet }
           setAddedOrRemoved={setAddedOrRemoved}
           setEdit={setEdit}
         />
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} sm={12} md={8.1}>
           <Paper elevation={7} sx={{ padding: 2.5 }}>
             <Box sx={{ display: 'flex', alignItems: 'top' }}>
               <Typography variant="h5"  fontWeight='bold'>
@@ -418,6 +448,37 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTablet }
               />
             </Link>
           </Paper>
+          {movieReviews.length > 0 &&
+            <Paper elevation={7} sx={{ padding: 2.5, mt: 2 }}>
+              <Typography variant='h6' fontWeight='bold' sx={{ mb: 1.5, ml: 0.5 }}>
+                Latest reviews:
+              </Typography>
+              <Grid container spacing={4} sx={{ mb: 0 }}>
+                {movieReviews.map((movieReview) => (
+                  <Grid item key={movieReview.id} xs={12} sm={6} lg={4} style={{ display: 'flex' }}>
+                    <Card raised sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                      <CardContent>
+                        <Typography variant='subtitle2' sx={{ fontSize: 18 }}>
+                          {movieReview.user.name}
+                        </Typography>
+                        <Typography variant='caption' fontWeight='bold'>
+                          {format(parseISO(movieReview.updatedAt), 'dd.MM.yyyy')}
+                        </Typography>
+                        <Typography variant='subtitle2' sx={{ fontSize: 16, mt: 2 }}>
+                          Rating: {movieReview.rating}
+                        </Typography>
+                        {movieReview.reviewText &&
+                        <Typography variant='body2' sx={{ mt: 2 }}>
+                          {movieReview.reviewText}
+                        </Typography>
+                        }
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            </Paper>
+          }
         </Grid>
       </Grid>
     </Container>

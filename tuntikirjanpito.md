@@ -92,5 +92,10 @@
 |           | 1      | DiscoverMovies ja SearchFormAdvanced mobiili optimointi |
 |           | 1      | Moderaattorin oikeuksien rajoittaminen + middlewarejen refaktorointi |
 |           | 1      | Admin roolin lisäys + moderaattori roolin antaminen/poistaminen |
+| 10.1.2024 | 2,5    | My account näkymän lopullinen toteutus + routejen refaktorointia/korjausta |
+|           | 1,5    | admin & moderator: käyttäjien arvostelujen muokkaus ja poistaminen |
+|           | 1,5    | Routet, joilla haetaan tietokannasta elokuvan viimeisimmät arvostelut sekä arvosana keskiarvo |
+|           | 1,5    | Arvosana keskiarvon ja viimeisimpien arvostelujen näyttäminen elokuvan sivulla |
+|           | 1      | Testausympäristön konfigurointi ja ensimmäisten testien kirjoitus |
 |           |        |  |
-| YHT:      | 124    |  |
+| YHT:      | 132    |  |

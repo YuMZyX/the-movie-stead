@@ -2,6 +2,8 @@ const router = require('express').Router()
 const Review = require('../models/review')
 const Movie = require('../models/movie')
 const { userExtractor } = require('../utils/middleware')
+const { sequelize } = require('../utils/db')
+const { User } = require('../models')
 
 router.post('/', userExtractor, async (req, res) => {
   const { user_id, movie_id, title, poster_path, rating, review_text } = req.body
@@ -35,13 +37,40 @@ router.post('/', userExtractor, async (req, res) => {
 })
 
 router.get('/user/:userId', userExtractor, async (req, res) => {
-  const reviews = await Review.findAll({
+  const reviews = await Review.findAndCountAll({
     where: {
       userId: req.params.userId
     },
     include: {
       model: Movie
     }
+  })
+  res.json(reviews)
+})
+
+router.get('/movie/:movieId', async (req, res) => {
+  const reviews = await Review.findAll({
+    where: {
+      movieId: req.params.movieId
+    },
+    limit: 3,
+    order: [['updated_at', 'DESC']],
+    include: {
+      model: User
+    }
+  })
+  res.json(reviews)
+})
+
+router.get('/movie/:movieId/rating', async (req, res) => {
+  const reviews = await Review.findOne({
+    attributes: [
+      [sequelize.fn('AVG', sequelize.col('rating')), 'avgRating']
+    ],
+    where: {
+      movieId: req.params.movieId
+    },
+    group: 'movie_id'
   })
   res.json(reviews)
 })
@@ -59,7 +88,11 @@ router.get('/:userId&:movieId', userExtractor, async (req, res) => {
 router.delete('/:id', userExtractor, async (req, res) => {
   const review = await Review.findByPk(req.params.id)
 
-  if (review && (req.user.id === review.userId || req.user.role === 'moderator')) {
+  if (review &&
+    (req.user.id === review.userId
+      || req.user.role === 'moderator'
+      || req.user.role === 'admin'
+    )) {
     await review.destroy()
   }
   else {
@@ -74,14 +107,19 @@ router.put('/:id', userExtractor, async (req, res) => {
   const { rating, review_text } = req.body
   const review = await Review.findByPk(req.params.id)
 
-  if (review) {
+  if (review &&
+    (req.user.id === review.userId
+      || req.user.role === 'moderator'
+      || req.user.role === 'admin'
+    )) {
     review.rating = rating
     review.reviewText = review_text
     await review.save()
     res.json(review)
   }
   else {
-    res.status(404).send('Review does not exist in database')
+    return res.status(401)
+      .send({ error: 'You can only modify reviews created by yourself' })
   }
 })
 

@@ -10,6 +10,9 @@ Movie.belongsToMany(User, { through: Review, as: 'reviewers' })
 Movie.hasMany(Review)
 Review.belongsTo(Movie)
 
+User.hasMany(Review)
+Review.belongsTo(User)
+
 User.belongsToMany(Movie, { through: Watchlist, as: 'user_watchlist' })
 Movie.belongsToMany(User, { through: Watchlist, as: 'watchlist_movies' })
 

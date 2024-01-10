@@ -58,7 +58,7 @@ router.get('/:userId&:movieId', userExtractor, async(req, res) => {
 })
 
 router.get('/user/:userId', userExtractor, async (req, res) => {
-  const watchlist = await Watchlist.findAll({
+  const watchlist = await Watchlist.findAndCountAll({
     where: {
       userId: req.params.userId
     },
