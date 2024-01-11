@@ -456,7 +456,17 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTablet }
               <Grid container spacing={4} sx={{ mb: 0 }}>
                 {movieReviews.map((movieReview) => (
                   <Grid item key={movieReview.id} xs={12} sm={6} lg={4} style={{ display: 'flex' }}>
-                    <Card raised sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+                    <Card
+                      raised
+                      sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        width: '100%',
+                        borderRadius: 5,
+                        backgroundColor: 'primary.light',
+                        color: 'secondary.main'
+                      }}
+                    >
                       <CardContent>
                         <Typography variant='subtitle2' sx={{ fontSize: 18 }}>
                           {movieReview.user.name}
