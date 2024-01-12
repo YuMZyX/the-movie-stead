@@ -12,7 +12,9 @@ router.get('/', moderatorExtractor, async (req, res) => {
       role: 'user'
     }
   })
-  res.json(users)
+  if (req.user.role === 'moderator' || req.user.role === 'admin') {
+    res.json(users)
+  }
 })
 
 router.get('/admin', adminExtractor, async (req, res) => {
@@ -24,7 +26,9 @@ router.get('/admin', adminExtractor, async (req, res) => {
       }
     }
   })
-  res.json(users)
+  if (req.user.role === 'admin') {
+    res.json(users)
+  }
 })
 
 router.get('/:id', userExtractor, async (req, res) => {
@@ -32,15 +36,23 @@ router.get('/:id', userExtractor, async (req, res) => {
     attributes: { exclude: ['password'] }
   })
 
-  if (user) {
+  if (user &&
+    (req.user.id === user.id
+      || req.user.role === 'moderator'
+      || req.user.role === 'admin'
+    )) {
     res.json(user)
   } else {
-    res.status(404).end()
+    return res.status(401).send('Access denied')
   }
 })
 
 router.post('/', async (req, res) => {
   const { name, email, password, role } = req.body
+
+  if (!name || !email || !password) {
+    return res.status(400).send('Name, email or password is missing')
+  }
 
   const emailExists = await User.findOne({
     where: {
@@ -65,44 +77,44 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', moderatorExtractor, async (req, res) => {
   const user = await User.findByPk(req.params.id)
-  if (user) {
+  if (user && (req.user.role === 'moderator' || req.user.role === 'admin')) {
     user.disabled = req.body.disabled
     await user.save()
     res.json(user)
   } else {
-    return res.status(404).send('User not found')
+    return res.status(404).end()
   }
 })
 
 router.put('/:id/admin', adminExtractor, async (req, res) => {
   const user = await User.findByPk(req.params.id)
-  if (user) {
+  if (user && req.user.role === 'admin') {
     user.disabled = req.body.disabled
     user.role = req.body.role
     await user.save()
     res.json(user)
   } else {
-    return res.status(404).send('User not found')
+    return res.status(404).end()
   }
 })
 
 router.delete('/:id', adminExtractor, async (req, res) => {
   const user = await User.findByPk(req.params.id)
-  await Watchlist.destroy({
-    where: {
-      userId: user.id
-    }
-  })
-  await Review.destroy({
-    where: {
-      userId: user.id
-    }
-  })
-  if (user) {
+  if (user && req.user.role === 'admin') {
+    await Watchlist.destroy({
+      where: {
+        userId: user.id
+      }
+    })
+    await Review.destroy({
+      where: {
+        userId: user.id
+      }
+    })
     await user.destroy()
     res.status(204).end()
   } else {
-    return res.status(404).send('User not found')
+    return res.status(404).end()
   }
 })
 

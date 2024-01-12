@@ -11,10 +11,12 @@ UI-Framework: Material-UI
 Visitor:
 - Browse movies ✔️
 - Search movies by different search/filter options ✔️
+- Browse stars (actors/actresses)
+- Search stars by name
 - Sign up / Login ✔️
 
 User:
-- Do everything that Visitor can ✔️
+- Do everything that Visitor can 
 - Review movies ✔️
 - Browse/sort own reviewed movies ✔️
 - Modify own reviews (only 1 review per movie) ✔️

@@ -97,5 +97,8 @@
 |           | 1,5    | Routet, joilla haetaan tietokannasta elokuvan viimeisimmät arvostelut sekä arvosana keskiarvo |
 |           | 1,5    | Arvosana keskiarvon ja viimeisimpien arvostelujen näyttäminen elokuvan sivulla |
 |           | 1      | Testausympäristön konfigurointi ja ensimmäisten testien kirjoitus |
+| 11.1.2024 | 0,5    | Elokuvan viimeisimpien arvostelujen ulkoasun parantelu |
+|           | 3,5    | movies API integraatiotestit |
+|           | 3      | session API integraatiotestit ja users API testien kirjoittamista |
 |           |        |  |
-| YHT:      | 132    |  |
+| YHT:      | 139    |  |

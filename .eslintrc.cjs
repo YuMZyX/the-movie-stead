@@ -52,6 +52,7 @@ module.exports = {
     'no-console': 'off',
     'react/prop-types': 'off',
     'react/react-in-jsx-scope': 'off',
-    'react/jsx-uses-react': 'off'
+    'react/jsx-uses-react': 'off',
+    'no-useless-escape': 'off'
   },
 }

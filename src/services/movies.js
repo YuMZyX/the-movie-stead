@@ -33,12 +33,6 @@ const discoverMovies = async (query, page) => {
   return res.data
 }
 
-// REMOVE IF NO LONGER RELEVANT
-const getMovieCredits = async (id) => {
-  const res = await axios.get(`${baseUrl}/${id}/credits`)
-  return res.data
-}
-
 export default {
   getTrending,
   getMovie,
@@ -46,5 +40,4 @@ export default {
   getTopRated,
   searchMovies,
   discoverMovies,
-  getMovieCredits
 }

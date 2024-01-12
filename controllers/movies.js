@@ -24,11 +24,15 @@ router.get('/toprated', async (req, res) => {
 })
 
 router.get('/:id', async (req, res) => {
-  const movie = await moviedb.movieInfo({
-    id: req.params.id,
-    append_to_response: 'credits'
-  })
-  res.json(movie)
+  try {
+    const movie = await moviedb.movieInfo({
+      id: req.params.id,
+      append_to_response: 'credits'
+    })
+    res.json(movie)
+  } catch {
+    return res.status(404).send({ error: 'Requested movie not found' })
+  }
 })
 
 router.get('/search/:query&:page', async (req, res) => {
@@ -43,24 +47,20 @@ router.get('/search/:query&:page', async (req, res) => {
 
 router.get('/discover/:query&:page', async (req, res) => {
   const queryObject = JSON.parse(req.params.query)
-  console.log('QUERYOBJECT: ', queryObject)
+  const genres = queryObject.with_genres
+    ? queryObject.with_genres.toString()
+    : ''
   const movies = await moviedb.discoverMovie({
     'vote_count.gte': 100,
     'with_runtime.gte': queryObject.with_runtime_gte || 1,
     'with_runtime.lte': queryObject.with_runtime_lte,
-    with_genres: queryObject.with_genres.toString(),
-    sort_by: queryObject.sort_by,
+    with_genres: genres,
+    sort_by: queryObject.sort_by || 'popularity.desc',
     'primary_release_date.gte': queryObject.release_date_gte,
     'primary_release_date.lte': queryObject.release_date_lte,
     page: req.params.page,
   })
   res.json(movies)
-})
-
-// REMOVE IF NO LONGER RELEVANT
-router.get('/:id/credits', async (req, res) => {
-  const movieCredits = await moviedb.movieCredits(req.params.id)
-  res.json(movieCredits)
 })
 
 module.exports = router
