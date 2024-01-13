@@ -14,7 +14,7 @@ import { uniqBy } from 'lodash'
 import ReviewDialog from './ReviewDialog'
 import StarIcon from './StarIcon'
 
-const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTablet }) => {
+const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
 
   const movieId = useParams()
   const [movie, setMovie] = useState(null)
@@ -135,14 +135,10 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTablet }
     ? format(parseISO(movie.release_date), 'dd.MM.yyyy')
     : 'N/A'
   const directors = movieCredits.crew.filter(crew => crew.job === 'Director').slice(0, 3)
-  const stars = isMobile || isTablet
-    ? movieCredits.cast.slice(0, 3)
-    : movieCredits.cast.slice(0, 4)
+  const stars = movieCredits.cast.slice(0, 3)
   const filteredWriters = movieCredits.crew
     .filter(crew => crew.job === 'Screenplay' || crew.department === 'Writing')
-  const writers = isMobile || isTablet
-    ? uniqBy(filteredWriters, (writer) => writer.id).slice(0, 3)
-    : uniqBy(filteredWriters, (writer) => writer.id).slice(0, 4)
+  const writers = uniqBy(filteredWriters, (writer) => writer.id).slice(0, 3)
   const genres = movie.genres.length > 0
     ? movie.genres.map((g, index) => (index ? ', ' : '') + g.name).slice(0, 3)
     : 'N/A'
@@ -232,8 +228,6 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTablet }
     ml: 0.8,
     bgcolor: 'secondary.main'
   }
-
-  console.log(movieReviews)
 
   return (
     <Container>

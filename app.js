@@ -9,6 +9,7 @@ const usersRouter = require('./controllers/users')
 const sessionsRouter = require('./controllers/sessions')
 const watchlistRouter = require('./controllers/watchlists')
 const moviesRouter = require('./controllers/movies')
+const starsRouter = require('./controllers/stars')
 const reviewsRouter = require('./controllers/reviews')
 
 app.use(cors())
@@ -22,6 +23,7 @@ app.use('/api/users', usersRouter)
 app.use('/api', sessionsRouter)
 app.use('/api/watchlists', watchlistRouter)
 app.use('/api/movies', moviesRouter)
+app.use('/api/stars', starsRouter)
 app.use('/api/reviews', reviewsRouter)
 
 app.get('/test', (req, res) => {

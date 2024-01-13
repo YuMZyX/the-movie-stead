@@ -1,6 +1,5 @@
 import { Typography, Grid, Container, Stack, Pagination } from '@mui/material'
-import { useParams } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import moviesService from '../services/movies'
 import Progress from './Progress'

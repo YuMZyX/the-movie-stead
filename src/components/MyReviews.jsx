@@ -108,7 +108,7 @@ const MyReviews = ({ user, addToWatchlist, removeFromWatchlist,
       <Progress />
     )
   }
-  if (reviews.length === 0) {
+  if (reviews.count === 0) {
     return (
       <Container>
         <Box sx={{ mt: 2, ml: 2 }}>

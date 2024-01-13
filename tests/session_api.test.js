@@ -1,7 +1,7 @@
 const supertest = require('supertest')
 const app = require('../app')
 const helper = require('./test_helper')
-const { User, Session } = require('../models')
+const { User } = require('../models')
 const bcrypt = require('bcrypt')
 const { sequelize } = require('../utils/db')
 const api = supertest(app)
@@ -9,11 +9,10 @@ const baseUrl = '/api'
 
 let token = ''
 
-describe.skip('When user account is already created', () => {
+describe('When user account is already created', () => {
 
   beforeEach(async () => {
-    await Session.destroy({ where: {} })
-    await User.destroy({ where: {} })
+    await helper.emptyDbRows()
 
     const passwordHash = await bcrypt.hash('password', 10)
     await User.create({
@@ -95,11 +94,10 @@ describe.skip('When user account is already created', () => {
 
 })
 
-describe.skip('When logged in', () => {
+describe('When logged in', () => {
 
   beforeEach(async () => {
-    await Session.destroy({ where: {} })
-    await User.destroy({ where: {} })
+    await helper.emptyDbRows()
 
     const passwordHash = await bcrypt.hash('password', 10)
     await User.create({

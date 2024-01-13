@@ -16,7 +16,7 @@ const unknownEndpoint = (request, response) => {
 }
 
 const errorHandler = (error, req, res, next) => {
-  console.error(error.message)
+  logger.error(error.message)
 
   if (error.name === 'SequelizeValidationError') {
     return res.status(400).json({ error: error.message })
@@ -74,23 +74,23 @@ const userExtractor = async (req, res, next) => {
 }
 
 const moderatorExtractor = async (req, res, next) => {
-  userExtractor(req, res, () => {
+  userExtractor(req, res, async () => {
     if (req.user.role !== 'moderator') {
       if (req.user.role !== 'admin') {
         return res.status(401).json({ error: 'Not allowed to access this content' })
       }
     }
+    next()
   })
-  next()
 }
 
 const adminExtractor = async (req, res, next) => {
-  userExtractor(req, res, () => {
+  userExtractor(req, res, async () => {
     if (req.user.role !== 'admin') {
       return res.status(401).json({ error: 'Not allowed to access this content' })
     }
+    next()
   })
-  next()
 }
 
 module.exports = {

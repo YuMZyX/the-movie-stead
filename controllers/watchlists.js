@@ -6,6 +6,10 @@ const { userExtractor } = require('../utils/middleware')
 router.post('/', userExtractor, async (req, res) => {
   const { user_id, movie_id, title, poster_path } = req.body
 
+  if (req.user.id !== user_id) {
+    return res.status(401).send('Access denied')
+  }
+
   const movie = await Movie.findByPk(movie_id)
   if (!movie) {
     await Movie.create({
@@ -66,7 +70,14 @@ router.get('/user/:userId', userExtractor, async (req, res) => {
       model: Movie
     }
   })
-  res.json(watchlist)
+  if (parseInt(req.user.id) === parseInt(req.params.userId)
+    || req.user.role === 'moderator'
+    || req.user.role === 'admin'
+  ) {
+    res.json(watchlist)
+  } else {
+    res.status(401).send('Access denied')
+  }
 })
 
 module.exports = router

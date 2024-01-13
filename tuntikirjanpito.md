@@ -100,5 +100,10 @@
 | 11.1.2024 | 0,5    | Elokuvan viimeisimpien arvostelujen ulkoasun parantelu |
 |           | 3,5    | movies API integraatiotestit |
 |           | 3      | session API integraatiotestit ja users API testien kirjoittamista |
+| 12.1.2024 | 1      | users API integraatiotestien viimeistely |
+|           | 2,5    | watchlists API integraatiotestien kirjoittamista |
+| 13.1.2024 | 1      | watchlists API integraatiotestien viimeistely |
+|           | 2,5    | reviews API integraatiotestit + extractor middlewarejen virheen jäljitys & korjaus |
+|           | 3      | StarsList (näyttelijät ja ohjaajat) näkymä, StarCard ja stars controller & service |
 |           |        |  |
-| YHT:      | 139    |  |
+| YHT:      | 149    |  |

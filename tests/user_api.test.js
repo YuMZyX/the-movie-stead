@@ -1,7 +1,7 @@
 const supertest = require('supertest')
 const app = require('../app')
 const helper = require('./test_helper')
-const { User, Session } = require('../models')
+const { User } = require('../models')
 const bcrypt = require('bcrypt')
 const { sequelize } = require('../utils/db')
 const api = supertest(app)
@@ -11,10 +11,10 @@ let token = ''
 let loggedId = ''
 let otherUserId = ''
 
-describe.skip('Sign Up', () => {
+describe('Sign Up', () => {
 
   beforeEach(async () => {
-    await User.destroy({ where: {} })
+    await helper.emptyDbRows()
 
     const passwordHash = await bcrypt.hash('password', 10)
     await User.create({
@@ -103,11 +103,10 @@ describe.skip('Sign Up', () => {
 
 })
 
-describe.skip('When logged in, user', () => {
+describe('When logged in, user', () => {
 
   beforeEach(async () => {
-    await Session.destroy({ where: {} })
-    await User.destroy({ where: {} })
+    await helper.emptyDbRows()
 
     const passwordHash = await bcrypt.hash('password', 10)
     await User.create({
@@ -203,11 +202,10 @@ describe.skip('When logged in, user', () => {
 
 })
 
-describe.skip('When logged in, moderator', () => {
+describe('When logged in, moderator', () => {
 
   beforeEach(async () => {
-    await Session.destroy({ where: {} })
-    await User.destroy({ where: {} })
+    await helper.emptyDbRows()
 
     const passwordHash = await bcrypt.hash('password', 10)
     await User.create({
@@ -310,11 +308,10 @@ describe.skip('When logged in, moderator', () => {
 
 })
 
-describe.skip('When logged in, admin', () => {
+describe('When logged in, admin', () => {
 
   beforeEach(async () => {
-    await Session.destroy({ where: {} })
-    await User.destroy({ where: {} })
+    await helper.emptyDbRows()
 
     const passwordHash = await bcrypt.hash('password', 10)
     await User.create({

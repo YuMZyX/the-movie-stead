@@ -2,8 +2,7 @@ import { FavoriteOutlined, MoreVertOutlined,
   StarOutlined, Login } from '@mui/icons-material'
 import { Card, CardContent, CardMedia, Typography, IconButton,
   Menu, MenuItem, Box, ListItemIcon } from '@mui/material'
-import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useState } from 'react'
 import watchlistsService from '../services/watchlists'
 
@@ -104,6 +103,7 @@ const MovieCard = ({ movie, watchlist, reviews, addToWatchlist, removeFromWatchl
   const linkStyle = {
     color: 'black',
     textDecoration: 'none',
+    display: 'inline-block'
   }
   const iconStyle = {
     position: 'absolute',
@@ -123,7 +123,7 @@ const MovieCard = ({ movie, watchlist, reviews, addToWatchlist, removeFromWatchl
           <CardMedia
             component='img'
             alt={movie.title}
-            image={'/MoviePosterNotFound.png'}
+            image={'/no-poster-available.jpg'}
             title={movie.title}
             sx={{ cursor: 'pointer', borderBottom: 1 }}
             style={posterStyle}

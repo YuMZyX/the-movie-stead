@@ -8,6 +8,10 @@ const { User } = require('../models')
 router.post('/', userExtractor, async (req, res) => {
   const { user_id, movie_id, title, poster_path, rating, review_text } = req.body
 
+  if (req.user.id !== user_id) {
+    return res.status(401).send('Access denied')
+  }
+
   const movie = await Movie.findByPk(movie_id)
   if (!movie) {
     await Movie.create({
@@ -45,7 +49,14 @@ router.get('/user/:userId', userExtractor, async (req, res) => {
       model: Movie
     }
   })
-  res.json(reviews)
+  if (parseInt(req.user.id) === parseInt(req.params.userId)
+      || req.user.role === 'moderator'
+      || req.user.role === 'admin'
+  ) {
+    res.json(reviews)
+  } else {
+    res.status(401).send('Access denied')
+  }
 })
 
 router.get('/movie/:movieId', async (req, res) => {
@@ -82,7 +93,17 @@ router.get('/:userId&:movieId', userExtractor, async (req, res) => {
       movieId: req.params.movieId
     }
   })
-  res.json(review)
+  if (review &&
+    (req.user.id === review.userId
+      || req.user.role === 'moderator'
+      || req.user.role === 'admin'
+    )) {
+    res.json(review)
+  } else if (!review) {
+    res.status(204).end()
+  } else {
+    res.status(401).send('Access denied')
+  }
 })
 
 router.delete('/:id', userExtractor, async (req, res) => {

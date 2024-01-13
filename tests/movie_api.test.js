@@ -4,7 +4,7 @@ const app = require('../app')
 const api = supertest(app)
 const baseUrl = '/api/movies'
 
-describe.skip('When fetching from movie API', () => {
+describe('When fetching from movie API', () => {
 
   test('movies are returned as JSON', async () => {
     await api
@@ -52,7 +52,7 @@ describe.skip('When fetching from movie API', () => {
 
 })
 
-describe.skip('Fetching details of a specific movie', () => {
+describe('Fetching details of a specific movie', () => {
 
   test('succeeds with a valid movie id', async () => {
     const movie = await api.get(`${baseUrl}/753342`)
@@ -72,7 +72,7 @@ describe.skip('Fetching details of a specific movie', () => {
 
 })
 
-describe.skip('Searching for a movie', () => {
+describe('Searching for a movie', () => {
 
   test('succeeds with a valid query', async () => {
     const search = { search: 'Harry Potter', year: 2001 }
@@ -151,7 +151,7 @@ describe.skip('Searching for a movie', () => {
 
 })
 
-describe.skip('Discovering movies (advanced search)', () => {
+describe('Discovering movies (advanced search)', () => {
 
   test('returns all (vote_count > 100 & runtime > 1) movies if query filters are empty',
     async () => {

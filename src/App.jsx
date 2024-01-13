@@ -15,6 +15,7 @@ import { useSnackbar } from 'notistack'
 import MyReviews from './components/MyReviews'
 import MovieSearch from './components/MovieSearch'
 import DiscoverMovies from './components/DiscoverMovies'
+import StarsList from './components/StarsList'
 
 const App = () => {
   const [windowDimension, setWindowDimension] = useState(null)
@@ -82,7 +83,7 @@ const App = () => {
   }
 
   const isMobile = windowDimension <= 640
-  const isTablet = windowDimension < 1280 && windowDimension > 640
+  const isTablet = windowDimension <= 1024 && windowDimension > 640
 
   return (
     <>
@@ -106,6 +107,10 @@ const App = () => {
             />}
         />
         <Route
+          path='/stars/:page'
+          element={<StarsList isMobile={isMobile} />}
+        />
+        <Route
           path='/movies/:id'
           element={
             <Movie
@@ -113,7 +118,6 @@ const App = () => {
               addToWatchlist={handleAddToWatchlist}
               removeFromWatchlist={handleRemoveFromWatchlist}
               isMobile={isMobile}
-              isTablet={isTablet}
             />}
         />
         <Route path='/login' element={<Login setUser={setUser} />} />

@@ -100,7 +100,7 @@ const Watchlist = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTabl
       <Progress />
     )
   }
-  if (watchlist.length === 0) {
+  if (watchlist.count === 0) {
     return (
       <Container>
         <Box sx={{ mt: 2, ml: 2 }}>

@@ -59,6 +59,7 @@
     "node": ">=18.17.1 <19.0.0"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "testTimeout": 10000
   }
 }

@@ -3,7 +3,7 @@ import { AppBar, Toolbar, IconButton, Button, Menu, MenuItem, Container,
 import AccountCircle from '@mui/icons-material/AccountCircle'
 import { useState } from 'react'
 import { Login, Logout, HowToReg, MenuOutlined, VideocamOutlined,
-  StarOutlined, FavoriteOutlined, PersonOutlined } from '@mui/icons-material'
+  StarOutlined, FavoriteOutlined, PersonOutlined, FaceRetouchingNaturalOutlined } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
 
 const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
@@ -29,7 +29,8 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
   }
 
   const iconsStyles = {
-    color: 'primary.dark'
+    color: 'primary.dark',
+    mr: 2
   }
 
   const navbarLinks = (user) => {
@@ -37,6 +38,7 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
       return (
         <Box>
           <Button color='inherit' onClick={() => navigate('/trending/1')}>Movies</Button>
+          <Button color='inherit' onClick={() => navigate('/stars/1')}>Stars</Button>
         </Box>
       )
     } else {
@@ -80,6 +82,15 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
                 </MenuItem>
                 <MenuItem onClick={() => {
                   handleAppMenuClose()
+                  navigate('/stars/1')
+                }}>
+                  <ListItemIcon>
+                    <FaceRetouchingNaturalOutlined sx={iconsStyles} />
+                  </ListItemIcon>
+                  Stars
+                </MenuItem>
+                <MenuItem onClick={() => {
+                  handleAppMenuClose()
                   navigate(`/myreviews/${user.id}`)
                 }}>
                   <ListItemIcon>
@@ -112,6 +123,7 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
             :
             <Box>
               <Button color='inherit' onClick={() => navigate('/trending/1')}>Movies</Button>
+              <Button color='inherit' onClick={() => navigate('/stars/1')}>Stars</Button>
               <Button color='inherit' onClick={() => navigate(`/myreviews/${user.id}`)}>My Reviews</Button>
               <Button color='inherit' onClick={() => navigate(`/watchlist/${user.id}`)}>Watchlist</Button>
               {(user.role === 'moderator' || user.role === 'admin') &&
