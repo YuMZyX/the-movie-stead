@@ -75,6 +75,7 @@ const StarsList = ({ isMobile }) => {
   return (
     <Container>
       <TextField
+        id='star-search'
         fullWidth
         sx={{ mt: 2 }}
         label='Search for a star'

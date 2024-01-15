@@ -112,5 +112,9 @@
 |           | 1,5    | Henkilöiden etsimisen alustava toteutus & linkit Movie näkymän henkilöille |
 | 15.1.2024 | 1      | Henkilöhaun query parametri ja debounce |
 |           | 1      | Projektin rakenteen refaktorointi selkeämpään muotoon |
+|           | 1,5    | Cypress asennus, testiympäristön konfigurointi & käyttöönotto + testing controller |
+|           | 1      | Sign Up lomakkeen E2E testit |
+|           | 1,5    | Login/Logout E2E testit ja tietokannan seedaus task komennon avulla |
+|           | 2      | Movie/Movies E2E testit & Stars E2E testit |
 |           |        |  |
-| YHT:      | 157    |  |
+| YHT:      | 165    |  |

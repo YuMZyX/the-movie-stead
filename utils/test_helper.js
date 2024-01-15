@@ -1,4 +1,5 @@
 const { User, Session, Watchlist, Movie, Review } = require('../models')
+const bcrypt = require('bcrypt')
 
 const usersInDb = async () => {
   const users = await User.findAll()
@@ -33,11 +34,41 @@ const emptyDbRows = async () => {
   await Movie.destroy({ where: {} })
 }
 
+const seedUsers = async () => {
+  const passwordHash = await bcrypt.hash('password', 10)
+  await User.create({
+    name: 'Regular User',
+    email: 'regular@gmail.com',
+    password: passwordHash,
+    role: 'user'
+  })
+  await User.create({
+    name: 'Disabled User',
+    email: 'disabled@gmail.com',
+    password: passwordHash,
+    role: 'user',
+    disabled: true
+  })
+  await User.create({
+    name: 'Moderator User',
+    email: 'moderator@gmail.com',
+    password: passwordHash,
+    role: 'moderator'
+  })
+  await User.create({
+    name: 'Admin User',
+    email: 'admin@gmail.com',
+    password: passwordHash,
+    role: 'admin'
+  })
+}
+
 module.exports = {
   usersInDb,
   sessionsInDb,
   watchlistsInDb,
   moviesInDb,
   reviewsInDb,
-  emptyDbRows
+  emptyDbRows,
+  seedUsers
 }

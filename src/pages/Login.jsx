@@ -89,7 +89,12 @@ const Login = ({ setUser }) => {
             error={formik.touched.password && Boolean(formik.errors.password)}
             helperText={formik.touched.password && formik.errors.password} />
           {error && <Typography variant='caption' color='error' sx={{ ml: 2 }}>{error}</Typography>}
-          <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2, color: 'secondary.main' }}>
+          <Button
+            id='login-button'
+            type='submit'
+            fullWidth
+            variant='contained'
+            sx={{ mt: 3, mb: 2, color: 'secondary.main' }}>
             Login
           </Button>
           <Grid container>

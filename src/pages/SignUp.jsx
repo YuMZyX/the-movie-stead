@@ -135,7 +135,13 @@ const SignUp = ({ setUser }) => {
             helperText={formik.touched.passwordCheck && formik.errors.passwordCheck}
             sx={{ mt: 3 }}/>
           {error && <Typography variant='caption' color='error' sx={{ ml: 2 }}>{error}</Typography>}
-          <Button type='submit' fullWidth variant='contained' sx={{ mt: 4, mb: 2, color: 'secondary.main' }}>
+          <Button
+            id='signup-button'
+            type='submit'
+            fullWidth
+            variant='contained'
+            sx={{ mt: 4, mb: 2, color: 'secondary.main' }}
+          >
             Sign Up
           </Button>
           <Grid container justifyContent='flex-start'>

@@ -71,7 +71,7 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
                 open={menuOpen}
                 onClose={handleAppMenuClose}
               >
-                <MenuItem onClick={() => {
+                <MenuItem id='movies' onClick={() => {
                   handleAppMenuClose()
                   navigate('/trending/1')
                 }}>
@@ -80,7 +80,7 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
                   </ListItemIcon>
                   Movies
                 </MenuItem>
-                <MenuItem onClick={() => {
+                <MenuItem id='stars' onClick={() => {
                   handleAppMenuClose()
                   navigate('/stars/trending/1')
                 }}>
@@ -89,7 +89,7 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
                   </ListItemIcon>
                   Stars
                 </MenuItem>
-                <MenuItem onClick={() => {
+                <MenuItem id='my-reviews' onClick={() => {
                   handleAppMenuClose()
                   navigate(`/myreviews/${user.id}`)
                 }}>
@@ -98,7 +98,7 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
                   </ListItemIcon>
                   My Reviews
                 </MenuItem>
-                <MenuItem onClick={() => {
+                <MenuItem id='watchlist' onClick={() => {
                   handleAppMenuClose()
                   navigate(`/watchlist/${user.id}`)
                 }}>
@@ -108,7 +108,7 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
                   Watchlist
                 </MenuItem>
                 {(user.role === 'moderator' || user.role === 'admin') &&
-                  <MenuItem onClick={() => {
+                  <MenuItem id='users' onClick={() => {
                     handleAppMenuClose()
                     navigate('/users')
                   }}>
@@ -122,12 +122,22 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
             </Box>
             :
             <Box>
-              <Button color='inherit' onClick={() => navigate('/trending/1')}>Movies</Button>
-              <Button color='inherit' onClick={() => navigate('/stars/trending/1')}>Stars</Button>
-              <Button color='inherit' onClick={() => navigate(`/myreviews/${user.id}`)}>My Reviews</Button>
-              <Button color='inherit' onClick={() => navigate(`/watchlist/${user.id}`)}>Watchlist</Button>
+              <Button id='movies' color='inherit' onClick={() => navigate('/trending/1')}>
+                Movies
+              </Button>
+              <Button id='stars' color='inherit' onClick={() => navigate('/stars/trending/1')}>
+                Stars
+              </Button>
+              <Button id='my-reviews' color='inherit' onClick={() => navigate(`/myreviews/${user.id}`)}>
+                My Reviews
+              </Button>
+              <Button id='watchlist' color='inherit' onClick={() => navigate(`/watchlist/${user.id}`)}>
+                Watchlist
+              </Button>
               {(user.role === 'moderator' || user.role === 'admin') &&
-                <Button color='inherit' onClick={() => navigate('/users')}>Users</Button>
+                <Button id='users' color='inherit' onClick={() => navigate('/users')}>
+                  Users
+                </Button>
               }
             </Box>
           }
@@ -241,7 +251,7 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
                   </div>
                   :
                   <div>
-                    <MenuItem onClick={() => {
+                    <MenuItem id='account-menu-login' onClick={() => {
                       navigate('/login')
                       handleAccountMenuClose()
                     }}>
@@ -250,7 +260,7 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
                       </ListItemIcon>
                       Login
                     </MenuItem>
-                    <MenuItem onClick={() => {
+                    <MenuItem id='account-menu-signup' onClick={() => {
                       navigate('/signup')
                       handleAccountMenuClose()
                     }}>

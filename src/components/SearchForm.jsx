@@ -86,12 +86,14 @@ const SearchForm = ({ setMovies, setAddedOrRemoved, isMobile }) => {
             onChange={(value) => formik.setFieldValue('year', value, true)}
             slotProps={{
               textField: {
+                id: 'release-year',
                 variant: 'outlined',
-                error: formik.touched.year && Boolean(formik.errors.year),
+                error: formik.touched.year && Boolean(formik.errors.year)
               }
             }}
           />
           <Button
+            id='search-button'
             variant='contained'
             fullWidth
             sx={{ ml: 2, color: 'secondary.main', whiteSpace: 'nowrap' }}

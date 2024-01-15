@@ -4,6 +4,7 @@ const path = require('path')
 const app = express()
 const cors = require('cors')
 const middleware = require('./utils/middleware')
+require('dotenv').config()
 
 const usersRouter = require('./controllers/users')
 const sessionsRouter = require('./controllers/sessions')
@@ -26,8 +27,13 @@ app.use('/api/movies', moviesRouter)
 app.use('/api/stars', starsRouter)
 app.use('/api/reviews', reviewsRouter)
 
-app.get('/test', (req, res) => {
-  res.send('test')
+if (process.env.NODE_ENV === 'test') {
+  const testingRouter = require('./controllers/testing')
+  app.use('/api/testing', testingRouter)
+}
+
+app.get('/health', (req, res) => {
+  res.status(200).send('ok')
 })
 
 app.use(middleware.unknownEndpoint)
