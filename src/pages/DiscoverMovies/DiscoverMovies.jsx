@@ -1,13 +1,13 @@
 import { Container, Typography, Grid, Stack, Pagination } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import watchlistsService from '../services/watchlists'
-import reviewsService from '../services/reviews'
-import moviesService from '../services/movies'
-import Progress from './Progress'
-import MovieCard from './MovieCard'
-import ReviewDialog from './ReviewDialog'
-import SearchFormAdvanced from './SearchFormAdvanced'
+import watchlistsService from '../../services/watchlists'
+import reviewsService from '../../services/reviews'
+import moviesService from '../../services/movies'
+import Progress from '../../components/Progress'
+import MovieCard from '../../components/MovieCard'
+import ReviewDialog from '../../components/ReviewDialog'
+import SearchFormAdvanced from './components/SearchFormAdvanced'
 
 const DiscoverMovies = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
 

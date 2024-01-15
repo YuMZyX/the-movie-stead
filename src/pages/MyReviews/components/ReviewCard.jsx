@@ -5,11 +5,11 @@ import { Card, Box, CardMedia, IconButton, Menu, CardContent,
 import { FavoriteOutlined, MoreVertOutlined,
   StarOutlined, ExpandMoreOutlined } from '@mui/icons-material'
 import { styled } from '@mui/material/styles'
-import watchlistsService from '../services/watchlists'
+import watchlistsService from '../../../services/watchlists'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
-import StarIcon from './StarIcon'
+import StarIcon from '../../../components/StarIcon'
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props
@@ -135,7 +135,7 @@ const ReviewCard = ({ movie, watchlist, review, addToWatchlist,
           <CardMedia
             component='img'
             alt={movie.title}
-            image={'/MoviePosterNotFound.png'}
+            image={'/no-movie-poster.png'}
             title={movie.title}
             sx={{ cursor: 'pointer', borderBottom: 1 }}
             style={posterStyle}

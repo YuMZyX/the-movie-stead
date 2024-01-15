@@ -1,10 +1,10 @@
 import { TextField, Box, FormControl, InputLabel, Select,
   MenuItem, Grid, OutlinedInput, Chip, IconButton } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers'
-import FilterSort from './FilterSort'
+import FilterSort from '../../../components/FilterSort'
 import { useEffect, useState } from 'react'
-import moviesService from '../services/movies'
-import Progress from './Progress'
+import moviesService from '../../../services/movies'
+import Progress from '../../../components/Progress'
 import { ClearOutlined } from '@mui/icons-material'
 import { useSearchParams } from 'react-router-dom'
 import { useDebounce } from 'use-debounce'

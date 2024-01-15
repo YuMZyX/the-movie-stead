@@ -38,7 +38,7 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
       return (
         <Box>
           <Button color='inherit' onClick={() => navigate('/trending/1')}>Movies</Button>
-          <Button color='inherit' onClick={() => navigate('/stars/1')}>Stars</Button>
+          <Button color='inherit' onClick={() => navigate('/stars/trending/1')}>Stars</Button>
         </Box>
       )
     } else {
@@ -82,7 +82,7 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
                 </MenuItem>
                 <MenuItem onClick={() => {
                   handleAppMenuClose()
-                  navigate('/stars/1')
+                  navigate('/stars/trending/1')
                 }}>
                   <ListItemIcon>
                     <FaceRetouchingNaturalOutlined sx={iconsStyles} />
@@ -123,7 +123,7 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
             :
             <Box>
               <Button color='inherit' onClick={() => navigate('/trending/1')}>Movies</Button>
-              <Button color='inherit' onClick={() => navigate('/stars/1')}>Stars</Button>
+              <Button color='inherit' onClick={() => navigate('/stars/trending/1')}>Stars</Button>
               <Button color='inherit' onClick={() => navigate(`/myreviews/${user.id}`)}>My Reviews</Button>
               <Button color='inherit' onClick={() => navigate(`/watchlist/${user.id}`)}>Watchlist</Button>
               {(user.role === 'moderator' || user.role === 'admin') &&

@@ -16,7 +16,8 @@ router.get('/trending/:page', async (req, res) => {
 router.get('/:id', async (req, res) => {
   try {
     const star = await moviedb.personInfo({
-      id: req.params.id
+      id: req.params.id,
+      append_to_response: 'movie_credits'
     })
     res.json(star)
   } catch {

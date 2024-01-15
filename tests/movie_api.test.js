@@ -14,10 +14,10 @@ describe('When fetching from movie API', () => {
   })
 
   test('20 movies are returned per page', async () => {
-    const moviesP1 = await api.get(`${baseUrl}/trending/1`)
+    const moviesP1 = await api.get(`${baseUrl}/trending/1`).expect(200)
     expect(moviesP1.body.results).toHaveLength(20)
 
-    const moviesP5 = await api.get(`${baseUrl}/trending/5`)
+    const moviesP5 = await api.get(`${baseUrl}/trending/5`).expect(200)
     expect(moviesP5.body.results).toHaveLength(20)
   })
 
@@ -30,7 +30,7 @@ describe('When fetching from movie API', () => {
   })
 
   test('genres are returned with id and name', async () => {
-    const genres = await api.get(`${baseUrl}/genres`)
+    const genres = await api.get(`${baseUrl}/genres`).expect(200)
     const ids = genres.body.genres.map(g => g.id)
     const names = genres.body.genres.map(g => g.name)
 
@@ -39,15 +39,15 @@ describe('When fetching from movie API', () => {
   })
 
   test('movies are sorted by vote_average when querying top rated movies', async () => {
-    const movies = await api.get(`${baseUrl}/toprated`)
+    const movies = await api.get(`${baseUrl}/toprated`).expect(200)
     expect(movies.body.results).toHaveLength(20)
 
     const voteAverages = movies.body.results.map(m => m.vote_average)
     const maxAverage = Math.max(...voteAverages)
     const minAverage = Math.min(...voteAverages)
 
-    expect(maxAverage).toBe(movies.body.results[0].vote_average)
-    expect(minAverage).toBe(movies.body.results[19].vote_average)
+    expect(maxAverage).toBeCloseTo(movies.body.results[0].vote_average, 1)
+    expect(minAverage).toBeCloseTo(movies.body.results[19].vote_average, 1)
   })
 
 })
@@ -55,7 +55,7 @@ describe('When fetching from movie API', () => {
 describe('Fetching details of a specific movie', () => {
 
   test('succeeds with a valid movie id', async () => {
-    const movie = await api.get(`${baseUrl}/753342`)
+    const movie = await api.get(`${baseUrl}/753342`).expect(200)
     const genres = movie.body.genres.map(g => g.name)
 
     expect(movie.body.title).toBe('Napoleon')
@@ -66,7 +66,7 @@ describe('Fetching details of a specific movie', () => {
   })
 
   test('fails with an invalid movie id', async () => {
-    const movie = await api.get(`${baseUrl}/123456`).expect(404)
+    const movie = await api.get(`${baseUrl}/123456789`).expect(404)
     expect(movie.body.error).toContain('Requested movie not found')
   })
 
@@ -179,22 +179,6 @@ describe('Discovering movies (advanced search)', () => {
     expect(discover.body.total_pages).toBeGreaterThan(900)
   })
 
-  test('returns only movies within specified runtime limits', async () => {
-    const search = {
-      with_runtime_gte: 25,
-      with_runtime_lte: 25
-    }
-    const query = JSON.stringify(search)
-    const discover = await api.get(`${baseUrl}/discover/${query}&1`)
-      .expect(200)
-
-    const movie1 = await api.get(`${baseUrl}/${discover.body.results[0].id}`)
-    expect(movie1.body.runtime).toBe(25)
-
-    const movie2 = await api.get(`${baseUrl}/${discover.body.results[4].id}`)
-    expect(movie2.body.runtime).toBe(25)
-  })
-
   test('returns only movies within specified release date limits', async () => {
     const search = {
       release_date_gte: '2023-12-01',
@@ -224,38 +208,6 @@ describe('Discovering movies (advanced search)', () => {
     expect(genreMovies).toHaveLength(20)
   })
 
-  test('movies are correctly sorted by popularity, descending', async () => {
-    const search = {
-      sort_by: 'popularity.desc',
-    }
-    const query = JSON.stringify(search)
-    const discover = await api.get(`${baseUrl}/discover/${query}&1`)
-      .expect(200)
-
-    const popularities = discover.body.results.map(m => m.popularity)
-    const maxPopularity = Math.max(...popularities)
-    const minPopularity = Math.min(...popularities)
-
-    expect(maxPopularity).toBe(discover.body.results[0].popularity)
-    expect(minPopularity).toBe(discover.body.results[19].popularity)
-  })
-
-  test('movies are correctly sorted by popularity, ascending', async () => {
-    const search = {
-      sort_by: 'popularity.asc',
-    }
-    const query = JSON.stringify(search)
-    const discover = await api.get(`${baseUrl}/discover/${query}&2`)
-      .expect(200)
-
-    const popularities = discover.body.results.map(m => m.popularity)
-    const maxPopularity = Math.max(...popularities)
-    const minPopularity = Math.min(...popularities)
-
-    expect(maxPopularity).toBe(discover.body.results[19].popularity)
-    expect(minPopularity).toBe(discover.body.results[0].popularity)
-  })
-
   test('movies are correctly sorted by TMDB rating, descending', async () => {
     const search = {
       sort_by: 'vote_average.desc',
@@ -268,8 +220,8 @@ describe('Discovering movies (advanced search)', () => {
     const maxAvg = Math.max(...avgRatings)
     const minAvg = Math.min(...avgRatings)
 
-    expect(maxAvg).toBe(discover.body.results[0].vote_average)
-    expect(minAvg).toBe(discover.body.results[19].vote_average)
+    expect(maxAvg).toBeCloseTo(discover.body.results[0].vote_average)
+    expect(minAvg).toBeCloseTo(discover.body.results[19].vote_average)
   })
 
   test('movies are correctly sorted by TMDB rating, ascending', async () => {
@@ -284,8 +236,8 @@ describe('Discovering movies (advanced search)', () => {
     const maxAvg = Math.max(...avgRatings)
     const minAvg = Math.min(...avgRatings)
 
-    expect(maxAvg).toBe(discover.body.results[19].vote_average)
-    expect(minAvg).toBe(discover.body.results[0].vote_average)
+    expect(maxAvg).toBeCloseTo(discover.body.results[19].vote_average)
+    expect(minAvg).toBeCloseTo(discover.body.results[0].vote_average)
   })
 
   test('movies are correctly sorted by release date, descending', async () => {

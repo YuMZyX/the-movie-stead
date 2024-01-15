@@ -105,5 +105,12 @@
 | 13.1.2024 | 1      | watchlists API integraatiotestien viimeistely |
 |           | 2,5    | reviews API integraatiotestit + extractor middlewarejen virheen jäljitys & korjaus |
 |           | 3      | StarsList (näyttelijät ja ohjaajat) näkymä, StarCard ja stars controller & service |
+| 14.1.2024 | 0,5    | stars API integraatiotestit |
+|           | 2,5    | Yksittäisen henkilön näkymän alustava toteutus & StarCard tunnetuimmat elokuvat |
+|           | 2      | Henkilön elokuvien nouto ja esittäminen + Person näkymän apufunktiot |
+|           | 1,5    | Yksittäisen henkilön näkymän mobiilioptimointi & muokkaukset henkilöille, joilta puuttuu tietoja |
+|           | 1,5    | Henkilöiden etsimisen alustava toteutus & linkit Movie näkymän henkilöille |
+| 15.1.2024 | 1      | Henkilöhaun query parametri ja debounce |
+|           | 1      | Projektin rakenteen refaktorointi selkeämpään muotoon |
 |           |        |  |
-| YHT:      | 149    |  |
+| YHT:      | 157    |  |

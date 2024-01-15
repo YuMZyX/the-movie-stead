@@ -3,8 +3,8 @@ import { Avatar, Box, Container, Paper, Table, TableBody,
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import userService from '../services/users'
-import Progress from './Progress'
-import Redirect from './Redirect'
+import Progress from '../components/Progress'
+import Redirect from '../components/Redirect'
 import { ManageAccountsOutlined, PersonAddAltOutlined,
   PersonOutlineOutlined } from '@mui/icons-material'
 import { format, parseISO } from 'date-fns'

@@ -1,6 +1,6 @@
 const supertest = require('supertest')
 const app = require('../app')
-const helper = require('./test_helper')
+const helper = require('../utils/test_helper')
 const { User, Watchlist, Movie } = require('../models')
 const bcrypt = require('bcrypt')
 const { sequelize } = require('../utils/db')

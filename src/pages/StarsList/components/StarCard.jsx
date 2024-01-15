@@ -1,4 +1,4 @@
-import { Card, CardMedia, CardContent, Typography } from '@mui/material'
+import { Card, CardMedia, CardContent, Typography, List, ListItem } from '@mui/material'
 import { useNavigate, Link } from 'react-router-dom'
 
 
@@ -37,27 +37,33 @@ const StarCard = ({ star }) => {
         <CardMedia
           component='img'
           alt={star.name}
-          image={'no-photo-available.jpg'}
+          image={'/photo-not-available.png'}
           title={star.name}
           sx={{ cursor: 'pointer', borderBottom: 1 }}
           style={posterStyle}
           onClick={() => handleCardClick(star.id)}
         />
       }
-      <CardContent>
+      <CardContent sx={{ '&:last-child': { pb: 1.5 } }}>
         <Link to={`/stars/${star.id}`} style={linkStyle}>
           <Typography variant='body1' fontWeight='bold' component='div'
-            sx={{ fontSize: 16, '&:hover': { color: 'secondary.dark' }, mb: 1 }}>
+            sx={{ fontSize: 16, '&:hover': { color: 'secondary.dark' } }}>
             {star.name}
           </Typography>
         </Link>
-        <Typography variant='body2'>
+        <List sx={{ listStyleType: 'disc', pl: 2 }}>
           {star.known_for.map((movie) => (
-            <li key={movie.id} style={{ marginLeft: 10 }}>
-              {movie.title || movie.name}
-            </li>
+            <ListItem
+              disablePadding
+              key={movie.id}
+              sx={{ display: 'list-item', mt: 0.3 }}
+            >
+              <Typography variant='body2' sx={{ ml: 0.3 }}>
+                {movie.title || movie.name}
+              </Typography>
+            </ListItem>
           ))}
-        </Typography>
+        </List>
       </CardContent>
     </Card>
   )

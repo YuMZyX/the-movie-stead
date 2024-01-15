@@ -2,7 +2,7 @@ import { Avatar, Button, TextField, Grid, Box,
   Typography, Container } from '@mui/material'
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined'
 import { Link, useNavigate } from 'react-router-dom'
-import Copyright from './Copyright'
+import Copyright from '../components/Copyright'
 import { useFormik } from 'formik'
 import * as yup from 'yup'
 import { useState } from 'react'

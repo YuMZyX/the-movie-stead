@@ -2,7 +2,7 @@ import { Avatar, Button, TextField, Grid, Box,
   Typography, Container } from '@mui/material'
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined'
 import { Link } from 'react-router-dom'
-import Copyright from './Copyright'
+import Copyright from '../components/Copyright'
 import userService from '../services/users'
 import sessionService from '../services/sessions'
 import { useFormik } from 'formik'

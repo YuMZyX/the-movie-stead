@@ -123,7 +123,7 @@ const MovieCard = ({ movie, watchlist, reviews, addToWatchlist, removeFromWatchl
           <CardMedia
             component='img'
             alt={movie.title}
-            image={'/no-poster-available.jpg'}
+            image={'/no-movie-poster.png'}
             title={movie.title}
             sx={{ cursor: 'pointer', borderBottom: 1 }}
             style={posterStyle}

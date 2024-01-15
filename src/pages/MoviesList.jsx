@@ -1,61 +1,43 @@
-import { Container, Typography, Grid, Stack, Pagination } from '@mui/material'
-import SearchForm from './SearchForm'
+import { Typography, Grid, Container, Stack, Pagination } from '@mui/material'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import moviesService from '../services/movies'
+import Progress from '../components/Progress'
+import MovieCard from '../components/MovieCard'
 import watchlistsService from '../services/watchlists'
 import reviewsService from '../services/reviews'
-import Progress from './Progress'
-import MovieCard from './MovieCard'
-import ReviewDialog from './ReviewDialog'
+import ReviewDialog from '../components/ReviewDialog'
+import SearchForm from '../components/SearchForm'
 
-const MovieSearch = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
+const MoviesList = ({ user, addToWatchlist, removeFromWatchlist,
+  isMobile, isTablet }) => {
 
   const moviesList = useParams()
-  const [searchParams] = useSearchParams()
-  const [search, setSearch] = useState(null)
-  const [year, setYear] = useState(null)
-  const [movies, setMovies] = useState([null])
-  const [totalResults, setTotalResults] = useState(null)
+  const navigate = useNavigate()
+  const [movies, setMovies] = useState([])
   const [totalPages, setTotalPages] = useState(null)
+  const [watchlist, setWatchlist] = useState([null])
+  const [reviews, setReviews] = useState([null])
   const [addedOrRemoved, setAddedOrRemoved] = useState(null)
   const [reviewDialogOpen, setReviewDialogOpen] = useState(false)
   const [movie, setMovie] = useState(null)
   const [review, setReview] = useState(null)
   const [edit, setEdit] = useState(false)
-  const [watchlist, setWatchlist] = useState([null])
-  const [reviews, setReviews] = useState([null])
-  const navigate = useNavigate()
 
   useEffect(() => {
-    setSearch(searchParams.get('q'))
-    if (searchParams.get('y')) {
-      const yearParam = new Date(searchParams.get('y'))
-      setYear(yearParam)
-    } else {
-      setYear(null)
-    }
-  }, [searchParams])
-
-  useEffect(() => {
-    if (search) {
-      moviesService.searchMovies({
-        search: search,
-        year: year
-      }, moviesList.page)
-        .then(response => {
-          setMovies(response.results)
-          if (response.total_pages >= 20) {
-            setTotalPages(20)
-          } else {
-            setTotalPages(response.total_pages)
-          }
-          setTotalResults(response.total_results)
-        })
-    } else if (!searchParams.get('q')) {
-      setMovies([])
-    }
-  }, [moviesList.page, addedOrRemoved, search, year])
+    moviesService.getTrending(moviesList.page)
+      .then(response => {
+        setMovies(response.results)
+        if (response.total_pages >= 20) {
+          setTotalPages(20)
+        } else {
+          setTotalPages(response.total_pages)
+        }
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }, [moviesList.page, addedOrRemoved])
 
   useEffect(() => {
     if (user) {
@@ -105,13 +87,9 @@ const MovieSearch = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) =>
   }
 
   const handlePageChange = (event, value) => {
-    setMovies([null])
-    if (year) {
-      const yearParam = year.getFullYear()
-      navigate(`/moviesearch/${value}?q=${search}&y=${yearParam}`)
-    } else {
-      navigate(`/moviesearch/${value}?q=${search}`)
-    }
+    setMovies(null)
+    setAddedOrRemoved(Math.random)
+    navigate(`/trending/${value}`)
   }
   const handleOpenDialog = () => {
     setReviewDialogOpen(true)
@@ -122,7 +100,7 @@ const MovieSearch = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) =>
 
   if (
     !movies
-    || movies[0] === null
+    || movies.length === 0
     || (user && (!watchlist || watchlist[0] === null))
     || (user && (!reviews || reviews[0] === null))
   ) {
@@ -133,33 +111,24 @@ const MovieSearch = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) =>
 
   return (
     <Container>
-      <SearchForm
-        setMovies={setMovies}
-        setAddedOrRemoved={setAddedOrRemoved}
-        isMobile={isMobile}
-      />
-      {(movies.length > 0 && totalResults > 0) &&
-        <Typography variant='h6' fontWeight='bold' gutterBottom sx={{ mt: 1.5, mb: 2 }}>
-          {totalResults} Movies matched your search
-        </Typography>
-      }
-      {(totalResults === 0) &&
-        <Typography variant='h6' fontWeight='bold' gutterBottom sx={{ mt: 1.5, mb: 2 }}>
-          Could not find any movies :(
-        </Typography>
-      }
+      <SearchForm isMobile={isMobile}/>
+      <Typography variant='h5' fontWeight='bold' gutterBottom sx={{ mt: 1.5, mb: 2 }}>
+        Trending movies
+      </Typography>
       <Grid container spacing={4} columns={18} sx={{ mb: 4 }}>
         {movies.map((movie) => (
           <Grid item key={movie.id} xs={9} sm={6} md={4.5} lg={3.6} style={{ display: 'flex' }}>
             <MovieCard
               movie={movie}
-              user={user}
               watchlist={watchlist.rows}
               reviews={reviews.rows}
               addToWatchlist={handleAddToWatchlist}
               removeFromWatchlist={handleRemoveFromWatchlist}
               createReview={handleCreateReview}
               editReview={handleEditReview}
+              user={user}
+              isMobile={isMobile}
+              isTablet={isTablet}
             />
           </Grid>
         ))}
@@ -174,23 +143,21 @@ const MovieSearch = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) =>
         setAddedOrRemoved={setAddedOrRemoved}
         setEdit={setEdit}
       />
-      {movies.length > 0 &&
-        <Stack spacing={2} sx={{ alignItems: 'center', mb: 3 }}>
-          <Pagination
-            count={totalPages}
-            page={parseInt(moviesList.page)}
-            onChange={handlePageChange}
-            variant='outlined'
-            showFirstButton
-            showLastButton
-            hidePrevButton={isMobile}
-            hideNextButton={isMobile}
-            color='primary'
-          />
-        </Stack>
-      }
+      <Stack spacing={2} sx={{ alignItems: 'center', mb: 3 }}>
+        <Pagination
+          count={totalPages}
+          page={parseInt(moviesList.page)}
+          onChange={handlePageChange}
+          variant='outlined'
+          showFirstButton
+          showLastButton
+          hidePrevButton={isMobile}
+          hideNextButton={isMobile}
+          color='primary'
+        />
+      </Stack>
     </Container>
   )
 }
 
-export default MovieSearch
+export default MoviesList

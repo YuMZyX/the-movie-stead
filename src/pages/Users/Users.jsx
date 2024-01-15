@@ -1,16 +1,16 @@
 import { useEffect, useMemo, useState } from 'react'
-import userService from '../services/users'
+import userService from '../../services/users'
 import { Container, Typography } from '@mui/material'
 import { format, parseISO } from 'date-fns'
 import { DataGrid, GridActionsCellItem,
   GridRowModes, GridRowEditStopReasons } from '@mui/x-data-grid'
 import { Link } from 'react-router-dom'
-import Progress from './Progress'
+import Progress from '../../components/Progress'
 import { CancelOutlined, DeleteOutlined,
   EditOutlined, SaveOutlined } from '@mui/icons-material'
-import Redirect from './Redirect'
+import Redirect from '../../components/Redirect'
 import { useConfirm } from 'material-ui-confirm'
-import CustomToolbar from './CustomToolbar'
+import CustomToolbar from './components/CustomToolbar'
 import { useSnackbar } from 'notistack'
 
 const Users = ({ user }) => {

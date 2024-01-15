@@ -3,16 +3,16 @@ import { Grid, Card, CardMedia, Paper, Typography,
   Container, Box, Table, TableRow, TableCell, TableBody,
   Divider, IconButton, Link, Tooltip, CardContent } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link as RouterLink } from 'react-router-dom'
 import moviesService from '../services/movies'
 import watchlistsService from '../services/watchlists'
 import reviewsService from '../services/reviews'
-import Progress from './Progress'
+import Progress from '../components/Progress'
 import { Favorite, Remove, Star } from '@mui/icons-material'
 import { format, parseISO } from 'date-fns'
 import { uniqBy } from 'lodash'
-import ReviewDialog from './ReviewDialog'
-import StarIcon from './StarIcon'
+import ReviewDialog from '../components/ReviewDialog'
+import StarIcon from '../components/StarIcon'
 
 const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
 
@@ -204,7 +204,8 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
     fontWeight: 'bold'
   }
   const creditNameStyle = {
-    fontSize: 14
+    fontSize: 14,
+    '&:hover': { color: 'secondary.dark' }
   }
   const posterStyle = {
     objectFit: 'cover',
@@ -228,6 +229,11 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
     ml: 0.8,
     bgcolor: 'secondary.main'
   }
+  const linkStyle = {
+    textDecoration: 'none',
+    color: 'black',
+    display: 'inline-block'
+  }
 
   return (
     <Container>
@@ -248,7 +254,7 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
                 <CardMedia
                   component="img"
                   alt={movie.title}
-                  image={'/MoviePosterNotFound.png'}
+                  image={'/no-movie-poster.png'}
                   title={movie.title}
                   style={posterStyle}
                 />
@@ -336,9 +342,11 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
                         {directors.map((d) =>
                           <Box key={d.id} sx={mobileBoxStyle}>
                             <li />
-                            <Typography sx={creditNameStyle}>
-                              {d.name}
-                            </Typography>
+                            <RouterLink to={`/stars/${d.id}`} style={linkStyle}>
+                              <Typography sx={creditNameStyle}>
+                                {d.name}
+                              </Typography>
+                            </RouterLink>
                           </Box>
                         )}
                       </TableCell>
@@ -347,10 +355,14 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
                         {directors.map((d, index, array) =>
                           index === array.length - 1
                             ?
-                            <Typography key={d.id} sx={creditNameStyle}>{d.name}</Typography>
+                            <RouterLink key={d.id} to={`/stars/${d.id}`} style={linkStyle}>
+                              <Typography sx={creditNameStyle}>{d.name}</Typography>
+                            </RouterLink>
                             :
                             <React.Fragment key={d.id}>
-                              <Typography sx={creditNameStyle}>{d.name}</Typography>
+                              <RouterLink to={`/stars/${d.id}`} style={linkStyle}>
+                                <Typography sx={creditNameStyle}>{d.name}</Typography>
+                              </RouterLink>
                               <Divider orientation='vertical' sx={dividerStyle}/>
                             </React.Fragment>
                         )}
@@ -371,9 +383,11 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
                         {writers.map((w) =>
                           <Box key={w.id} sx={mobileBoxStyle}>
                             <li />
-                            <Typography sx={creditNameStyle}>
-                              {w.name}
-                            </Typography>
+                            <RouterLink to={`/stars/${w.id}`} style={linkStyle}>
+                              <Typography sx={creditNameStyle}>
+                                {w.name}
+                              </Typography>
+                            </RouterLink>
                           </Box>
                         )}
                       </TableCell>
@@ -382,10 +396,14 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
                         {writers.map((w, index, array) =>
                           index === array.length - 1
                             ?
-                            <Typography key={w.id} sx={creditNameStyle}>{w.name}</Typography>
+                            <RouterLink key={w.id} to={`/stars/${w.id}`} style={linkStyle}>
+                              <Typography sx={creditNameStyle}>{w.name}</Typography>
+                            </RouterLink>
                             :
                             <React.Fragment key={w.id}>
-                              <Typography sx={creditNameStyle}>{w.name}</Typography>
+                              <RouterLink to={`/stars/${w.id}`} style={linkStyle}>
+                                <Typography sx={creditNameStyle}>{w.name}</Typography>
+                              </RouterLink>
                               <Divider orientation='vertical' sx={dividerStyle}/>
                             </React.Fragment>
                         )}
@@ -406,9 +424,11 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
                         {stars.map((s) =>
                           <Box key={s.id} sx={mobileBoxStyle}>
                             <li />
-                            <Typography sx={creditNameStyle}>
-                              {s.name}
-                            </Typography>
+                            <RouterLink to={`/stars/${s.id}`} style={linkStyle}>
+                              <Typography sx={creditNameStyle}>
+                                {s.name}
+                              </Typography>
+                            </RouterLink>
                           </Box>
                         )}
                       </TableCell>
@@ -417,10 +437,14 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
                         {stars.map((s, index, array) =>
                           index === array.length - 1
                             ?
-                            <Typography key={s.id} sx={creditNameStyle}>{s.name}</Typography>
+                            <RouterLink key={s.id} to={`/stars/${s.id}`} style={linkStyle}>
+                              <Typography sx={creditNameStyle}>{s.name}</Typography>
+                            </RouterLink>
                             :
                             <React.Fragment key={s.id}>
-                              <Typography sx={creditNameStyle}>{s.name}</Typography>
+                              <RouterLink to={`/stars/${s.id}`} style={linkStyle}>
+                                <Typography sx={creditNameStyle}>{s.name}</Typography>
+                              </RouterLink>
                               <Divider orientation='vertical' sx={dividerStyle}/>
                             </React.Fragment>
                         )}
@@ -449,7 +473,7 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
               </Typography>
               <Grid container spacing={4} sx={{ mb: 0 }}>
                 {movieReviews.map((movieReview) => (
-                  <Grid item key={movieReview.id} xs={12} sm={6} lg={4} style={{ display: 'flex' }}>
+                  <Grid item key={movieReview.id} xs={12} sm={6} lg={4} sx={{ display: 'flex' }}>
                     <Card
                       raised
                       sx={{

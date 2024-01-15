@@ -1,21 +1,22 @@
 import { useState, useEffect } from 'react'
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
-import MoviesList from './components/MoviesList'
-import Login from './components/Login'
-import SignUp from './components/SignUp'
+import MoviesList from './pages/MoviesList'
+import Login from './pages/Login'
+import SignUp from './pages/SignUp'
 import Navbar from './components/Navbar'
 import sessionService from './services/sessions'
-import Users from './components/Users'
-import User from './components/User'
-import Movie from './components/Movie'
-import NotFound from './components/NotFound'
-import Watchlist from './components/Watchlist'
+import Users from './pages/Users/Users'
+import User from './pages/User'
+import Movie from './pages/Movie'
+import NotFound from './pages/NotFound'
+import Watchlist from './pages/Watchlist'
 import watchlistsService from './services/watchlists'
 import { useSnackbar } from 'notistack'
-import MyReviews from './components/MyReviews'
-import MovieSearch from './components/MovieSearch'
-import DiscoverMovies from './components/DiscoverMovies'
-import StarsList from './components/StarsList'
+import MyReviews from './pages/MyReviews/MyReviews'
+import MovieSearch from './pages/MovieSearch'
+import DiscoverMovies from './pages/DiscoverMovies/DiscoverMovies'
+import StarsList from './pages/StarsList/StarsList'
+import Person from './pages/Person'
 
 const App = () => {
   const [windowDimension, setWindowDimension] = useState(null)
@@ -107,7 +108,7 @@ const App = () => {
             />}
         />
         <Route
-          path='/stars/:page'
+          path='/stars/trending/:page'
           element={<StarsList isMobile={isMobile} />}
         />
         <Route
@@ -120,6 +121,7 @@ const App = () => {
               isMobile={isMobile}
             />}
         />
+        <Route path='/stars/:id' element={<Person isMobile={isMobile} isTablet={isTablet} />} />
         <Route path='/login' element={<Login setUser={setUser} />} />
         <Route path='/signup' element={<SignUp setUser={setUser} />} />
         <Route path='/users' element={<Users user={user} />} />

@@ -1,22 +1,27 @@
 import { Typography, Grid, Container, Box } from '@mui/material'
 import { useEffect, useState } from 'react'
-import Progress from './Progress'
-import MovieCard from './MovieCard'
-import watchlistsService from '../services/watchlists'
-import reviewsService from '../services/reviews'
-import ReviewDialog from './ReviewDialog'
-import FilterSort from './FilterSort'
-import Redirect from './Redirect'
+import watchlistsService from '../../services/watchlists'
+import reviewsService from '../../services/reviews'
+import Progress from '../../components/Progress'
+import ReviewCard from './components/ReviewCard'
+import ReviewDialog from '../../components/ReviewDialog'
+import FilterSort from '../../components/FilterSort'
+import Redirect from '../../components/Redirect'
+import { useParams } from 'react-router-dom'
 
 const sortItems = [
   { value: 'Date, DESC', selectText: 'Date added, descending' },
   { value: 'Date, ASC', selectText: 'Date added, ascending' },
   { value: 'Title, DESC', selectText: 'Movie title, A - Z' },
   { value: 'Title, ASC', selectText: 'Movie title, Z - A' },
+  { value: 'Rating, DESC', selectText: 'Your rating, descending' },
+  { value: 'Rating, ASC', selectText: 'Your rating, ascending' },
 ]
 
-const Watchlist = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTablet }) => {
+const MyReviews = ({ user, addToWatchlist, removeFromWatchlist,
+  isMobile, isTablet }) => {
 
+  const userParam = useParams()
   const [watchlist, setWatchlist] = useState([null])
   const [reviews, setReviews] = useState([null])
   const [addedOrRemoved, setAddedOrRemoved] = useState(null)
@@ -24,11 +29,28 @@ const Watchlist = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTabl
   const [movie, setMovie] = useState(null)
   const [review, setReview] = useState(null)
   const [edit, setEdit] = useState(false)
-  const [wlFilter, setWlFilter] = useState('')
+  const [reviewFilter, setReviewFilter] = useState('')
   const [sortOption, setSortOption] = useState('Date, DESC')
 
   useEffect(() => {
     if (user) {
+      if (user.role === 'moderator' || user.role === 'admin') {
+        reviewsService.getUserReviews(userParam.id)
+          .then(response => {
+            setReviews(response)
+          })
+          .catch (error => {
+            console.log(error)
+          })
+      } else {
+        reviewsService.getUserReviews(user.id)
+          .then(response => {
+            setReviews(response)
+          })
+          .catch (error => {
+            console.log(error)
+          })
+      }
       watchlistsService.getWatchlistMovies(user.id)
         .then(response => {
           setWatchlist(response)
@@ -36,32 +58,18 @@ const Watchlist = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTabl
         .catch(error => {
           console.log(error)
         })
-      reviewsService.getUserReviews(user.id)
-        .then(response => {
-          setReviews(response)
-        })
-        .catch (error => {
-          console.log(error)
-        })
     }
-  }, [user, addedOrRemoved])
+  }, [user, addedOrRemoved, userParam])
 
-  const handleAddToWatchlist = (movie) => {
-    addToWatchlist(movie)
+  const handleAddToWatchlist = async (movie) => {
+    await addToWatchlist(movie)
+    setAddedOrRemoved(movie.id)
   }
   const handleRemoveFromWatchlist = async (watchlistId, movie) => {
     await removeFromWatchlist(watchlistId, movie)
     setAddedOrRemoved(watchlistId)
   }
 
-  const handleCreateReview = async (movie) => {
-    setMovie(movie)
-    setReview({
-      rating: null,
-      review_text: null
-    })
-    handleOpenDialog()
-  }
   const handleEditReview = async (movie, review) => {
     setMovie(movie)
     setReview({
@@ -84,7 +92,7 @@ const Watchlist = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTabl
     setSortOption(event.target.value)
   }
   const handleFilterChange = (event) => {
-    setWlFilter(event.target.value)
+    setReviewFilter(event.target.value)
   }
 
   if (!user) {
@@ -100,20 +108,20 @@ const Watchlist = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTabl
       <Progress />
     )
   }
-  if (watchlist.count === 0) {
+  if (reviews.count === 0) {
     return (
       <Container>
         <Box sx={{ mt: 2, ml: 2 }}>
           <Typography variant='h6'>
-            Your watchlist is currently empty
+            You have not reviewed any movies yet
           </Typography>
         </Box>
       </Container>
     )
   }
 
-  const filterSortWatchlist = watchlist.rows
-    .filter((wl) => wl.movie.title.toLowerCase().includes(wlFilter.toLowerCase()))
+  const filterSortReviews = reviews.rows
+    .filter((review) => review.movie.title.toLowerCase().includes(reviewFilter.toLowerCase()))
     .sort((a, b) => {
       switch (sortOption) {
       case 'Date, DESC':
@@ -124,6 +132,10 @@ const Watchlist = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTabl
         return a.movie.title.localeCompare(b.movie.title)
       case 'Title, ASC':
         return b.movie.title.localeCompare(a.movie.title)
+      case 'Rating, DESC':
+        return b.rating - a.rating
+      case 'Rating, ASC':
+        return a.rating - b.rating
       default:
         return new Date(b.createdAt) - new Date(a.createdAt)
       }
@@ -131,28 +143,34 @@ const Watchlist = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTabl
 
   return (
     <Container>
-      <Typography variant='h5' fontWeight='bold' gutterBottom sx={{ mt: 2 }}>
-        Your watchlist
-      </Typography>
+      {user.id === parseInt(userParam.id)
+        ?
+        <Typography variant='h5' fontWeight='bold' gutterBottom sx={{ mt: 2 }}>
+          Your reviews
+        </Typography>
+        :
+        <Typography variant='h5' fontWeight='bold' gutterBottom sx={{ mt: 2 }}>
+          Reviews of user {userParam.id}
+        </Typography>
+      }
       <FilterSort
-        filter={wlFilter}
+        filter={reviewFilter}
         sortOption={sortOption}
         handleFilterChange={handleFilterChange}
         handleSortChange={handleSortChange}
         sortItems={sortItems}
-        label='Filter watchlist'
+        label='Filter reviews'
         isMobile={isMobile}
       />
-      <Grid container spacing={4} columns={18} sx={{ mb: 4 }}>
-        {filterSortWatchlist.map((wl) => (
-          <Grid item key={wl.movieId} xs={9} sm={6} md={4.5} lg={3.6} style={{ display: 'flex' }}>
-            <MovieCard
-              movie={wl.movie}
+      <Grid container spacing={4} sx={{ mb: 4 }}>
+        {filterSortReviews.map((reviewItem) => (
+          <Grid item key={reviewItem.id} xs={6} sm={4} md={3} style={{ display: 'flex' }}>
+            <ReviewCard
+              movie={reviewItem.movie}
               watchlist={watchlist.rows}
-              reviews={reviews.rows}
+              review={reviewItem}
               addToWatchlist={handleAddToWatchlist}
               removeFromWatchlist={handleRemoveFromWatchlist}
-              createReview={handleCreateReview}
               editReview={handleEditReview}
               user={user}
               isMobile={isMobile}
@@ -175,4 +193,4 @@ const Watchlist = ({ user, addToWatchlist, removeFromWatchlist, isMobile, isTabl
   )
 }
 
-export default Watchlist
+export default MyReviews
