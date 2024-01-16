@@ -116,5 +116,10 @@
 |           | 1      | Sign Up lomakkeen E2E testit |
 |           | 1,5    | Login/Logout E2E testit ja tietokannan seedaus task komennon avulla |
 |           | 2      | Movie/Movies E2E testit & Stars E2E testit |
+| 16.1.2024 | 1      | Watchlist E2E testit |
+|           | 2,5    | Reviews E2E testit & Users näkymän taulukon reviews linkit |
+|           | 1,5    | User/Users E2E testit |
+|           | 1,5    | Discover movies toteutus omaksi valinnaksi navigointipalkkiin + Popper menuvalikko |
+|           | 0,5    | Discover movies E2E testien kirjoitusta |
 |           |        |  |
-| YHT:      | 165    |  |
+| YHT:      | 172    |  |
