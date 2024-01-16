@@ -23,7 +23,7 @@ describe('Movie/Movies', function() {
       cy.contains('Stars')
       cy.get('.MuiGrid-container').find('.MuiGrid-item').should('have.length', 2)
       cy.get('.MuiGrid-container').find('[alt="IMDb logo"]').should('exist')
-      cy.get('.MuiGrid-container').find('[aria-label="Add to watchlist"]').should('not.exist')
+      cy.get('.MuiGrid-container').find('[aria-label="Add to Watchlist"]').should('not.exist')
       cy.get('.MuiGrid-container').find('[aria-label="Create a review"]').should('not.exist')
     })
 
@@ -78,7 +78,7 @@ describe('Movie/Movies', function() {
       cy.contains('Stars')
       cy.get('.MuiGrid-container').find('.MuiGrid-item').should('have.length', 2)
       cy.get('.MuiGrid-container').find('[alt="IMDb logo"]').should('exist')
-      cy.get('.MuiGrid-container').find('[aria-label="Add to watchlist"]').should('exist')
+      cy.get('.MuiGrid-container').find('[aria-label="Add to Watchlist"]').should('exist')
       cy.get('.MuiGrid-container').find('[aria-label="Create a review"]').should('exist')
     })
 

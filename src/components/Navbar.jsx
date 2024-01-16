@@ -1,10 +1,14 @@
-import { AppBar, Toolbar, IconButton, Button, Menu, MenuItem, Container,
-  Tooltip, Box, ListItemIcon, Divider, Avatar } from '@mui/material'
+import { AppBar, Toolbar, IconButton, Button, Menu, MenuItem,
+  Container, Tooltip, Box, ListItemIcon, Divider, Avatar,
+  Popper, MenuList, Paper } from '@mui/material'
 import AccountCircle from '@mui/icons-material/AccountCircle'
 import { useState } from 'react'
 import { Login, Logout, HowToReg, MenuOutlined, VideocamOutlined,
-  StarOutlined, FavoriteOutlined, PersonOutlined, FaceRetouchingNaturalOutlined } from '@mui/icons-material'
+  StarOutlined, FavoriteOutlined, PersonOutlined, TrendingUpOutlined,
+  FaceRetouchingNaturalOutlined, ArrowDropDownOutlined,
+  SavedSearchOutlined } from '@mui/icons-material'
 import { useNavigate } from 'react-router-dom'
+import { usePopupState, bindHover, bindPopper } from 'material-ui-popup-state/hooks'
 
 const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
 
@@ -13,6 +17,10 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
   const accountOpen = Boolean(accountAnchorEl)
   const menuOpen = Boolean(menuAnchorEl)
   const navigate = useNavigate()
+  const moviesPopperState = usePopupState({
+    variant: 'popper',
+    popupId: 'movies-popper'
+  })
 
   const handleAccountMenu = (event) => {
     setAccountAnchorEl(event.currentTarget)
@@ -36,8 +44,8 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
   const navbarLinks = (user) => {
     if (!user) {
       return (
-        <Box>
-          <Button color='inherit' onClick={() => navigate('/trending/1')}>Movies</Button>
+        <Box sx={{ display: 'flex' }}>
+          {moviesMenu()}
           <Button color='inherit' onClick={() => navigate('/stars/trending/1')}>Stars</Button>
         </Box>
       )
@@ -78,7 +86,16 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
                   <ListItemIcon>
                     <VideocamOutlined sx={iconsStyles} />
                   </ListItemIcon>
-                  Movies
+                  Trending movies
+                </MenuItem>
+                <MenuItem id='discover' onClick={() => {
+                  handleAppMenuClose()
+                  navigate('/discover/1')
+                }}>
+                  <ListItemIcon>
+                    <SavedSearchOutlined sx={iconsStyles} />
+                  </ListItemIcon>
+                  Discover movies
                 </MenuItem>
                 <MenuItem id='stars' onClick={() => {
                   handleAppMenuClose()
@@ -121,10 +138,8 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
               </Menu>
             </Box>
             :
-            <Box>
-              <Button id='movies' color='inherit' onClick={() => navigate('/trending/1')}>
-                Movies
-              </Button>
+            <Box sx={{ display: 'flex' }}>
+              {moviesMenu()}
               <Button id='stars' color='inherit' onClick={() => navigate('/stars/trending/1')}>
                 Stars
               </Button>
@@ -144,6 +159,45 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
         </Box>
       )
     }
+  }
+
+  const moviesMenu = () => {
+    return (
+      <div>
+        <Button
+          {...bindHover(moviesPopperState)}
+          id='movies'
+          color='inherit'
+          onClick={() => navigate('/trending/1')}
+          endIcon={<ArrowDropDownOutlined />}
+          sx={{ '& .MuiButton-endIcon': { marginLeft: '0px' } }}
+        >
+          Movies
+        </Button>
+        <Popper
+          {...bindPopper(moviesPopperState)}
+          placement='bottom-start'
+          disablePortal
+        >
+          <Paper>
+            <MenuList id='movies-menu'>
+              <MenuItem id='movies' onClick={() => {navigate('/trending/1')}}>
+                <ListItemIcon>
+                  <TrendingUpOutlined sx={iconsStyles} />
+                </ListItemIcon>
+                Trending movies
+              </MenuItem>
+              <MenuItem id='discover' onClick={() => {navigate('/discover/1')}}>
+                <ListItemIcon>
+                  <SavedSearchOutlined sx={iconsStyles} />
+                </ListItemIcon>
+                Discover movies
+              </MenuItem>
+            </MenuList>
+          </Paper>
+        </Popper>
+      </div>
+    )
   }
 
   return (
@@ -230,7 +284,7 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
                       {user.name}
                     </MenuItem>
                     <Divider />
-                    <MenuItem onClick={() => {
+                    <MenuItem id='my-account' onClick={() => {
                       handleAccountMenuClose()
                       navigate(`/users/${user.id}`)
                     }}>
@@ -239,7 +293,7 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
                       </ListItemIcon>
                       My account
                     </MenuItem>
-                    <MenuItem onClick={() => {
+                    <MenuItem id='logout' onClick={() => {
                       handleLogout()
                       handleAccountMenuClose()
                     }}>

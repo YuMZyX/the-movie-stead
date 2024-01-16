@@ -80,6 +80,36 @@ describe('Sign Up', function() {
       cy.get('html').should('not.contain', 'Test User')
     })
 
+    it('fails if email address is not valid', function() {
+      cy.get('#name').type('Test User')
+      cy.get('#email').type('test.user@')
+      cy.get('#password').type('password')
+      cy.get('#passwordCheck').type('password')
+      cy.get('#signup-button').click()
+      cy.contains('Enter a valid email')
+      cy.get('html').should('not.contain', 'Test User')
+    })
+
+    it('fails if name is too short', function() {
+      cy.get('#name').type('Tes')
+      cy.get('#email').type('test.user@gmail.com')
+      cy.get('#password').type('password')
+      cy.get('#passwordCheck').type('password')
+      cy.get('#signup-button').click()
+      cy.contains('Name has to be atleast 4 characters long')
+      cy.get('html').should('not.contain', 'Test User')
+    })
+
+    it('fails if password is too short', function() {
+      cy.get('#name').type('Test User')
+      cy.get('#email').type('test.user@gmail.com')
+      cy.get('#password').type('passw')
+      cy.get('#passwordCheck').type('passw')
+      cy.get('#signup-button').click()
+      cy.contains('Password has to be atleast 6 characters long')
+      cy.get('html').should('not.contain', 'Test User')
+    })
+
     it('fails if email already exists in DB', function() {
       cy.get('#name').type('Test User')
       cy.get('#email').type('init.user@gmail.com')

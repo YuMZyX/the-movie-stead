@@ -1,0 +1,186 @@
+describe('Users/User', function() {
+
+  describe('When logged in', function() {
+    beforeEach(function() {
+      cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
+      cy.task('db:seedUsers')
+      cy.login({ email: 'regular@gmail.com', password: 'password' })
+    })
+
+    it('user can access his/her my account page', function() {
+      cy.get('#my-account').click({ force: true })
+      cy.get('.MuiContainer-root').contains('Regular User')
+      cy.get('.MuiContainer-root').contains('regular@gmail.com')
+      cy.get('.MuiContainer-root').find('.MuiTableRow-root').eq(2).contains('user')
+      cy.get('.MuiContainer-root').contains('0 reviews')
+      cy.get('.MuiContainer-root').contains('0 movies')
+    })
+
+    describe('and movie is reviewed and added to watchlist', function() {
+      beforeEach(function() {
+        cy.get('.MuiGrid-container').find('.MuiIconButton-root').first().click()
+        cy.contains('Create a review').click()
+        cy.get('input[value=5]').click({ force: true })
+        cy.get('#create-review').click()
+        cy.wait(500)
+        cy.get('.MuiGrid-container').find('.MuiIconButton-root').eq(1).click()
+        cy.wait(500)
+        cy.contains('Add to Watchlist').click({ force: true })
+        cy.wait(500)
+      })
+
+      it('user can access watchlist from his/her my account page', function() {
+        cy.get('#my-account').click({ force: true })
+        cy.get('.MuiContainer-root').contains('Regular User')
+        cy.get('.MuiContainer-root').contains('regular@gmail.com')
+        cy.get('.MuiContainer-root').contains('1 movies').click()
+        cy.contains('Your watchlist')
+        cy.get('.MuiBox-root').find('.MuiFormControl-root').should('have.length', 2)
+        cy.get('.MuiGrid-container').find('.MuiGrid-item').should('have.length', 1)
+      })
+
+      it('user can access reviews from his/her my account page', function() {
+        cy.get('#my-account').click({ force: true })
+        cy.get('.MuiContainer-root').contains('Regular User')
+        cy.get('.MuiContainer-root').contains('regular@gmail.com')
+        cy.get('.MuiContainer-root').contains('1 reviews').click()
+        cy.contains('Your reviews')
+        cy.get('.MuiBox-root').find('.MuiFormControl-root').should('have.length', 2)
+        cy.get('.MuiGrid-container').find('.MuiGrid-item').should('have.length', 1)
+        cy.get('.MuiGrid-container').find('.MuiIconButton-root').find('p').should('exist')
+        cy.get('.MuiGrid-container').find('.MuiIconButton-root').find('p').should('contain', 5)
+      })
+    })
+  })
+
+  describe('When logged in', function() {
+    beforeEach(function() {
+      cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
+      cy.task('db:seedUsers')
+      cy.login({ email: 'moderator@gmail.com', password: 'password' })
+    })
+
+    it('moderator can access his/her my account page', function() {
+      cy.get('#my-account').click({ force: true })
+      cy.get('.MuiContainer-root').contains('Moderator User')
+      cy.get('.MuiContainer-root').contains('moderator@gmail.com')
+      cy.get('.MuiContainer-root').find('.MuiTableRow-root').eq(2).contains('moderator')
+      cy.get('.MuiContainer-root').contains('0 reviews')
+      cy.get('.MuiContainer-root').contains('0 movies')
+    })
+
+    it('moderator can disable user', function() {
+      cy.get('#users').click({ force: true })
+      cy.get('.MuiDataGrid-main').find('[data-rowindex="1"]').find('[data-field="actions"]')
+        .find('[aria-label="Edit"]').click()
+      cy.wait(500)
+      cy.get('.MuiDataGrid-main').find('[data-rowindex="1"]').find('[data-field="disabled"]')
+        .find('input').click()
+      cy.wait(500)
+      cy.get('.MuiDataGrid-main').find('[data-rowindex="1"]').find('[data-field="actions"]')
+        .find('[aria-label="Save"]').click()
+      cy.get('#logout').click({ force: true })
+      cy.get('#email').type('regular@gmail.com')
+      cy.get('#password').type('password')
+      cy.get('#login-button').click()
+      cy.contains('Account disabled, contact admin/moderator')
+    })
+
+    it('moderator can\'t delete user', function() {
+      cy.get('#users').click({ force: true })
+      cy.get('.MuiDataGrid-main').find('[data-rowindex="1"]').find('[data-field="actions"]')
+        .find('[aria-label="Delete"]').click()
+      cy.contains('Only admins are allowed to delete users')
+    })
+  })
+
+  describe('When logged in', function() {
+    beforeEach(function() {
+      cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
+      cy.task('db:seedUsers')
+      cy.login({ email: 'admin@gmail.com', password: 'password' })
+    })
+
+    it('admin can access his/her my account page', function() {
+      cy.get('#my-account').click({ force: true })
+      cy.get('.MuiContainer-root').contains('Admin User')
+      cy.get('.MuiContainer-root').contains('admin@gmail.com')
+      cy.get('.MuiContainer-root').find('.MuiTableRow-root').eq(2).contains('admin')
+      cy.get('.MuiContainer-root').contains('0 reviews')
+      cy.get('.MuiContainer-root').contains('0 movies')
+    })
+
+    it('admin can disable moderator', function() {
+      cy.get('#users').click({ force: true })
+      cy.get('.MuiDataGrid-main').find('[data-rowindex="2"]').find('[data-field="actions"]')
+        .find('[aria-label="Edit"]').click()
+      cy.wait(500)
+      cy.get('.MuiDataGrid-main').find('[data-rowindex="2"]').find('[data-field="disabled"]')
+        .find('input').click()
+      cy.wait(500)
+      cy.get('.MuiDataGrid-main').find('[data-rowindex="2"]').find('[data-field="actions"]')
+        .find('[aria-label="Save"]').click()
+      cy.get('#logout').click({ force: true })
+      cy.get('#email').type('moderator@gmail.com')
+      cy.get('#password').type('password')
+      cy.get('#login-button').click()
+      cy.contains('Account disabled, contact admin/moderator')
+    })
+
+    it('admin can delete user', function() {
+      cy.get('#users').click({ force: true })
+      cy.get('.MuiDataGrid-main').find('[data-rowindex="1"]').find('[data-field="actions"]')
+        .find('[aria-label="Delete"]').click()
+      cy.wait(200)
+      cy.get('#delete-user-confirm').find('button').last().click()
+      cy.wait(500)
+      cy.get('.MuiDataGrid-main').should('not.contain', 'Regular User')
+      cy.get('.MuiDataGrid-main').should('not.contain', 'regular@gmail.com')
+      cy.get('#logout').click({ force: true })
+      cy.get('#email').type('regular@gmail.com')
+      cy.get('#password').type('password')
+      cy.get('#login-button').click()
+      cy.contains('Invalid username or password')
+    })
+
+    it('admin can promote user to moderator', function() {
+      cy.get('#users').click({ force: true })
+      cy.get('.MuiDataGrid-main').find('[data-rowindex="1"]').find('[data-field="actions"]')
+        .find('[aria-label="Edit"]').click()
+      cy.wait(200)
+      cy.get('.MuiDataGrid-main').find('[data-rowindex="1"]').find('[data-field="role"]')
+        .click().get('ul > li[data-value="moderator"]').click()
+      cy.wait(200)
+      cy.get('.MuiDataGrid-main').find('[data-rowindex="1"]').find('[data-field="actions"]')
+        .find('[aria-label="Save"]').click()
+      cy.get('#logout').click({ force: true })
+      cy.get('#email').type('regular@gmail.com')
+      cy.get('#password').type('password')
+      cy.get('#login-button').click()
+      cy.get('#users').click({ force: true })
+      cy.contains('User management')
+    })
+
+    it('admin can demote moderator to user', function() {
+      cy.get('#users').click({ force: true })
+      cy.get('.MuiDataGrid-main').find('[data-rowindex="2"]').find('[data-field="actions"]')
+        .find('[aria-label="Edit"]').click()
+      cy.wait(200)
+      cy.get('.MuiDataGrid-main').find('[data-rowindex="2"]').find('[data-field="role"]')
+        .click().get('ul > li[data-value="user"]').click()
+      cy.wait(200)
+      cy.get('.MuiDataGrid-main').find('[data-rowindex="2"]').find('[data-field="actions"]')
+        .find('[aria-label="Save"]').click()
+      cy.get('#logout').click({ force: true })
+      cy.get('#email').type('moderator@gmail.com')
+      cy.get('#password').type('password')
+      cy.get('#login-button').click()
+      cy.get('#users').should('not.exist')
+      cy.get('#my-account').click({ force: true })
+      cy.get('.MuiContainer-root').contains('Moderator User')
+      cy.get('.MuiContainer-root').contains('moderator@gmail.com')
+      cy.get('.MuiContainer-root').find('.MuiTableRow-root').eq(2).contains('user')
+    })
+  })
+
+})

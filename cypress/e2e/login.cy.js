@@ -63,7 +63,6 @@ describe('Login/Logout', function() {
         cy.get('#email').type('disabled@gmail.com')
         cy.get('#password').type('password')
         cy.get('#login-button').click()
-
         cy.contains('Account disabled, contact admin/moderator')
         cy.get('html').should('not.contain', 'Initial User')
         cy.get('html').should('not.contain', 'Watchlist')

@@ -78,6 +78,7 @@ const ReviewForm = ({ user, movie, review, edit, handleCloseDialog, setAddedOrRe
       title: 'Delete review?',
       description: movie.title,
       confirmationText: 'Delete', dialogProps: {
+        id: 'delete-confirm',
         PaperProps: {
           sx: {
             width: 'auto',
@@ -171,17 +172,17 @@ const ReviewForm = ({ user, movie, review, edit, handleCloseDialog, setAddedOrRe
           {edit
             ?
             <Box>
-              <Button fullWidth variant='contained' onClick={() => handleEdit(formik.values)}
+              <Button id='edit-review' fullWidth variant='contained' onClick={() => handleEdit(formik.values)}
                 sx={{ mt: 2, mb: 1, color: 'secondary.main' }}>
                 Edit review
               </Button>
-              <Button fullWidth variant='contained' onClick={handleRemove}
+              <Button id='delete-review' fullWidth variant='contained' onClick={handleRemove}
                 color='error' sx={{ mt: 1, mb: 1, color: 'secondary.main' }}>
                 Delete review
               </Button>
             </Box>
             :
-            <Button type='submit' fullWidth variant='contained'
+            <Button id='create-review' type='submit' fullWidth variant='contained'
               sx={{ mt: 2, mb: 2, color: 'secondary.main' }}>
               Create review
             </Button>

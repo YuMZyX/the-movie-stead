@@ -21,7 +21,7 @@ const ReviewDialog = ({ open, handleCloseDialog, user, movie,
   }
 
   return (
-    <BootstrapDialog open={open} onClose={handleClose} fullWidth>
+    <BootstrapDialog id='review-dialog' open={open} onClose={handleClose} fullWidth>
       <IconButton
         onClick={handleClose}
         sx={{

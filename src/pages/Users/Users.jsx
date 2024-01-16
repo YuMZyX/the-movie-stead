@@ -78,6 +78,7 @@ const Users = ({ user }) => {
         title: 'Delete user?',
         description: user.name,
         confirmationText: 'Delete', dialogProps: {
+          id: 'delete-user-confirm',
           PaperProps: {
             sx: {
               width: 'auto',
@@ -147,7 +148,9 @@ const Users = ({ user }) => {
       }
       return format(parseISO(params.value), 'dd.MM.yyyy')
     } },
-    { field: 'reviews', headerName: 'Reviews', flex: 0.4 },
+    { field: 'reviews', headerName: 'Reviews', flex: 0.4, renderCell: (params) => (
+      <Link to={`/myreviews/${params.row.id}`}>Check</Link>
+    ) },
     { field: 'actions', type: 'actions', headerName: 'Actions', cellClassName: 'actions',
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit

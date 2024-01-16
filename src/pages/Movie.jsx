@@ -161,7 +161,7 @@ const Movie = ({ user, addToWatchlist, removeFromWatchlist, isMobile }) => {
       return (
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', flexGrow: 1 }}>
           <Box>
-            <Tooltip title='Add to watchlist'>
+            <Tooltip title='Add to Watchlist'>
               <IconButton sx={{ boxShadow: 1, mr: 1 }} onClick={handleAddToWatchlist}>
                 <Favorite fontSize='medium' sx={{ color: 'primary.dark' }} />
               </IconButton>
