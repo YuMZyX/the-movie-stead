@@ -2,7 +2,7 @@ describe('Stars', function() {
 
   describe('In the stars list, site user', function() {
     beforeEach(function() {
-      cy.visit('http://localhost:3001/#/stars/trending/1')
+      cy.visit('/#/stars/trending/1')
     })
 
     it('can see 20 persons', function() {

@@ -12,9 +12,13 @@ module.exports = defineConfig({
         }
       })
     },
-    baseUrl: 'http://localhost:3001'
+    baseUrl: (process.platform === 'win32')
+      ? 'http://localhost:5173'
+      : 'http://localhost:3001'
   },
   env: {
-    BACKEND: 'http://localhost:3001/api'
+    BACKEND: (process.platform === 'win32')
+      ? 'http://localhost:5173/api'
+      : 'http://localhost:3001/api'
   }
 })
