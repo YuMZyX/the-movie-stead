@@ -24,3 +24,43 @@ jobs:
         run: npm run lint
       - name: Build
         run: npm run build
+      - name: Run integration tests
+        run: npm test
+        env:
+          TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          TMDB_APIKEY: ${{ secrets.TMDB_APIKEY }}
+      - name: Run E2E tests
+        uses: cypress-io/github-action@v5
+        env:
+          TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          TMDB_APIKEY: ${{ secrets.TMDB_APIKEY }}
+        with:
+          command: npm run test:e2e
+          start: npm run start:test
+          wait-on: http://localhost:5173
+      - name: Railway deployment
+        if: ${{ github.event_name == 'push' && !contains( toJson(github.event.commits.*.message), '#skip') }}
+        uses: bervProject/railway-deploy@main
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        with:
+          service: 'the-movie-stead'
+
+  tag_release:
+    needs: [deployment_pipeline]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    if: ${{ !contains( toJson(github.event.commits.*.message), '#skip') && github.event_name == 'push' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.67.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
