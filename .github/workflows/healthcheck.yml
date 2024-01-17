@@ -1,0 +1,16 @@
+name: Scheduled health check
+
+on:
+  schedule:
+    - cron: '0 12 * * *'
+
+jobs:
+  scheduled_health_check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check the deployed service URL
+        uses: jtalk/url-health-check-action@v3
+        with:
+          url: https://the-movie-stead-production.up.railway.app/
+          max-attempts: 5
+          retry-delay: 60s

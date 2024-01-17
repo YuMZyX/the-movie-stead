@@ -24,6 +24,22 @@ jobs:
         run: npm run lint
       - name: Build
         run: npm run build
+      - name: Run integration tests
+        run: npm test
+        env:
+          TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          TMDB_APIKEY: ${{ secrets.TMDB_APIKEY }}
+      - name: Run E2E tests
+        uses: cypress-io/github-action@v6
+        env:
+          TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          TMDB_APIKEY: ${{ secrets.TMDB_APIKEY }}
+        with:
+          command: npm run test:e2e
+          start: npm run start:test
+          browser: chrome
       - name: Railway deployment
         if: ${{ github.event_name == 'push' && !contains( toJson(github.event.commits.*.message), '#skip') }}
         uses: bervProject/railway-deploy@main
