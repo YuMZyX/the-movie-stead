@@ -17,6 +17,8 @@ import MovieSearch from './pages/MovieSearch'
 import DiscoverMovies from './pages/DiscoverMovies/DiscoverMovies'
 import StarsList from './pages/StarsList/StarsList'
 import Person from './pages/Person'
+import Footer from './components/Footer'
+import { Box } from '@mui/material'
 
 const App = () => {
   const [windowDimension, setWindowDimension] = useState(null)
@@ -87,7 +89,7 @@ const App = () => {
   const isTablet = windowDimension <= 900 && windowDimension > 600
 
   return (
-    <>
+    <Box sx={{ minHeight: '98vh', display: 'flex', flexDirection: 'column' }}>
       <Navbar
         handleLogout={handleLogout}
         user={user}
@@ -172,7 +174,8 @@ const App = () => {
         />
         <Route path='*' element={<NotFound />} />
       </Routes>
-    </>
+      <Footer isMobile={isMobile} />
+    </Box>
   )
 }
 

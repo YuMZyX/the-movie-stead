@@ -121,5 +121,11 @@
 |           | 1,5    | User/Users E2E testit |
 |           | 1,5    | Discover movies toteutus omaksi valinnaksi navigointipalkkiin + Popper menuvalikko |
 |           | 0,5    | Discover movies E2E testien kirjoitusta |
+| 17.1.2024 | 1,5    | Discover movies E2E testien viimeistely |
+|           | 1      | E2E testien korjausta (luotettavuuden parantelua) ja sivuston mobiilioptimointia |
+|           | 1,5    | Logout & token toiminnallisuuden parantelua ja alustava deployment pipeline |
+|           | 2      | Deployment pipelinen toteutusta, virheiden etsintää & korjausta |
+|           | 0,5    | Pipelinen viimeistely ja health checkin toteutus |
+|           | 1,5    | Footer komponentti, jossa TMDB logo ja teksti attribuutio vaatimusten täyttämiseksi |
 |           |        |  |
-| YHT:      | 172    |  |
+| YHT:      | 180    |  |

@@ -249,6 +249,7 @@ const Users = ({ user }) => {
           }
         }}
         pageSizeOptions={[10,25]}
+        sx={{ mb: 3 }}
       />
     </Container>
   )

@@ -71,7 +71,7 @@ const SignUp = ({ setUser }) => {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          minHeight: '90vh',
+          minHeight: '87vh',
         }}
       >
         <Avatar sx={{ m: 2, bgcolor: 'primary.main', color: 'secondary.main' }}>
