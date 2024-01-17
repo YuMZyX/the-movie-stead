@@ -12,9 +12,9 @@ module.exports = defineConfig({
         }
       })
     },
-    baseUrl: 'http://localhost:5173'
+    baseUrl: 'http://localhost:3001'
   },
   env: {
-    BACKEND: 'http://localhost:5173/api'
+    BACKEND: 'http://localhost:3001/api'
   }
 })

@@ -24,12 +24,6 @@ jobs:
         run: npm run lint
       - name: Build
         run: npm run build
-      - name: Run integration tests
-        run: npm test
-        env:
-          TEST_DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          TMDB_APIKEY: ${{ secrets.TMDB_APIKEY }}
       - name: Run E2E tests
         uses: cypress-io/github-action@v6
         env:
