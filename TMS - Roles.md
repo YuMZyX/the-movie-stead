@@ -1,12 +1,4 @@
-The Movie Stead
-
-STACK: React JS / Node.js / PostgreSQL
-UI-Framework: Material-UI
-
-* For web & mobile
-* Uses TMDB API
-* ROLES: Visitor / User / Moderator / Admin
-
+## The Movie Stead - Roles
 
 Visitor:
 - Browse movies ✔️
@@ -33,6 +25,7 @@ Moderator:
 - View each users reviews ✔️
 - View each users 'My account' page ✔️
 - Modify or delete unappropriate reviews by users ✔️
+  
 
 Admin:
 - Do everything that Moderator can ✔️
