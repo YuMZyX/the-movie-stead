@@ -11,6 +11,7 @@ const FilterSort = ({ filter, sortOption, handleFilterChange,
   return (
     <Box sx={{ display: 'flex', flexDirection: flexDirection, mb: 2, mt: 2 }}>
       <TextField
+        id='filter-results'
         sx={{ mr: 2 }}
         label={label}
         fullWidth
@@ -30,13 +31,14 @@ const FilterSort = ({ filter, sortOption, handleFilterChange,
       <FormControl sx={{ minWidth: 240, mt: marginTop }}>
         <InputLabel>Sort by</InputLabel>
         <Select
+          id='sort-results'
           value={sortOption}
           onChange={handleSortChange}
           label='Sort by'
           fullWidth
         >
           {sortItems.map((sortItem) => (
-            <MenuItem key={sortItem.value} value={sortItem.value}>
+            <MenuItem id={sortItem.value} key={sortItem.value} value={sortItem.value}>
               {sortItem.selectText}
             </MenuItem>
           ))}

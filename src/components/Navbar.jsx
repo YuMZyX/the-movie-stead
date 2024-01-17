@@ -44,9 +44,18 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
   const navbarLinks = (user) => {
     if (!user) {
       return (
-        <Box sx={{ display: 'flex' }}>
-          {moviesMenu()}
-          <Button color='inherit' onClick={() => navigate('/stars/trending/1')}>Stars</Button>
+        <Box>
+          {isMobile || isTablet
+            ?
+            <>
+              {mobileMenu()}
+            </>
+            :
+            <Box sx={{ display: 'flex' }}>
+              {moviesMenu()}
+              <Button color='inherit' onClick={() => navigate('/stars/trending/1')}>Stars</Button>
+            </Box>
+          }
         </Box>
       )
     } else {
@@ -54,89 +63,9 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
         <Box>
           {isMobile || isTablet
             ?
-            <Box>
-              <IconButton
-                color='inherit'
-                aria-controls={menuOpen ? 'app-menu' : undefined}
-                aria-haspopup='true'
-                aria-expanded={menuOpen ? 'true' : undefined}
-                onClick={handleAppMenu}
-              >
-                <MenuOutlined />
-              </IconButton>
-              <Menu
-                id='app-menu'
-                anchorEl={menuAnchorEl}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={menuOpen}
-                onClose={handleAppMenuClose}
-              >
-                <MenuItem id='movies' onClick={() => {
-                  handleAppMenuClose()
-                  navigate('/trending/1')
-                }}>
-                  <ListItemIcon>
-                    <VideocamOutlined sx={iconsStyles} />
-                  </ListItemIcon>
-                  Trending movies
-                </MenuItem>
-                <MenuItem id='discover' onClick={() => {
-                  handleAppMenuClose()
-                  navigate('/discover/1')
-                }}>
-                  <ListItemIcon>
-                    <SavedSearchOutlined sx={iconsStyles} />
-                  </ListItemIcon>
-                  Discover movies
-                </MenuItem>
-                <MenuItem id='stars' onClick={() => {
-                  handleAppMenuClose()
-                  navigate('/stars/trending/1')
-                }}>
-                  <ListItemIcon>
-                    <FaceRetouchingNaturalOutlined sx={iconsStyles} />
-                  </ListItemIcon>
-                  Stars
-                </MenuItem>
-                <MenuItem id='my-reviews' onClick={() => {
-                  handleAppMenuClose()
-                  navigate(`/myreviews/${user.id}`)
-                }}>
-                  <ListItemIcon>
-                    <StarOutlined sx={iconsStyles} />
-                  </ListItemIcon>
-                  My Reviews
-                </MenuItem>
-                <MenuItem id='watchlist' onClick={() => {
-                  handleAppMenuClose()
-                  navigate(`/watchlist/${user.id}`)
-                }}>
-                  <ListItemIcon>
-                    <FavoriteOutlined sx={iconsStyles} />
-                  </ListItemIcon>
-                  Watchlist
-                </MenuItem>
-                {(user.role === 'moderator' || user.role === 'admin') &&
-                  <MenuItem id='users' onClick={() => {
-                    handleAppMenuClose()
-                    navigate('/users')
-                  }}>
-                    <ListItemIcon>
-                      <PersonOutlined sx={iconsStyles} />
-                    </ListItemIcon>
-                    Users
-                  </MenuItem>
-                }
-              </Menu>
-            </Box>
+            <>
+              {mobileMenu()}
+            </>
             :
             <Box sx={{ display: 'flex' }}>
               {moviesMenu()}
@@ -159,6 +88,98 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
         </Box>
       )
     }
+  }
+
+  const mobileMenu = () => {
+    return (
+      <Box>
+        <IconButton
+          color='inherit'
+          aria-controls={menuOpen ? 'app-menu' : undefined}
+          aria-haspopup='true'
+          aria-expanded={menuOpen ? 'true' : undefined}
+          onClick={handleAppMenu}
+        >
+          <MenuOutlined />
+        </IconButton>
+        <Menu
+          id='app-menu'
+          anchorEl={menuAnchorEl}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'right',
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          open={menuOpen}
+          onClose={handleAppMenuClose}
+        >
+          <MenuItem id='movies' onClick={() => {
+            handleAppMenuClose()
+            navigate('/trending/1')
+          }}>
+            <ListItemIcon>
+              <VideocamOutlined sx={iconsStyles} />
+            </ListItemIcon>
+            Trending movies
+          </MenuItem>
+          <MenuItem id='discover' onClick={() => {
+            handleAppMenuClose()
+            navigate('/discover/1')
+          }}>
+            <ListItemIcon>
+              <SavedSearchOutlined sx={iconsStyles} />
+            </ListItemIcon>
+            Discover movies
+          </MenuItem>
+          <MenuItem id='stars' onClick={() => {
+            handleAppMenuClose()
+            navigate('/stars/trending/1')
+          }}>
+            <ListItemIcon>
+              <FaceRetouchingNaturalOutlined sx={iconsStyles} />
+            </ListItemIcon>
+            Stars
+          </MenuItem>
+          {user &&
+          <Box>
+            <MenuItem id='my-reviews' onClick={() => {
+              handleAppMenuClose()
+              navigate(`/myreviews/${user.id}`)
+            }}>
+              <ListItemIcon>
+                <StarOutlined sx={iconsStyles} />
+              </ListItemIcon>
+              My Reviews
+            </MenuItem>
+            <MenuItem id='watchlist' onClick={() => {
+              handleAppMenuClose()
+              navigate(`/watchlist/${user.id}`)
+            }}>
+              <ListItemIcon>
+                <FavoriteOutlined sx={iconsStyles} />
+              </ListItemIcon>
+              Watchlist
+            </MenuItem>
+            {(user.role === 'moderator' || user.role === 'admin') &&
+              <MenuItem id='users' onClick={() => {
+                handleAppMenuClose()
+                navigate('/users')
+              }}>
+                <ListItemIcon>
+                  <PersonOutlined sx={iconsStyles} />
+                </ListItemIcon>
+                Users
+              </MenuItem>
+            }
+          </Box>
+          }
+        </Menu>
+      </Box>
+    )
   }
 
   const moviesMenu = () => {
@@ -294,7 +315,7 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
                       My account
                     </MenuItem>
                     <MenuItem id='logout' onClick={() => {
-                      handleLogout()
+                      handleLogout(user.id)
                       handleAccountMenuClose()
                     }}>
                       <ListItemIcon>

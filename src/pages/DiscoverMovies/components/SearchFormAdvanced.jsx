@@ -141,6 +141,11 @@ const SearchFormAdvanced = ({ movieFilter, setMovieFilter, isMobile }) => {
             name='release_date_min'
             value={releaseDateMin}
             onChange={(newValue) => setReleaseDateMin(newValue)}
+            slotProps={{
+              textField: {
+                id: 'release-date-min'
+              }
+            }}
           />
           <DatePicker
             label='Release date ending'
@@ -148,6 +153,11 @@ const SearchFormAdvanced = ({ movieFilter, setMovieFilter, isMobile }) => {
             value={releaseDateMax}
             onChange={(newValue) => setReleaseDateMax(newValue)}
             sx={{ mt: 1 }}
+            slotProps={{
+              textField: {
+                id: 'release-date-max'
+              }
+            }}
           />
         </Grid>
         <Grid
@@ -209,7 +219,7 @@ const SearchFormAdvanced = ({ movieFilter, setMovieFilter, isMobile }) => {
               )}
             >
               {genres.map((genre) => (
-                <MenuItem key={genre.id} value={genre.id}>
+                <MenuItem id={genre.name} key={genre.id} value={genre.id}>
                   {genre.name}
                 </MenuItem>
               ))}

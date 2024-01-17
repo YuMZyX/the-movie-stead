@@ -6,17 +6,9 @@ const login = async (credentials) => {
   return res.data
 }
 
-const logout = async () => {
-  const user = JSON.parse(window.localStorage.getItem('loggedTMSUser'))
-  if (user) {
-    const config = {
-      headers: { Authorization: `Bearer ${user.token}` }
-    }
-    const res = await axios.delete(`${baseUrl}/logout`, config)
-    return res.data
-  } else {
-    throw new Error('User not found.')
-  }
+const logout = async (id) => {
+  const res = await axios.delete(`${baseUrl}/logout/${id}`)
+  return res.data
 }
 
 export default { login, logout }

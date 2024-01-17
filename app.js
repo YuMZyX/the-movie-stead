@@ -1,4 +1,5 @@
 const express = require('express')
+const cookieParser = require('cookie-parser')
 require('express-async-errors')
 const path = require('path')
 const app = express()
@@ -15,6 +16,7 @@ const reviewsRouter = require('./controllers/reviews')
 
 app.use(cors())
 app.use(express.json())
+app.use(cookieParser())
 
 app.use(middleware.requestLogger)
 

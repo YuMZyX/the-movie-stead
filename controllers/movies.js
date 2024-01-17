@@ -51,7 +51,7 @@ router.get('/discover/:query&:page', async (req, res) => {
     ? queryObject.with_genres.toString()
     : ''
   const movies = await moviedb.discoverMovie({
-    'vote_count.gte': 100,
+    'vote_count.gte': 50,
     'with_runtime.gte': queryObject.with_runtime_gte || 1,
     'with_runtime.lte': queryObject.with_runtime_lte,
     with_genres: genres,

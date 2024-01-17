@@ -51,8 +51,7 @@ const userExtractor = async (req, res, next) => {
   try {
     jwt.verify(authorization.substring(7), config.JWT_SECRET)
   } catch (error) {
-    console.log(error)
-    return res.status(401).json({ error: 'Token invalid or expired' })
+    return res.status(401).json({ error: 'Token invalid' })
   }
 
   const session = await sessionCheck(authorization.substring(7))

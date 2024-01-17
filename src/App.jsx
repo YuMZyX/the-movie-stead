@@ -42,9 +42,9 @@ const App = () => {
     return () => window.removeEventListener('resize', handleResize)
   })
 
-  const handleLogout = async () => {
+  const handleLogout = async (userId) => {
     try {
-      await sessionService.logout()
+      await sessionService.logout(userId)
     } catch (error) {
       console.log(error)
       window.localStorage.removeItem('loggedTMSUser')
@@ -83,8 +83,8 @@ const App = () => {
     }
   }
 
-  const isMobile = windowDimension <= 640
-  const isTablet = windowDimension <= 1024 && windowDimension > 640
+  const isMobile = windowDimension <= 600
+  const isTablet = windowDimension <= 900 && windowDimension > 600
 
   return (
     <>

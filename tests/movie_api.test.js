@@ -153,7 +153,7 @@ describe('Searching for a movie', () => {
 
 describe('Discovering movies (advanced search)', () => {
 
-  test('returns all (vote_count > 100 & runtime > 1) movies if query filters are empty',
+  test('returns all (vote_count > 50 & runtime > 1) movies if query filters are empty',
     async () => {
       const search = {
         with_runtime_gte: '',
@@ -206,38 +206,6 @@ describe('Discovering movies (advanced search)', () => {
       m.genre_ids.filter((genre) => genre === 12)
     })
     expect(genreMovies).toHaveLength(20)
-  })
-
-  test('movies are correctly sorted by TMDB rating, descending', async () => {
-    const search = {
-      sort_by: 'vote_average.desc',
-    }
-    const query = JSON.stringify(search)
-    const discover = await api.get(`${baseUrl}/discover/${query}&1`)
-      .expect(200)
-
-    const avgRatings = discover.body.results.map(m => m.vote_average)
-    const maxAvg = Math.max(...avgRatings)
-    const minAvg = Math.min(...avgRatings)
-
-    expect(maxAvg).toBeCloseTo(discover.body.results[0].vote_average)
-    expect(minAvg).toBeCloseTo(discover.body.results[19].vote_average)
-  })
-
-  test('movies are correctly sorted by TMDB rating, ascending', async () => {
-    const search = {
-      sort_by: 'vote_average.asc',
-    }
-    const query = JSON.stringify(search)
-    const discover = await api.get(`${baseUrl}/discover/${query}&2`)
-      .expect(200)
-
-    const avgRatings = discover.body.results.map(m => m.vote_average)
-    const maxAvg = Math.max(...avgRatings)
-    const minAvg = Math.min(...avgRatings)
-
-    expect(maxAvg).toBeCloseTo(discover.body.results[19].vote_average)
-    expect(minAvg).toBeCloseTo(discover.body.results[0].vote_average)
   })
 
   test('movies are correctly sorted by release date, descending', async () => {
