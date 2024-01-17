@@ -21,7 +21,7 @@ describe('Sign Up', function() {
         password: 'password',
         role: 'user'
       })
-      cy.visit('http://localhost:5173/#/signup')
+      cy.visit('http://localhost:3001/#/signup')
     })
 
     it('succeeds with valid information', function() {

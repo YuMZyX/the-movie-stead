@@ -21,7 +21,7 @@ describe('Login/Logout', function() {
         password: 'password',
         role: 'user'
       })
-      cy.visit('http://localhost:5173/#/login')
+      cy.visit('http://localhost:3001/#/login')
     })
 
     it('succeeds with correct credentials', function() {
