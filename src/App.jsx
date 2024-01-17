@@ -42,9 +42,9 @@ const App = () => {
     return () => window.removeEventListener('resize', handleResize)
   })
 
-  const handleLogout = async (userId) => {
+  const handleLogout = async () => {
     try {
-      await sessionService.logout(userId)
+      await sessionService.logout()
     } catch (error) {
       console.log(error)
       window.localStorage.removeItem('loggedTMSUser')

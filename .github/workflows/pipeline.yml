@@ -39,7 +39,7 @@ jobs:
         with:
           command: npm run test:e2e
           start: npm run start:test
-          wait-on: http://localhost:5173
+          wait-on: http://localhost:3001
       - name: Railway deployment
         if: ${{ github.event_name == 'push' && !contains( toJson(github.event.commits.*.message), '#skip') }}
         uses: bervProject/railway-deploy@main

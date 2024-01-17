@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 const config = require('../utils/config')
 const { User } = require('../models')
 const { Session } = require('../models')
+const { userExtractor } = require('../utils/middleware')
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body
@@ -36,13 +37,13 @@ router.post('/login', async (req, res) => {
   res.status(200).send({ token, name: user.name, email: user.email, role: user.role, id: user.id })
 })
 
-router.delete('/logout/:userId', async (req, res) => {
+router.delete('/logout', userExtractor, async (req, res) => {
   await Session.destroy({
     where: {
-      userId: req.params.userId
+      userId: req.user.id
     }
   })
-  res.status(200).send(`user ${req.params.userId} logged out`)
+  res.status(200).send(`${req.user.name} logged out`)
 })
 
 module.exports = router

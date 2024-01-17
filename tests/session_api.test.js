@@ -7,7 +7,7 @@ const { sequelize } = require('../utils/db')
 const api = supertest(app)
 const baseUrl = '/api'
 
-let userId = ''
+let token = ''
 
 describe('When user account is already created', () => {
 
@@ -107,24 +107,21 @@ describe('When logged in', () => {
       role: 'user'
     })
 
-    const user = await User.findOne({
-      where: {
-        email: 'init.user@gmail.com'
-      }
-    })
-    userId = user.id
-
     const credentials = { email: 'init.user@gmail.com', password: 'password' }
-    await api.post(`${baseUrl}/login`).send(credentials)
+    const res = await api.post(`${baseUrl}/login`)
+      .send(credentials)
+
+    token = res.body.token
   })
 
   test('user can log out', async () => {
     const sessionsAtStart = await helper.sessionsInDb()
 
-    const res = await api.delete(`${baseUrl}/logout/${userId}`)
+    const res = await api.delete(`${baseUrl}/logout`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(200)
 
-    expect(res.text).toContain(`user ${userId} logged out`)
+    expect(res.text).toContain('Initial User logged out')
 
     const sessionsAtEnd = await helper.sessionsInDb()
     expect(sessionsAtEnd).toHaveLength(sessionsAtStart.length - 1)

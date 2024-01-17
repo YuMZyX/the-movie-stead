@@ -315,7 +315,7 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
                       My account
                     </MenuItem>
                     <MenuItem id='logout' onClick={() => {
-                      handleLogout(user.id)
+                      handleLogout()
                       handleAccountMenuClose()
                     }}>
                       <ListItemIcon>
