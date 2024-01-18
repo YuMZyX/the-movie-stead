@@ -127,5 +127,6 @@
 |           | 2      | Deployment pipelinen toteutusta, virheiden etsintää & korjausta |
 |           | 0,5    | Pipelinen viimeistely ja health checkin toteutus |
 |           | 1,5    | Footer komponentti, jossa TMDB logo ja teksti attribuutio vaatimusten täyttämiseksi |
+| 18.1.2024 | 2      | Readme ja käyttöohjeet |
 |           |        |  |
-| YHT:      | 180    |  |
+| YHT:      | 182    |  |
