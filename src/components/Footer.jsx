@@ -18,9 +18,9 @@ const Footer = ({ isMobile }) => {
             component='img'
             alt='TMDB logo'
             src='/TMDB-logo-short.svg'
-            sx={{ height: 5, mr: 1 }}
+            sx={{ height: 6, mr: 1 }}
           />
-          <Typography variant='caption' sx={{ fontSize: 7 }}>
+          <Typography variant='caption' sx={{ fontSize: 8 }}>
             This product uses the TMDB API but is not endorsed or certified by TMDB.
           </Typography>
         </>
@@ -30,7 +30,7 @@ const Footer = ({ isMobile }) => {
             component='img'
             alt='TMDB logo'
             src='/TMDB-logo-short.svg'
-            sx={{ height: 7, mr: 1 }}
+            sx={{ height: 8, mr: 1 }}
           />
           <Typography variant='caption' sx={{ fontSize: 10 }}>
             This product uses the TMDB API but is not endorsed or certified by TMDB.
