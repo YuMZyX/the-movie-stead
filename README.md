@@ -8,10 +8,10 @@ Application is running live at: https://the-movie-stead-production.up.railway.ap
 * Discover new movies with advanced search functions
 * See detailed information about a movie along with latest reviews and users rating average
 * Browse currently trending stars (actors, actresses, directors) and search for specific stars
-* See detailed information about a star with links to his famous movies
+* See detailed information about a star with links to his/her famous movies
 * Add movies to a personal watchlist and remove them once you've seen them
 * Create movie reviews and edit or remove them later if you change your mind
-* Access all your reviews in one place and see how your rating compares to majority
+* Access all your reviews in one place and see how your rating compares to other reviewers
 * User management and reviews checking for moderators
   
 More about the user roles: https://github.com/YuMZyX/the-movie-stead/blob/main/TMS-Roles.md  
