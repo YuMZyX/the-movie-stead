@@ -23,7 +23,8 @@ Working hours schedule (in Finnish only): https://github.com/YuMZyX/the-movie-st
 ## 📚 Main stack
 * Frontend: React JS with Material-UI framework  
 * Backend: Node.js with Express  
-* Database: PostgreSQL with Sequelize  
+* Database: PostgreSQL with Sequelize
+* Testing: Cypress, Jest and SuperTest
 * TMDB API for getting movies and stars data
 
 
