@@ -43,10 +43,13 @@ describe('Discover movies', function() {
 
     it('can discover movies by specifying certain release day', function() {
       cy.contains('Advanced search >').click()
+      cy.wait(200)
       cy.get('#release-date-min').type('07192023')
+      cy.wait(200)
       cy.get('#release-date-max').type('07192023')
+      cy.wait(200)
       cy.get('body').click({ force: true })
-      cy.wait(500)
+      cy.wait(1000)
       cy.contains('Movies matched your search')
       cy.get('.MuiGrid-spacing-xs-4').find('.MuiGrid-item').first().click()
       cy.contains('19.07.2023')
@@ -94,8 +97,11 @@ describe('Discover movies', function() {
 
     it('can discover movies by filtering page results with a string', function() {
       cy.contains('Advanced search >').click()
+      cy.wait(200)
       cy.get('#release-date-min').type('07192023')
+      cy.wait(200)
       cy.get('#release-date-max').type('07192023')
+      cy.wait(200)
       cy.get('body').click({ force: true })
       cy.wait(1000)
       cy.contains('Movies matched your search')
