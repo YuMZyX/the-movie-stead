@@ -1,0 +1,53 @@
+*** Settings ***
+Library    SeleniumLibrary
+Resource    commonKeywords.resource
+
+*** Variables ***
+${ACCOUNT MENU SIGNUP}    //*[@id="account-menu-signup"]
+${NAME FIELD}    //*[@id="name"]
+${EMAIL FIELD}    //*[@id="email"]
+${PW FIELD}    //*[@id="password"]
+${PWC FIELD}    //*[@id="passwordCheck"]
+${SIGNUP BUTTON}    //*[@id="signup-button"]
+
+*** Keywords ***
+Setup tests
+    Clear test database
+    Open browser on TMS home page
+
+Navigate to signup page
+    Click Element    ${ACCOUNT MENU}
+    Click Element    ${ACCOUNT MENU SIGNUP}
+    Page Should Contain    The Movie Stead - Sign up
+    Page Should Contain    Already have an account? Sign in
+
+Fill form and signup
+    [Arguments]    ${name}=    ${email}=    ${pw}=    ${pwc}=
+    Input Text    ${NAME FIELD}    ${name}    clear=True
+    Input Text    ${EMAIL FIELD}    ${email}    clear=True
+    Input Text    ${PW FIELD}    ${pw}    clear=True
+    Input Text    ${PWC FIELD}    ${pwc}    clear=True
+    Click Button    ${SIGNUP BUTTON}
+    Sleep    2s
+
+Clear signup form
+    ${name}=    Get Element Attribute    ${NAME FIELD}    value
+    ${length}=    Get Length    ${name}
+    Run Keyword If    """${name}""" != ''
+    ...    Repeat Keyword    ${length + 1}    Press Keys    ${NAME FIELD}    BACKSPACE
+        
+    ${email}=    Get Element Attribute    ${EMAIL FIELD}    value
+    ${length}=    Get Length    ${email}
+    Run Keyword If    """${email}""" != ''
+    ...    Repeat Keyword    ${length + 1}    Press Keys    ${EMAIL FIELD}    BACKSPACE
+    
+    ${pw}=    Get Element Attribute    ${PW FIELD}    value
+    ${length}=    Get Length    ${pw}
+    Run Keyword If    """${pw}""" != ''
+    ...    Repeat Keyword    ${length + 1}    Press Keys    ${PW FIELD}    BACKSPACE
+
+    ${pwc}=    Get Element Attribute    ${PWC FIELD}    value
+    ${length}=    Get Length    ${pwc}
+    Run Keyword If    """${pwc}""" != ''
+    ...    Repeat Keyword    ${length + 1}    Press Keys    ${PWC FIELD}    BACKSPACE
+    

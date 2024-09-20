@@ -48,7 +48,7 @@ router.get('/:id', userExtractor, async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-  const { name, email, password, role } = req.body
+  const { name, email, password, role, disabled } = req.body
 
   if (!name || !email || !password) {
     return res.status(400).send('Name, email or password is missing')
@@ -70,7 +70,8 @@ router.post('/', async (req, res) => {
     name,
     email,
     role,
-    password: passwordHash
+    password: passwordHash,
+    disabled: disabled || false
   })
   res.json(user)
 })
