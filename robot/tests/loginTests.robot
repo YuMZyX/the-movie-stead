@@ -31,7 +31,6 @@ Login fails with incorrect credentials
     Navigate to login page
     Fill form and login    regular@gmail.com    regularp
     Verify unsuccessfull login
-    Click Element    ${ACCOUNT MENU LOGIN}
     Clear login form
     Fill form and login    reglar@gmail.com    regularpw
     Verify unsuccessfull login
@@ -43,3 +42,38 @@ Login fails with a disabled account
     Fill form and login    disabled@gmail.com    disabledpw
     Verify unsuccessfull login
     Page Should Contain    Account disabled, contact admin/moderator
+
+Logout succeeds
+    [Documentation]    Verifies that logged in user can successfully logout
+    [Tags]    Login_run
+    Navigate to login page
+    Fill form and login    regular@gmail.com    regularpw
+    Verify logged in
+    Logout user
+    Verify not logged in
+
+User can access watchlist and reviews
+    [Documentation]    Verifies that logged in user can access watchlist and my reviews
+    [Tags]    Login_run
+    Navigate to login page
+    Fill form and login    regular@gmail.com    regularpw
+    Navigate to My Reviews
+    Page Should Contain    You have not reviewed any movies yet
+    Navigate to Watchlist
+    Page Should Contain    Your watchlist is currently empty
+
+Moderator can access users page
+    [Documentation]    Verifies that logged in moderator can access users page
+    [Tags]    Login_run
+    Navigate to login page
+    Fill form and login    moderator@gmail.com    moderatorpw
+    Navigate to users
+    Page Should Contain    User management
+
+Admin can access users page
+    [Documentation]    Verifies that logged in admin can access users page
+    [Tags]    Login_run
+    Navigate to login page
+    Fill form and login    admin@gmail.com    adminpw
+    Navigate to users
+    Page Should Contain    User management

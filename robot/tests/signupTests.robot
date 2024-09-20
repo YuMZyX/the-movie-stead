@@ -32,19 +32,16 @@ Signup fails if any field is empty
     Fill form and signup    ${EMPTY}    test@gmail.com    password    password
     Verify unsuccessfull login
     Page Should Contain    Name is required
-    Click Element    ${ACCOUNT MENU SIGNUP}
     Clear signup form
 
     Fill form and signup    Test User    ${EMPTY}    password    password
     Verify unsuccessfull login
     Page Should Contain    Email address is required
-    Click Element    ${ACCOUNT MENU SIGNUP}
     Clear signup form
 
     Fill form and signup    Test User    test@gmail.com    ${EMPTY}    password
     Verify unsuccessfull login
     Page Should Contain    Password is required
-    Click Element    ${ACCOUNT MENU SIGNUP}
     Clear signup form
 
     Fill form and signup    Test User    test@gmail.com    password    ${EMPTY}
