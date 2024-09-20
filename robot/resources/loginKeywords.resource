@@ -2,9 +2,6 @@
 Library    SeleniumLibrary
 Resource    commonKeywords.resource
 
-*** Variables ***
-
-
 *** Keywords ***
 Setup tests
     Clear test database

@@ -16,6 +16,11 @@ ${LOGIN BUTTON}    //*[@id="login-button"]
 ${MY REVIEWS}    //*[@id="my-reviews"]
 ${WATCHLIST}    //*[@id="watchlist"]
 ${USERS}    //*[@id="users"]
+${TRENDING MOVIES}    //div[contains(@class, 'MuiGrid-container')]/div
+${FIRST MOVIE ON PAGE}    //div[contains(@class, 'MuiGrid-container')]/div[1]
+${FIRST MOVIE ON PAGE MENU}    //div[contains(@class, 'MuiGrid-container')]/div[1]//button
+${ICON ADD TO WATCLIST}    //button[@aria-label='Add to Watchlist']
+${ICON CREATE REVIEW}    //button[@aria-label='Create a review']
 
 *** Keywords ***
 Setup suite

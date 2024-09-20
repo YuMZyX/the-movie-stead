@@ -23,10 +23,10 @@ Navigate to signup page
 
 Fill form and signup
     [Arguments]    ${name}=    ${email}=    ${pw}=    ${pwc}=
-    Input Text    ${NAME FIELD}    ${name}    clear=True
-    Input Text    ${EMAIL FIELD}    ${email}    clear=True
-    Input Text    ${PW FIELD}    ${pw}    clear=True
-    Input Text    ${PWC FIELD}    ${pwc}    clear=True
+    Input Text    ${NAME FIELD}    ${name}
+    Input Text    ${EMAIL FIELD}    ${email}
+    Input Text    ${PW FIELD}    ${pw}
+    Input Text    ${PWC FIELD}    ${pwc}
     Click Button    ${SIGNUP BUTTON}
     Sleep    2s
 

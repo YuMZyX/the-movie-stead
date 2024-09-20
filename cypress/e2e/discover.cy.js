@@ -97,7 +97,7 @@ describe('Discover movies', function() {
       cy.get('#release-date-min').type('07192023')
       cy.get('#release-date-max').type('07192023')
       cy.get('body').click({ force: true })
-      cy.wait(700)
+      cy.wait(1000)
       cy.contains('Movies matched your search')
       cy.contains('Barbie')
       cy.contains('Oppenheimer')
