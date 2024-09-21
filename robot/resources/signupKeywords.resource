@@ -31,21 +31,25 @@ Fill form and signup
     Sleep    2s
 
 Clear signup form
+    Press Keys    ${NAME FIELD}    CTRL+A BACKSPACE
     ${name}=    Get Element Attribute    ${NAME FIELD}    value
     ${length}=    Get Length    ${name}
     Run Keyword If    """${name}""" != ''
     ...    Repeat Keyword    ${length + 1}    Press Keys    ${NAME FIELD}    BACKSPACE
-        
+
+    Press Keys    ${EMAIL FIELD}    CTRL+A BACKSPACE
     ${email}=    Get Element Attribute    ${EMAIL FIELD}    value
     ${length}=    Get Length    ${email}
     Run Keyword If    """${email}""" != ''
     ...    Repeat Keyword    ${length + 1}    Press Keys    ${EMAIL FIELD}    BACKSPACE
     
+    Press Keys    ${PW FIELD}    CTRL+A BACKSPACE
     ${pw}=    Get Element Attribute    ${PW FIELD}    value
     ${length}=    Get Length    ${pw}
     Run Keyword If    """${pw}""" != ''
     ...    Repeat Keyword    ${length + 1}    Press Keys    ${PW FIELD}    BACKSPACE
-
+    
+    Press Keys    ${PWC FIELD}    CTRL+A BACKSPACE
     ${pwc}=    Get Element Attribute    ${PWC FIELD}    value
     ${length}=    Get Length    ${pwc}
     Run Keyword If    """${pwc}""" != ''

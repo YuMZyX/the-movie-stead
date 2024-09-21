@@ -36,7 +36,6 @@ User can access detailed page of a movie
     [Documentation]    Verifies that user can a click a movie to see detailed page of a movie
     [Tags]    Movies
     Click Element    ${FIRST CARD ON PAGE}
-    Sleep    1s
     Verify detailed page of a movie
 
 User can search for a specific movie
@@ -50,7 +49,6 @@ User can search for a specific movie
     Page Should Not Contain    Die Hard 2
     Page Should Not Contain    Live Free or Die Hard
     Click Element    //div[contains(text(), "Die Hard")]
-    Sleep    1s
     Verify detailed page of a movie
     Page Should Contain    John McTiernan
     Page Should Contain    Bruce Willis
@@ -104,5 +102,4 @@ Can see watchlist and review icons on detailed movie page when logged in
     Fill form and login    test@gmail.com    password
     Wait Until Page Contains    Trending movies
     Click Element    ${FIRST CARD ON PAGE}
-    Sleep    1s
     Verify detailed page of a movie    ${True}

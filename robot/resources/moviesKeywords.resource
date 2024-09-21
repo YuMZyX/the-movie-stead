@@ -10,7 +10,7 @@ Setup tests
 
 Verify detailed page of a movie
     [Arguments]    ${loggedIn}=${False}
-    Page Should Contain    Overview
+    Wait Until Page Contains    Overview
     Page Should Contain    Director
     Page Should Contain    Writers
     Page Should Contain    Stars

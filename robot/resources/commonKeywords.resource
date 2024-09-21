@@ -24,6 +24,7 @@ ${ICON CREATE REVIEW}    //button[@aria-label="Create a review"]
 ${PAGE 5}    //button[@aria-label='Go to page 5']
 ${LAST PAGE}    //button[@aria-label='Go to last page']
 ${IMDB LOGO}    //img[@alt="IMDb logo"]
+${MY REVIEWS HEADER}    //*[contains(@class, "MuiTypography-h")][contains(string(), "review")]
 
 *** Keywords ***
 Setup suite
@@ -46,9 +47,8 @@ Seed users to test database
 Open browser on TMS home page
     Open Browser    ${HOME PAGE}    ${BROWSER}
     Maximize Browser Window
-    Sleep    1s
+    Wait Until Page Contains    Trending movies
     Title Should Be    The Movie Stead
-    Page Should Contain    Trending movies
 
 Navigate to login page
     Click Element    ${ACCOUNT MENU}
@@ -66,11 +66,11 @@ Fill form and login
 Logout user
     Click Element    ${ACCOUNT MENU}
     Click Element    ${ACCOUNT MENU LOGOUT}
-    Sleep    1s
-    Page Should Contain    The Movie Stead - Login
+    Wait Until Page Contains    The Movie Stead - Login
     Page Should Contain    Don't have an account? Sign Up
 
 Verify logged in
+    Wait Until Page Contains    Trending movies
     Click Element    ${ACCOUNT MENU}
     Page Should Contain Element    ${ACCOUNT MENU MY ACCOUNT}
     Press Keys    ${ACCOUNT MENU}    ESCAPE
@@ -88,12 +88,12 @@ Verify unsuccessfull login
 
 Navigate to My Reviews
     Click Element    ${MY REVIEWS}
-    Sleep    1s
+    Wait Until Element Is Visible    ${MY REVIEWS HEADER}
 
 Navigate to Watchlist
     Click Element    ${WATCHLIST}
-    Sleep    1s
+    Wait Until Page Contains    Your watchlist
 
 Navigate to users
     Click Element    ${USERS}
-    Sleep    1s
+    Wait Until Page Contains    User management
