@@ -20,8 +20,8 @@ Login succeeds
     [Tags]    Login
     Navigate to login page
     Fill form and login    regular@gmail.com    regularpw
+    Wait Until Page Contains    Trending movies
     Verify logged in
-    Page Should Contain    Trending movies
     Page Should Contain    Watchlist
     Page Should Contain    My Reviews
 
@@ -45,7 +45,7 @@ Login fails with a disabled account
 
 Logout succeeds
     [Documentation]    Verifies that logged in user can successfully logout
-    [Tags]    Login_run
+    [Tags]    Login
     Navigate to login page
     Fill form and login    regular@gmail.com    regularpw
     Verify logged in
@@ -54,9 +54,10 @@ Logout succeeds
 
 User can access watchlist and reviews
     [Documentation]    Verifies that logged in user can access watchlist and my reviews
-    [Tags]    Login_run
+    [Tags]    Login
     Navigate to login page
     Fill form and login    regular@gmail.com    regularpw
+    Wait Until Page Contains    Trending movies
     Navigate to My Reviews
     Page Should Contain    You have not reviewed any movies yet
     Navigate to Watchlist
@@ -64,16 +65,18 @@ User can access watchlist and reviews
 
 Moderator can access users page
     [Documentation]    Verifies that logged in moderator can access users page
-    [Tags]    Login_run
+    [Tags]    Login
     Navigate to login page
     Fill form and login    moderator@gmail.com    moderatorpw
+    Wait Until Page Contains    Trending movies
     Navigate to users
     Page Should Contain    User management
 
 Admin can access users page
     [Documentation]    Verifies that logged in admin can access users page
-    [Tags]    Login_run
+    [Tags]    Login
     Navigate to login page
     Fill form and login    admin@gmail.com    adminpw
+    Wait Until Page Contains    Trending movies
     Navigate to users
     Page Should Contain    User management

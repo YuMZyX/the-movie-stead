@@ -53,7 +53,7 @@ const Navbar = ({ handleLogout, user, isMobile, isTablet }) => {
             :
             <Box sx={{ display: 'flex' }}>
               {moviesMenu()}
-              <Button color='inherit' onClick={() => navigate('/stars/trending/1')}>Stars</Button>
+              <Button id='stars' color='inherit' onClick={() => navigate('/stars/trending/1')}>Stars</Button>
             </Box>
           }
         </Box>

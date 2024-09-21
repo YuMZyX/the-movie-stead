@@ -40,14 +40,14 @@ const Person = ({ isMobile, isTablet }) => {
   }
 
   const calculateAge = (dob) => {
-    const age = moment(dob, 'YYYY-MM-DD').fromNow(true)
-    return `(${age} old)`
+    const age = moment().diff(moment(dob, 'YYYY-MM-DD'), 'years')
+    return `(${age} years old)`
   }
   const calculateAgeAtDeath = (dob, dod) => {
     const born = moment(dob, 'YYYY-MM-DD')
     const died = moment(dod, 'YYYY-MM-DD')
-    const age = born.from(died, true)
-    return `(${age} old)`
+    const age = died.diff(born, 'years')
+    return `(${age} years old)`
   }
 
   const knownForCast = () => {

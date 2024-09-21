@@ -8,9 +8,6 @@ Documentation    Movies functionality test cases
 
 *** Variables ***
 ${RESOURCES BASE}    ../resources
-${PAGE 5}    //button[@aria-label='Go to page 5']
-${LAST PAGE}    //button[@aria-label='Go to last page']
-${IMDB LOGO}    //img[@alt='IMDb logo']
 ${SEARCH FIELD}    //*[@id="search"]
 ${SEARCH FIELD INVALID}    //input[@aria-invalid='true' and @id='search']
 ${SEARCH YEAR}    //*[@id="release-year"]
@@ -20,7 +17,7 @@ ${SEARCH BUTTON}    //*[@id="search-button"]
 There are 20 movies at home page
     [Documentation]    Verifies that trending movies page has 20 movies
     [Tags]    Movies
-    ${count}=    Get Element Count    ${TRENDING MOVIES}
+    ${count}=    Get Element Count    ${ALL CARDS ON PAGE}
     Should Be Equal As Integers    ${count}    20
 
 User can access 20 pages of trending movies
@@ -38,15 +35,9 @@ User can access 20 pages of trending movies
 User can access detailed page of a movie
     [Documentation]    Verifies that user can a click a movie to see detailed page of a movie
     [Tags]    Movies
-    Click Element    ${FIRST MOVIE ON PAGE}
+    Click Element    ${FIRST CARD ON PAGE}
     Sleep    1s
-    Page Should Contain    Overview
-    Page Should Contain    Director
-    Page Should Contain    Writers
-    Page Should Contain    Stars
-    Element Should Be Visible    ${IMDB LOGO}
-    Element Should Not Be Visible    ${ICON ADD TO WATCLIST}
-    Element Should Not Be Visible    ${ICON CREATE REVIEW}
+    Verify detailed page of a movie
 
 User can search for a specific movie
     [Documentation]    Verifies that user can use search string and release year to search for a specific movie
@@ -58,8 +49,9 @@ User can search for a specific movie
     Page Should Contain    Die Hard
     Page Should Not Contain    Die Hard 2
     Page Should Not Contain    Live Free or Die Hard
-    Click Element    //div[contains(text(),'Die Hard')]
+    Click Element    //div[contains(text(), "Die Hard")]
     Sleep    1s
+    Verify detailed page of a movie
     Page Should Contain    John McTiernan
     Page Should Contain    Bruce Willis
     Page Should Contain    15.07.1988
@@ -98,6 +90,7 @@ Can see watchlist and review menu items when logged in
     [Tags]    Movies
     Navigate to login page
     Fill form and login    test@gmail.com    password
+    Wait Until Page Contains    Trending movies
     Click Button    ${FIRST MOVIE ON PAGE MENU}
     Sleep    0.5s
     Page Should Contain    Add to Watchlist
@@ -109,12 +102,7 @@ Can see watchlist and review icons on detailed movie page when logged in
     [Tags]    Movies
     Navigate to login page
     Fill form and login    test@gmail.com    password
-    Click Element    ${FIRST MOVIE ON PAGE}
+    Wait Until Page Contains    Trending movies
+    Click Element    ${FIRST CARD ON PAGE}
     Sleep    1s
-    Page Should Contain    Overview
-    Page Should Contain    Director
-    Page Should Contain    Writers
-    Page Should Contain    Stars
-    Element Should Be Visible    ${IMDB LOGO}
-    Element Should Be Visible    ${ICON ADD TO WATCLIST}
-    Element Should Be Visible    ${ICON CREATE REVIEW}
+    Verify detailed page of a movie    ${True}

@@ -16,11 +16,14 @@ ${LOGIN BUTTON}    //*[@id="login-button"]
 ${MY REVIEWS}    //*[@id="my-reviews"]
 ${WATCHLIST}    //*[@id="watchlist"]
 ${USERS}    //*[@id="users"]
-${TRENDING MOVIES}    //div[contains(@class, 'MuiGrid-container')]/div
-${FIRST MOVIE ON PAGE}    //div[contains(@class, 'MuiGrid-container')]/div[1]
-${FIRST MOVIE ON PAGE MENU}    //div[contains(@class, 'MuiGrid-container')]/div[1]//button
-${ICON ADD TO WATCLIST}    //button[@aria-label='Add to Watchlist']
-${ICON CREATE REVIEW}    //button[@aria-label='Create a review']
+${ALL CARDS ON PAGE}    //div[contains(@class, "MuiGrid-container")]/div
+${FIRST CARD ON PAGE}    //div[contains(@class, "MuiGrid-container")]/div[1]
+${FIRST MOVIE ON PAGE MENU}    //div[contains(@class, "MuiGrid-container")]/div[1]//button
+${ICON ADD TO WATCLIST}    //button[@aria-label="Add to Watchlist"]
+${ICON CREATE REVIEW}    //button[@aria-label="Create a review"]
+${PAGE 5}    //button[@aria-label='Go to page 5']
+${LAST PAGE}    //button[@aria-label='Go to last page']
+${IMDB LOGO}    //img[@alt="IMDb logo"]
 
 *** Keywords ***
 Setup suite
@@ -58,7 +61,7 @@ Fill form and login
     Input Text    ${EMAIL FIELD}    ${email}
     Input Text    ${PW FIELD}    ${pw}
     Click Button    ${LOGIN BUTTON}
-    Sleep    2s
+    Sleep    1s
 
 Logout user
     Click Element    ${ACCOUNT MENU}
