@@ -10,6 +10,8 @@ Documentation    Watchlist functionality test cases
 
 *** Variables ***
 ${RESOURCES BASE}    ../resources
+${EMAIL}    test@gmail.com
+${PASSWORD}    password
 ${ICON REMOVE FROM WATCHLIST}    //button[@aria-label="Remove from Watchlist"]
 
 *** Test Cases ***
@@ -17,7 +19,7 @@ User can add movie to watchlist from movie card menu
     [Documentation]    Verifies that user can add movie to watchlist using movie cards menu
     [Tags]    Watchlist
     Navigate to login page
-    Fill form and login    test@gmail.com    password
+    Fill form and login    ${EMAIL}    ${PASSWORD}
     Verify logged in
     Add first movie on page to watchlist
     Navigate to Watchlist
@@ -27,7 +29,7 @@ User can add movie to watchlist from detailed page of a movie
     [Documentation]    Verifies that user can add movie to watchlist using icon button in detailed page of a movie
     [Tags]    Watchlist
     Navigate to login page
-    Fill form and login    test@gmail.com    password
+    Fill form and login    ${EMAIL}    ${PASSWORD}
     Verify logged in
     Click Element    ${FIRST CARD ON PAGE}
     Verify detailed page of a movie    ${True}
@@ -40,9 +42,9 @@ User can add movie to watchlist from My Reviews page
     [Documentation]    Verifies that user can add a reviewed movie to watchlist from My Reviews page
     [Tags]    Watchlist
     Navigate to login page
-    Fill form and login    test@gmail.com    password
+    Fill form and login    ${EMAIL}    ${PASSWORD}
     Verify logged in
-    Create a review for first movie on page
+    Create a review for first movie on page    3 Stars     Not my cup of tea
     Navigate to My Reviews
     Add first movie on page to watchlist
     Navigate to Watchlist
@@ -52,7 +54,7 @@ User can remove movie from watchlist using movie card menu
     [Documentation]    Verifies that user can remove a movie from watchlist using movie card menu
     [Tags]    Watchlist
     Navigate to login page
-    Fill form and login    test@gmail.com    password
+    Fill form and login    ${EMAIL}    ${PASSWORD}
     Verify logged in
     Add first movie on page to watchlist
     Remove first movie on page from watchlist
@@ -63,7 +65,7 @@ User can remove movie from watchlist using watchlist
     [Documentation]    Verifies that user can remove a movie from watchlist using card menu in watchlist
     [Tags]    Watchlist
     Navigate to login page
-    Fill form and login    test@gmail.com    password
+    Fill form and login    ${EMAIL}    ${PASSWORD}
     Verify logged in
     Add first movie on page to watchlist
     Navigate to Watchlist
@@ -76,7 +78,7 @@ User can remove movie from watchlist using detailed page of a movie
     [Documentation]    Verifies that user can remove a movie from watchlist using detailed page of a movie
     [Tags]    Watchlist
     Navigate to login page
-    Fill form and login    test@gmail.com    password
+    Fill form and login    ${EMAIL}    ${PASSWORD}
     Verify logged in
     Add first movie on page to watchlist
     Click Element    ${FIRST CARD ON PAGE}
@@ -90,7 +92,7 @@ User can remove movie from watchlist using My Reviews page
     [Documentation]    Verifies that user can remove a reviewed movie from watchlist using My Reviews page
     [Tags]    Watchlist
     Navigate to login page
-    Fill form and login    test@gmail.com    password
+    Fill form and login    ${EMAIL}    ${PASSWORD}
     Verify logged in
     Add first movie on page to watchlist
     Create a review for first movie on page

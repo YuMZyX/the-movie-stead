@@ -8,6 +8,8 @@ Documentation    Movies functionality test cases
 
 *** Variables ***
 ${RESOURCES BASE}    ../resources
+${EMAIL}    test@gmail.com
+${PASSWORD}    password
 ${SEARCH FIELD}    //*[@id="search"]
 ${SEARCH FIELD INVALID}    //input[@aria-invalid='true' and @id='search']
 ${SEARCH YEAR}    //*[@id="release-year"]
@@ -87,7 +89,7 @@ Can see watchlist and review menu items when logged in
     [Documentation]    Verifies that user can see watchlist and review menu items when logged in
     [Tags]    Movies
     Navigate to login page
-    Fill form and login    test@gmail.com    password
+    Fill form and login    ${EMAIL}    ${PASSWORD}
     Wait Until Page Contains    Trending movies
     Click Button    ${FIRST MOVIE ON PAGE MENU}
     Sleep    0.5s
@@ -99,7 +101,7 @@ Can see watchlist and review icons on detailed movie page when logged in
     [Documentation]    Verifies that user can see watchlist and review icons on detailed movie page when logged in
     [Tags]    Movies
     Navigate to login page
-    Fill form and login    test@gmail.com    password
+    Fill form and login    ${EMAIL}    ${PASSWORD}
     Wait Until Page Contains    Trending movies
     Click Element    ${FIRST CARD ON PAGE}
     Verify detailed page of a movie    ${True}

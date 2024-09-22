@@ -21,9 +21,10 @@ ${FIRST CARD ON PAGE}    //div[contains(@class, "MuiGrid-container")]/div[1]
 ${FIRST MOVIE ON PAGE MENU}    //div[contains(@class, "MuiGrid-container")]/div[1]//button
 ${ICON ADD TO WATCLIST}    //button[@aria-label="Add to Watchlist"]
 ${ICON CREATE REVIEW}    //button[@aria-label="Create a review"]
-${PAGE 5}    //button[@aria-label='Go to page 5']
-${LAST PAGE}    //button[@aria-label='Go to last page']
+${PAGE 5}    //button[@aria-label="Go to page 5"]
+${LAST PAGE}    //button[@aria-label="Go to last page"]
 ${IMDB LOGO}    //img[@alt="IMDb logo"]
+${TMS LOGO}    //img[@alt="The Movie Stead - Logo"]
 ${MY REVIEWS HEADER}    //*[contains(@class, "MuiTypography-h")][contains(string(), "review")]
 
 *** Keywords ***
@@ -53,7 +54,7 @@ Open browser on TMS home page
 Navigate to login page
     Click Element    ${ACCOUNT MENU}
     Click Element    ${ACCOUNT MENU LOGIN}
-    Page Should Contain    The Movie Stead - Login
+    Wait Until Page Contains    The Movie Stead - Login
     Page Should Contain    Don't have an account? Sign Up
 
 Fill form and login
@@ -97,3 +98,7 @@ Navigate to Watchlist
 Navigate to users
     Click Element    ${USERS}
     Wait Until Page Contains    User management
+
+Navigate to homepage
+    Click Element    ${TMS LOGO}
+    Wait Until Page Contains    Trending movies
