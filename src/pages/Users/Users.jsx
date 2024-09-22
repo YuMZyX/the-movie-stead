@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import userService from '../../services/users'
-import { Container, Typography } from '@mui/material'
+import { Container, Typography, Box } from '@mui/material'
 import { format, parseISO } from 'date-fns'
 import { DataGrid, GridActionsCellItem,
   GridRowModes, GridRowEditStopReasons } from '@mui/x-data-grid'
@@ -200,9 +200,20 @@ const Users = ({ user }) => {
       <Redirect />
     )
   }
-  if (!users || users.length === 0) {
+  if (!users || users[0] === null) {
     return (
       <Progress />
+    )
+  }
+  if (users.count === 0) {
+    return (
+      <Container>
+        <Box sx={{ mt: 2, ml: 2 }}>
+          <Typography variant='h6'>
+            User list is currently empty
+          </Typography>
+        </Box>
+      </Container>
     )
   }
 

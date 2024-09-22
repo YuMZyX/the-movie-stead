@@ -30,9 +30,11 @@ Login fails with incorrect credentials
     [Tags]    Login
     Navigate to login page
     Fill form and login    regular@gmail.com    regularp
+    Page Should Contain    Invalid username or password
     Verify unsuccessfull login
     Clear login form
     Fill form and login    reglar@gmail.com    regularpw
+    Page Should Contain    Invalid username or password
     Verify unsuccessfull login
 
 Login fails with a disabled account

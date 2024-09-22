@@ -26,6 +26,7 @@ ${LAST PAGE}    //button[@aria-label="Go to last page"]
 ${IMDB LOGO}    //img[@alt="IMDb logo"]
 ${TMS LOGO}    //img[@alt="The Movie Stead - Logo"]
 ${MY REVIEWS HEADER}    //*[contains(@class, "MuiTypography-h")][contains(string(), "review")]
+${DELETE CONFIRM BUTTON}    //button[text()="Delete"]
 
 *** Keywords ***
 Setup suite
@@ -98,6 +99,7 @@ Navigate to Watchlist
 Navigate to users
     Click Element    ${USERS}
     Wait Until Page Contains    User management
+    Sleep    2s
 
 Navigate to homepage
     Click Element    ${TMS LOGO}

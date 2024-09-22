@@ -226,19 +226,19 @@ Moderator can access, edit and delete users reviews
     Sleep    1s
     Verify no reviews exist in My Reviews
 
-Admin can access, edit and delete users reviews
+Admin can access, edit and delete moderators reviews
     [Documentation]    Verifies that admin can access, edit and delete reviews of regular users
     [Tags]    Review
-    Add user to test database    Admin User     admin@gmail.com    adminpw    admin    ${False}
+    Seed users to test database
     Navigate to login page
-    Fill form and login    ${EMAIL}    ${PASSWORD}
+    Fill form and login    moderator@gmail.com    moderatorpw
     Verify logged in
     Create a review for first movie on page    1 Star     This movie is !¤#$¤#%!&#¤%#!
     Logout user
 
     Fill form and login    admin@gmail.com    adminpw
     Navigate to users
-    Access users reviews    ${EMAIL}
+    Access users reviews    moderator@gmail.com
     Verify one review exists in My Reviews
     Verify review text and rating    1    This movie is !¤#$¤#%!&#¤%#!
 

@@ -9,7 +9,6 @@ ${EDIT REVIEW MENU}    //*[@id="movie-menu" and not(contains(@aria-hidden, "true
 ${CREATE REVIEW BUTTON}    //*[@id="create-review"]
 ${EDIT REVIEW BUTTON}    //*[@id="edit-review"]
 ${DELETE REVIEW BUTTON}    //*[@id="delete-review"]
-${DELETE CONFIRM BUTTON}    //button[text()="Delete"]
 ${REVIEW TEXT}    //*[@id="review_text"]
 ${REVIEW EXPAND}    //*[@data-testid="ExpandMoreOutlinedIcon"]
 ${ICON EDIT REVIEW}    //button[@aria-label="Edit review"]
