@@ -16,9 +16,10 @@ ${LOGIN BUTTON}    //*[@id="login-button"]
 ${MY REVIEWS}    //*[@id="my-reviews"]
 ${WATCHLIST}    //*[@id="watchlist"]
 ${USERS}    //*[@id="users"]
-${ALL CARDS ON PAGE}    //div[contains(@class, "MuiGrid-container")]/div
-${FIRST CARD ON PAGE}    //div[contains(@class, "MuiGrid-container")]/div[1]
-${FIRST MOVIE ON PAGE MENU}    //div[contains(@class, "MuiGrid-container")]/div[1]//button
+${ALL CARDS ON PAGE}    //div[contains(@class, "MuiGrid-container Mui")]/div
+${FIRST CARD ON PAGE}    //div[contains(@class, "MuiGrid-container Mui")]/div[1]
+${LAST CARD ON PAGE}    //div[contains(@class, "MuiGrid-container Mui")]/div[last()]
+${FIRST MOVIE ON PAGE MENU}    //div[contains(@class, "MuiGrid-container Mui")]/div[1]//button
 ${ICON ADD TO WATCLIST}    //button[@aria-label="Add to Watchlist"]
 ${ICON CREATE REVIEW}    //button[@aria-label="Create a review"]
 ${PAGE 5}    //button[@aria-label="Go to page 5"]
@@ -104,3 +105,8 @@ Navigate to users
 Navigate to homepage
     Click Element    ${TMS LOGO}
     Wait Until Page Contains    Trending movies
+
+Click random card on page between
+    [Arguments]    ${start}=    ${end}=
+    ${random_number}=    Evaluate    random.randint(${start}, ${end})    modules=random
+    Click Element    //div[contains(@class, "MuiGrid-container Mui")]/div[${random_number}]
