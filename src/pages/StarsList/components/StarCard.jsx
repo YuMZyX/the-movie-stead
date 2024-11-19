@@ -52,7 +52,7 @@ const StarCard = ({ star }) => {
           </Typography>
         </Link>
         <List sx={{ listStyleType: 'disc', pl: 2 }}>
-          {star.known_for.map((movie) => (
+          {star.known_for?.map((movie) => (
             <ListItem
               disablePadding
               key={movie.id}

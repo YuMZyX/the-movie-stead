@@ -99,7 +99,7 @@ const StarsList = ({ isMobile }) => {
         </Typography>
       }
       <Grid container spacing={4} sx={{ mb: 4 }}>
-        {stars.map((star) => (
+        {stars?.map((star) => (
           <Grid item key={star.id} xs={6} sm={4} md={3} style={{ display: 'flex' }}>
             <StarCard star={star} />
           </Grid>
